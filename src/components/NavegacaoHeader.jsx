@@ -46,7 +46,7 @@ const NavegacaoHeader = (props) => {
         <HeaderStyle>
             <NavBarStyle>
                 <a href="google.com">
-                    <Logo src={compraUnidaLogo} alt="Minha Imagem JPG" />
+                    <Logo src={compraUnidaLogo} alt="Logo Compra Unida" />
                 </a>
                 <Links href="google.com">Home</Links>
                 <Links href="google.com">Produtos</Links>

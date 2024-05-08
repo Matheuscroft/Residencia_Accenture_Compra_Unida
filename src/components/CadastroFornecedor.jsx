@@ -76,7 +76,7 @@ const CadastroFornecedor = (props) => {
                 <Input type="text" placeholder="Nome Completo" /><br />
                 <Paragrafo>Nome Completo do Responsável:</Paragrafo>
                 <Input type="text" placeholder="Nome Completo" /><br />
-                <Paragrafo>CPNJ/MEI: OBG</Paragrafo>
+                <Paragrafo>CPNJ/MEI: OBRIGATORIO</Paragrafo>
                 <Input type="text" placeholder="CPF/CPNJ" /><br />
                 <Paragrafo>Endereço: OBG</Paragrafo>
                 <Input type="text" placeholder="Endereço" /><br />
