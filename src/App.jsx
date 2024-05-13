@@ -2,6 +2,9 @@ import React, { useState } from 'react';
 import Login from './components/Login';
 import Home from './components/Home';
 import CadastroFornecedor from './components/CadastroFornecedor';
+import HomeFornecedor from './components/HomeFornecedor';
+import CriarProduto from './components/CriarProduto'
+import CriarOferta from './components/CriarOferta';
 
 
 function App() {
@@ -19,6 +22,23 @@ function App() {
         <Home handlePage={handlePage} />
       )
 
+    case "home-fornecedor":
+
+      return (
+        <HomeFornecedor handlePage={handlePage} />
+      )
+
+    case "criar-produto":
+
+      return (
+        <CriarProduto handlePage={handlePage} />
+      )
+
+    case "criar-oferta":
+
+      return (
+        <CriarOferta handlePage={handlePage} />
+      )
 
     case "cadastro":
 
@@ -32,7 +52,6 @@ function App() {
       return (
         <Login handlePage={handlePage} />
       )
-      break;
   }
 
 }

@@ -1,95 +1,73 @@
-import React from "react";
-import styled, { css } from 'styled-components'
+import React, { useState } from "react";
 import NavegacaoHeader from "./NavegacaoHeader";
+import { Input, Wrapper, Title, Button, BotaoPrincipal } from "./Estilos";
 
 const CadastroFornecedor = (props) => {
 
-    const Button = styled.button`
-        background: transparent;
-        border-radius: 3px;
-        border: 2px solid #BF4F74;
-        color: #BF4F74;
-        margin: 0.5em 1em;
-        padding: 0.25em 1em;
-        `
+    const [dadosFornecedor, setDadosFornecedor] = useState({});
 
-    const BotaoPrincipal = styled(Button)`
-        color: tomato;
-        border-color: tomato;
-        `;
-
-    const Paragrafo = styled.p`
-        color: tomato;
-        
-        `;
-
-    const Title = styled.h1`
-        font-size: 1.5em;
-        text-align: center;
-        color: #BF4F74;
-        `;
-
-    const Input = styled.input`
-        padding: 0.5em;
-        margin: 0.5em;
-        color: "#BF4F74";
-        background: white;
-        border: black 2px solid;
-        border-radius: 3px;
-        width: 100%;
-        `;
-
-    const Wrapper = styled.section`
-        padding: 4em;
-        background: papayawhip;
-        `;
-
-
-    const Container = styled.div`
-        align-items: center;
-        justify-content: center;
-        display: flex;
-        background-color: #a29f9f;
-        flex-direction: column;
-
-        `
-
-
-    const fornecedor = {
-        nome: "",
-        cnpj: "",
-        endereco: "",
-        telefone: "",
-        email: "",
-        senha: "",
-        MEI: ""
+    const handleChange = (event) => {
+        const name = event.target.name;
+        const value = event.target.value;
+        //setDadosFornecedor(values => ({...values, [name]: value}))
+        setDadosFornecedor({ ...dadosFornecedor, [name]: value })
+        console.log(dadosFornecedor)
     }
 
-    return (
+    const handleSubmit = (event) => {
+        event.preventDefault();
+        alert(`${dadosFornecedor.nome} cadastrado com sucesso!`)
+        props.handlePage("home-fornecedor")
         
+      }
+
+    return (
+
         <div>
-            <NavegacaoHeader/>
-            
+            <NavegacaoHeader />
+
             <Wrapper>
-                <Title>Cadastro - Fornecedor</Title>
-                <Paragrafo>Razão Social:</Paragrafo>
-                <Input type="text" placeholder="Nome Completo" /><br />
-                <Paragrafo>Nome Completo do Responsável:</Paragrafo>
-                <Input type="text" placeholder="Nome Completo" /><br />
-                <Paragrafo>CPNJ/MEI: OBRIGATORIO</Paragrafo>
-                <Input type="text" placeholder="CPF/CPNJ" /><br />
-                <Paragrafo>Endereço: OBG</Paragrafo>
-                <Input type="text" placeholder="Endereço" /><br />
-                <Paragrafo>Telefone: OBG</Paragrafo>
-                <Input type="text" placeholder="Telefone" /><br />
-                <Paragrafo>E-mail: OBG</Paragrafo>
-                <Input type="email" placeholder="E-mail" /><br />
-                <Paragrafo>Senha: OBG</Paragrafo>
-                <Input type="password" placeholder="Senha" /><br />
-                <Paragrafo>Confirma Senha: OBG</Paragrafo>
-                <Input type="password" placeholder="Senha" /><br />
-                <Button>Cadastrar</Button>
-                <BotaoPrincipal>MEU NOME</BotaoPrincipal>
+                <form onSubmit={handleSubmit} >
+                    <Title>Cadastro - Fornecedor</Title>
+
+                    <label>Razão Social:
+                        <Input type="text" name="razao_social" value={dadosFornecedor.razao_social || ""}  onChange={handleChange} placeholder="Razão Social" /><br />
+                    </label>
+
+                    <p>{dadosFornecedor.razao_social}</p>
+
+                    <label>Nome Completo do Responsável:
+                        <Input type="text" name="nome" value={dadosFornecedor.nome || ""}  onChange={handleChange} placeholder="Nome Completo" /><br />
+                    </label>
+
+                    <label>CPNJ/MEI: OBRIGATORIO
+                        <Input type="text" name="cnpj_mei" value={dadosFornecedor.cnpj_mei || ""}  onChange={handleChange} placeholder="CPF/CPNJ" required /><br />
+                    </label>
+
+                    <label>Endereço: OBG
+                        <Input type="text" name="endereco" value={dadosFornecedor.endereco || ""}  onChange={handleChange} placeholder="Endereço" required /><br />
+                    </label>
+
+                    <label>Telefone: OBG
+                        <Input type="text" name="telefone" value={dadosFornecedor.telefone || ""}  onChange={handleChange} placeholder="Telefone" required /><br />
+                    </label>
+
+                    <label>E-mail: OBG
+                        <Input type="email" name="email" value={dadosFornecedor.email || ""}  onChange={handleChange} placeholder="E-mail" required /><br />
+                    </label>
+
+                    <label>Senha: OBG
+                        <Input type="password" name="senha" value={dadosFornecedor.senha || ""}  onChange={handleChange} placeholder="Senha" required /><br />
+                    </label>
+
+                    <label>Confirma Senha: OBG
+                        <Input type="password" name="confirma_senha" value={dadosFornecedor.confirma_senha || ""}  onChange={handleChange} placeholder="Senha" required /><br />
+                    </label>
+
+                    <input type="submit" />
+                    <Button>Cadastrar</Button>
+                    <BotaoPrincipal>MEU NOME</BotaoPrincipal>
+                </form>
             </Wrapper>
         </div>
     )
