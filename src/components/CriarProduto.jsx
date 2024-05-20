@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import NavegacaoHeader from "./NavegacaoHeader";
 import { Input, Wrapper, Title, Button, BotaoPrincipal } from "./Estilos";
 import { v4 as uuidv4 } from 'uuid';
@@ -15,9 +15,33 @@ const CriarProduto = (props) => {
         console.log(produto)
     }
 
+    const handlePriceChange = (event) => {
+        let value = event.target.value;
+        value = value.replace(/\D/g, "");
+        value = (value / 100).toFixed(2) + "";
+        value = value.replace(".", ",");
+        value = "R$ " + value.replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
+        setProduto({ ...produto, preco: value });
+    };
+
+    const handleImageChange = (event) => {
+        const files = event.target.files;
+        const imagesArray = Array.from(files).map(file => URL.createObjectURL(file));
+        setProduto({ ...produto, imagens: imagesArray });
+    };
+
+
     const handleSubmit = (event) => {
 
         event.preventDefault();
+
+        if (produto.categoria === "default") {
+            alert("Selecione um produto")
+            return;
+        }
+
+
+
         const produtoComId = {
             id: uuidv4(),
             ...produto
@@ -54,16 +78,24 @@ const CriarProduto = (props) => {
                     <Input type="text" id="descricao" name="descricao" value={produto.descricao || ""} onChange={handleChange} placeholder="Descrição do produto" required />
 
                     <label htmlFor="categoria">Categoria</label>
-                    <Input type="text" id="categoria" name="categoria" value={produto.categoria || ""} onChange={handleChange} placeholder="Categoria do produto" required />
+                    <select name="categoria" id="categoria" onChange={handleChange}>
+                        <option value="default">Selecione uma categoria</option>
+                        <option value="alimentacao">Alimentação</option>
+                        <option value="vestuario">Vestuário</option>
+                        <option value="racao">Ração</option>
+                        <option value="bebidas">Bebidas</option>
+                    </select>
+
 
                     <label htmlFor="preco">Preço</label>
-                    <Input type="number" id="preco" name="preco" value={produto.preco || ""} onChange={handleChange} placeholder="Preço do produto" required />
+                    <Input type="text" id="preco" name="preco" value={produto.preco || ""} onChange={handlePriceChange} placeholder="Preço do produto" required />
 
                     <label htmlFor="quantidadeEstoque">Quantidade em estoque</label>
-                    <Input type="text" id="quantidadeEstoque" name="quantidadeEstoque" value={produto.quantidadeEstoque || ""} onChange={handleChange} placeholder="Quantidade em estoque do produto" required />
+                    <Input type="number" id="quantidadeEstoque" name="quantidadeEstoque" value={produto.quantidadeEstoque || ""} onChange={handleChange} placeholder="Quantidade em estoque do produto" required />
 
                     <label htmlFor="imagens">Imagens</label>
                     <Input type="text" id="imagens" name="imagens" value={produto.imagens || ""} onChange={handleChange} placeholder="Imagens do produto" required />
+                    <Input type="file" id="imagens" name="imagens" onChange={handleImageChange} multiple />
 
                     <input type="submit" />
                     <Button>Cadastrar</Button>
