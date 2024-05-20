@@ -32,7 +32,7 @@ border: #51f651 solid 2px;
 `
 
 export const Botao = styled.button`
-background-color: #dfcd2d;
+background-color: #FFCD46;
 width: 10%;
 
 `

@@ -1,36 +1,27 @@
 import React, { useState, useEffect } from "react";
 import NavegacaoHeader from "./NavegacaoHeader";
-import { Input, Wrapper, Title, Button, BotaoPrincipal } from "./Estilos";
+import { Form, Button, Container, Row, Col, Card } from "react-bootstrap";
 import { v4 as uuidv4 } from 'uuid';
 
 const CriarOferta = (props) => {
-
     const [oferta, setOferta] = useState({});
     const [produtos, setProdutos] = useState([]);
 
     useEffect(() => {
-
         const produtosStorage = localStorage.getItem('produtos');
-
         if (produtosStorage) {
             const produtosConvertidos = JSON.parse(produtosStorage);
-            console.log("Produtos convertidos de volta:", produtosConvertidos);
-
-
             setProdutos(listaAnterior => {
                 const novosProdutos = produtosConvertidos.filter(novoProd =>
                     !listaAnterior.some(prod => prod.nomeProduto === novoProd.nomeProduto));
-                console.log("Novos produtos adicionados:", novosProdutos);
                 return [...listaAnterior, ...novosProdutos];
             });
-        }        
-    }, [])
+        }
+    }, []);
 
-    const produtosSelect = produtos.map((produto, index) => {
-        return (
-            <option value={produto.id} key={index}>{produto.nomeProduto}</option>
-        )
-    })
+    const produtosSelect = produtos.map((produto, index) => (
+        <option value={produto.id} key={index}>{produto.nomeProduto}</option>
+    ));
 
     const handleChange = (event) => {
         const name = event.target.name;
@@ -41,10 +32,7 @@ const CriarOferta = (props) => {
         } else {
             setOferta({ ...oferta, [name]: value });
         }
-
-        setOferta({ ...oferta, [name]: value })
-        console.log(oferta)
-    }
+    };
 
     const handlePriceChange = (event) => {
         let value = event.target.value;
@@ -56,13 +44,11 @@ const CriarOferta = (props) => {
     };
 
     const handleSubmit = (event) => {
-
         event.preventDefault();
 
-        if(oferta.produtoRelacionado === "default")
-        {
-            alert("Selecione um produto")
-            return
+        if (oferta.produtoRelacionado === "default") {
+            alert("Selecione um produto");
+            return;
         }
 
         if (oferta.dataTermino && oferta.dataInicio && oferta.dataTermino < oferta.dataInicio) {
@@ -71,7 +57,6 @@ const CriarOferta = (props) => {
         }
 
         const produtoSelecionado = produtos.find(produto => produto.id === oferta.produtoRelacionado);
-
         if (!produtoSelecionado) {
             alert("Produto não encontrado");
             return;
@@ -84,60 +69,68 @@ const CriarOferta = (props) => {
         };
 
         const ofertasAtuais = JSON.parse(localStorage.getItem('ofertas')) || [];
-
         const novasOfertas = [...ofertasAtuais, ofertaComId];
-
         localStorage.setItem('ofertas', JSON.stringify(novasOfertas));
 
         alert(`${ofertaComId.nomeOferta} cadastrado com sucesso`);
-
-        console.log("olha abaixo o que tem no getItem:");
-        console.log(localStorage.getItem('ofertas'));
-
         props.handlePage("home-fornecedor");
-
-    }
+    };
 
     return (
-
-        <div>
+        <Container>
             <NavegacaoHeader />
+            <Row className="justify-content-md-center" style={{ marginTop: '100px' }}>
+                <Col xs={12} md={6}>
+                    <Card className="text-light" style={{ backgroundColor: '#1c3bc5', borderRadius: '15px', borderColor: '#d4edda' }}>
+                        <Card.Body>
+                            <h1 className="text-center text-light">Cadastrar nova oferta</h1>
+                            <Form onSubmit={handleSubmit}>
+                                <Form.Group controlId="nomeOferta" className="mb-3">
+                                    <Form.Label className="text-light">Nome da oferta</Form.Label>
+                                    <Form.Control type="text" name="nomeOferta" value={oferta.nomeOferta || ""} onChange={handleChange} placeholder="Nome da oferta" required />
+                                </Form.Group>
 
-            <Wrapper>
-                <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column" }}>
-                    <Title>Cadastrar nova oferta</Title>
+                                <Form.Group controlId="descricao" className="mb-3">
+                                    <Form.Label className="text-light">Descrição</Form.Label>
+                                    <Form.Control type="text" name="descricao" value={oferta.descricao || ""} onChange={handleChange} placeholder="Descrição da oferta" required />
+                                </Form.Group>
 
-                    <label htmlFor="nomeOferta">Nome da oferta</label>
-                    <Input type="text" id="nomeOferta" name="nomeOferta" value={oferta.nomeOferta || ""} onChange={handleChange} placeholder="Nome da oferta" required />
+                                <Form.Group controlId="produtoRelacionado" className="mb-3">
+                                    <Form.Label className="text-light">Produto relacionado</Form.Label>
+                                    <Form.Control as="select" name="produtoRelacionado" value={oferta.produtoRelacionado || "default"} onChange={handleChange} required>
+                                        <option value="default">Selecione um produto</option>
+                                        {produtosSelect}
+                                    </Form.Control>
+                                </Form.Group>
 
-                    <label htmlFor="descricao">Descrição</label>
-                    <Input type="text" id="descricao" name="descricao" value={oferta.descricao || ""} onChange={handleChange} placeholder="Descrição da oferta" required />
+                                <Form.Group controlId="precoEspecial" className="mb-3">
+                                    <Form.Label className="text-light">Preço especial</Form.Label>
+                                    <Form.Control type="text" name="precoEspecial" value={oferta.precoEspecial || ""} onChange={handlePriceChange} placeholder="Preço especial da oferta" required />
+                                </Form.Group>
 
-                    <label htmlFor="produtoRelacionado">Produto relacionado</label>
-                    <select name="produtoRelacionado" id="produtoRelacionado" onChange={handleChange}>
-                        <option value="default">Selecione um produto</option>
-                        {produtosSelect}
-                    </select>
+                                <Form.Group controlId="quantidadeMinima" className="mb-3">
+                                    <Form.Label className="text-light">Quantidade mínima para ativação da oferta</Form.Label>
+                                    <Form.Control type="number" name="quantidadeMinima" value={oferta.quantidadeMinima || ""} onChange={handleChange} placeholder="Quantidade mínima para a oferta" required />
+                                </Form.Group>
 
-                    <label htmlFor="precoEspecial">Preço especial</label>
-                    <Input type="text" id="precoEspecial" name="precoEspecial" value={oferta.precoEspecial || ""} onChange={handlePriceChange} placeholder="Preço especial da oferta" required />
+                                <Form.Group controlId="dataInicio" className="mb-3">
+                                    <Form.Label className="text-light">Data de início da oferta</Form.Label>
+                                    <Form.Control type="date" name="dataInicio" value={oferta.dataInicio || ""} onChange={handleChange} placeholder="Data de início da oferta" required />
+                                </Form.Group>
 
-                    <label htmlFor="quantidadeMinima">Quantidade mínima para ativação da oferta</label>
-                    <Input type="number" id="quantidadeMinima" name="quantidadeMinima" value={oferta.quantidadeMinima || ""} onChange={handleChange} placeholder="Quantidade miníma para a oferta" required />
+                                <Form.Group controlId="dataTermino" className="mb-3">
+                                    <Form.Label className="text-light">Data de término da oferta</Form.Label>
+                                    <Form.Control type="date" name="dataTermino" value={oferta.dataTermino || ""} onChange={handleChange} placeholder="Data de término da oferta" required disabled={!oferta.dataInicio} />
+                                </Form.Group>
 
-                    <label htmlFor="dataInicio">Data de início da oferta</label>
-                    <Input type="date" id="dataInicio" name="dataInicio" value={oferta.dataInicio || ""} onChange={handleChange} placeholder="Data de início da oferta" required />
-
-                    <label htmlFor="dataTermino">Data de término da oferta</label>
-                    <Input type="date" id="dataTermino" name="dataTermino" value={oferta.dataTermino || ""} onChange={handleChange} placeholder="Data de término da oferta" required disabled={!oferta.dataInicio}/>
-
-                    <input type="submit" />
-                    <Button>Cadastrar</Button>
-                    <BotaoPrincipal>MEU NOME</BotaoPrincipal>
-                </form>
-            </Wrapper>
-        </div>
-    )
+                                <Button type="submit" className="w-100 mt-3" style={{ backgroundColor: '#FFCD46', borderColor: '#FFCD46', color: 'black' }}>Cadastrar</Button>
+                            </Form>
+                        </Card.Body>
+                    </Card>
+                </Col>
+            </Row>
+        </Container>
+    );
 }
 
-export default CriarOferta
+export default CriarOferta;

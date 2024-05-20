@@ -1,69 +1,44 @@
 import React, { useState, useEffect } from 'react';
-import Mensagens from './Mensagens'
-import Posts from './Posts'
+import Mensagens from './Mensagens';
+import Posts from './Posts';
 import NavegacaoHome from './NavegacaoHome';
 import NavegacaoHeader from './NavegacaoHeader';
 import EditarProdutoModal from './EditarProdutoModal';
 
-import Container from 'react-bootstrap/Container';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
+import { Container, Row, Col, Button, Card } from 'react-bootstrap';
 
 const HomeFornecedor = (props) => {
-
-    const [exibeComponente, setExibeComponente] = useState("")
-
-    const handleComponente = (comp) => {
-        setExibeComponente(comp)
-    }
-
-
-
-    const [listaProdutos, setListaProdutos] = useState([])
-    const [listaOfertas, setListaOfertas] = useState([])
-
+    const [exibeComponente, setExibeComponente] = useState("");
+    const [listaProdutos, setListaProdutos] = useState([]);
+    const [listaOfertas, setListaOfertas] = useState([]);
     const [selectedEntidade, setSelectedEntidade] = useState(null);
     const [showEditarModal, setShowEditarModal] = useState(false);
 
+    const handleComponente = (comp) => {
+        setExibeComponente(comp);
+    };
+
     useEffect(() => {
-
         const produtosStorage = localStorage.getItem('produtos');
-
         if (produtosStorage) {
             const produtosConvertidos = JSON.parse(produtosStorage);
-            console.log("Produtos convertidos de volta:", produtosConvertidos);
-
-
             setListaProdutos(listaAnterior => {
                 const novosProdutos = produtosConvertidos.filter(novoProd =>
                     !listaAnterior.some(prod => prod.nomeProduto === novoProd.nomeProduto));
-                console.log("Novos produtos adicionados:", novosProdutos);
                 return [...listaAnterior, ...novosProdutos];
             });
         }
 
         const ofertasStorage = localStorage.getItem('ofertas');
-
         if (ofertasStorage) {
             const ofertasConvertidas = JSON.parse(ofertasStorage);
-            console.log("Ofertas convertidas de volta:", ofertasConvertidas);
-
-
             setListaOfertas(listaAnterior => {
                 const novasOfertas = ofertasConvertidas.filter(novaOferta =>
                     !listaAnterior.some(oferta => oferta.nomeOferta === novaOferta.nomeOferta));
-                console.log("Novas ofertas adicionadas:", novasOfertas);
                 return [...listaAnterior, ...novasOfertas];
             });
         }
-
-        console.log("ATUALIZOU");
-
     }, []);
-
-    useEffect(() => {
-        console.log("Conteúdo atual da lista:", listaProdutos);
-    }, [listaProdutos]);
 
     const excluirItem = (elementoID, tipo) => {
         if (tipo === 'produto') {
@@ -99,110 +74,95 @@ const HomeFornecedor = (props) => {
         setShowEditarModal(false);
     };
 
-    const listaProdutosLI = listaProdutos.map((produto, index) => {
+    const listaProdutosLI = listaProdutos.map((produto) => (
+        <li key={produto.id} style={{ display: "flex", alignItems: "center" }}>
+        {produto.imagens && produto.imagens.length > 0 && (
+            <img src={produto.imagens[0]} alt={produto.nomeProduto} style={{ width: "100px", height: "100px", marginRight: "10px" }} />
+        )}
+        {produto.nomeProduto}
+        <Button variant="warning" size="sm" onClick={() => handleEditEntidade({ ...produto, tipo: "produto" })} className="ms-2">Editar</Button>
+        <Button variant="danger" size="sm" onClick={() => excluirItem(produto.id, 'produto')} className="ms-2">X</Button>
+    </li>
+));
 
+const listaOfertasLI = listaOfertas.map((oferta) => {
+    const produtoRelacionado = listaProdutos.find(produto => produto.id === oferta.produtoRelacionado.id);
+    return (
+        <li key={oferta.id} style={{ display: "flex", alignItems: "center" }}>
+            {produtoRelacionado && produtoRelacionado.imagens && produtoRelacionado.imagens.length > 0 && (
+                <img src={produtoRelacionado.imagens[0]} alt={produtoRelacionado.nomeProduto} style={{ width: "200px", height: "200px", marginRight: "10px" }} />
+            )}
+            {oferta.nomeOferta}
+            <Button variant="warning" size="sm" onClick={() => handleEditEntidade({ ...oferta, tipo: "oferta" })} className="ms-2">Editar</Button>
+            <Button variant="danger" size="sm" onClick={() => excluirItem(oferta.id, 'oferta')} className="ms-2">X</Button>
+        </li>
+    );
+});
+
+switch (exibeComponente) {
+    case "mensagens":
         return (
-            <li key={produto.id} style={{ display: "flex", alignItems: "center" }}>
-                {produto.imagens && produto.imagens.length > 0 && (
-                    <img src={produto.imagens[0]} alt={produto.nomeProduto} style={{ width: "50px", height: "50px", marginRight: "10px" }} />
-                )}
-                {produto.nomeProduto}
-                <button onClick={() => handleEditEntidade({ ...produto, tipo: "produto" })}>Editar</button>
-                <button onClick={() => excluirItem(produto.id, 'produto')}>X</button>
-            </li>
-        )
-    })
-
-    const listaOfertasLI = listaOfertas.map((oferta, index) => {
-        
-        const produtoRelacionado = listaProdutos.find(produto => produto.id === oferta.produtoRelacionado.id);
-
-        return (
-            <li key={oferta.id} style={{ display: "flex", alignItems: "center" }}>
-                {produtoRelacionado && produtoRelacionado.imagens && produtoRelacionado.imagens.length > 0 && (
-                    <img src={produtoRelacionado.imagens[0]} alt={produtoRelacionado.nomeProduto} style={{ width: "50px", height: "50px", marginRight: "10px" }} />
-                )}
-                {oferta.nomeOferta}
-                <button onClick={() => handleEditEntidade({ ...oferta, tipo: "oferta" })}>Editar</button>
-                <button onClick={() => excluirItem(oferta.id, 'oferta')}>X</button>
-            </li>
+            <div>
+                <NavegacaoHeader />
+                <NavegacaoHome handleComponente={handleComponente} handlePage={props.handlePage} />
+                <Mensagens />
+            </div>
         );
-    })
 
+    case "posts":
+        return (
+            <div>
+                <NavegacaoHeader />
+                <NavegacaoHome handleComponente={handleComponente} handlePage={props.handlePage} />
+                <Posts />
+            </div>
+        );
 
-
-    switch (exibeComponente) {
-        case "mensagens":
-
-            return (
-                <div>
-                    <NavegacaoHeader />
-                    <NavegacaoHome handleComponente={handleComponente} handlePage={props.handlePage} />
-                    <Mensagens />
-                </div>
-            )
-
-        case "posts":
-
-            return (
-                <div>
-                    <NavegacaoHeader />
-                    <NavegacaoHome handleComponente={handleComponente} handlePage={props.handlePage} />
-                    <Posts />
-                </div>
-            )
-
-        default:
-
-            return (
-                <div>
-                    <NavegacaoHeader />
-                    <NavegacaoHome handleComponente={handleComponente} handlePage={props.handlePage} />
-
-
-
-                    <Container>
-                        <Row>
-                            <Col className="d-flex justify-content-center">
-                                <h1>HOME FORNECEDOR</h1>
-                            </Col>
-
-                        </Row>
-                        <Row>
-                            <Col className="d-flex justify-content-center" style={{ border: "solid green 2px" }}>
-                                <div style={{ border: "solid green 2px" }}>
-                                    <button className='botao-cadastrar' onClick={() => props.handlePage("criar-produto")}>CADASTRAR PRODUTO</button>
-                                    <br />
-                                    <p style={{ border: "solid yellow 2px" }}>Lista de Produtos</p>
+    default:
+        return (
+            <div>
+                <NavegacaoHeader />
+                <NavegacaoHome handleComponente={handleComponente} handlePage={props.handlePage} />
+                <Container style={{ marginTop: '20px' }}>
+                    <Row className="mb-4">
+                        <Col className="d-flex justify-content-center">
+                            <h1>HOME FORNECEDOR</h1>
+                        </Col>
+                    </Row>
+                    <Row>
+                        <Col>
+                            <Card className="mb-4">
+                                <Card.Body className="d-flex flex-column align-items-center"> 
+                                    <Button className='botao-cadastrar mb-3 align-self-center' style={{ backgroundColor: '#FFCD46', borderColor: '#FFCD46', color: 'black' }} onClick={() => props.handlePage("criar-produto")}>ADICIONAR PRODUTO</Button>
+                                    <h5>Lista de Produtos</h5>
                                     <ul>
                                         {listaProdutosLI}
                                     </ul>
-                                </div>
-                            </Col>
-                            <Col className="d-flex justify-content-center" style={{ border: "solid green 2px" }}>
-                                <div style={{ border: "solid blue 2px" }}>
-                                    <button className='botao-cadastrar' onClick={() => props.handlePage("criar-oferta")}>CRIAR OFERTA</button>
-                                    <br />
-                                    <p>Lista de Ofertas</p>
+                                </Card.Body>
+                            </Card>
+                        </Col>
+                        <Col>
+                            <Card className="mb-4">
+                                <Card.Body className="d-flex flex-column align-items-center">
+                                    <Button className='botao-cadastrar mb-3 align-self-center' style={{ backgroundColor: '#FFCD46', borderColor: '#FFCD46', color: 'black' }} onClick={() => props.handlePage("criar-oferta")}>CRIAR OFERTA</Button>
+                                    <h5>Lista de Ofertas</h5>
                                     <ul>
                                         {listaOfertasLI}
                                     </ul>
-                                </div>
-                            </Col>
-                        </Row>
-                    </Container>
-                    <EditarProdutoModal
-                        show={showEditarModal}
-                        onHide={() => setShowEditarModal(false)}
-                        entidade={selectedEntidade}
-                        onEdit={handleSaveEditProduto}
-                    />
-                </div>
-            )
-
-            break;
-    }
-
+                                </Card.Body>
+                            </Card>
+                        </Col>
+                    </Row>
+                </Container>
+                <EditarProdutoModal
+                    show={showEditarModal}
+                    onHide={() => setShowEditarModal(false)}
+                    entidade={selectedEntidade}
+                    onEdit={handleSaveEditProduto}
+                />
+            </div>
+        );
+}
 }
 
-export default HomeFornecedor
+export default HomeFornecedor;

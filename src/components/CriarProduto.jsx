@@ -1,19 +1,21 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import NavegacaoHeader from "./NavegacaoHeader";
-import { Input, Wrapper, Title, Button, BotaoPrincipal } from "./Estilos";
+import { Form, Button, Container, Row, Col, Card, } from "react-bootstrap";
 import { v4 as uuidv4 } from 'uuid';
 
 const CriarProduto = (props) => {
-
     const [produto, setProduto] = useState({});
 
     const handleChange = (event) => {
         const name = event.target.name;
-        const value = event.target.value;
-        //setProduto(values => ({...values, [name]: value}))
-        setProduto({ ...produto, [name]: value })
-        console.log(produto)
-    }
+        let value = event.target.value;
+    
+        if (name === "quantidadeEstoque" && value < 0) {
+            value = 0;
+        }
+    
+        setProduto({ ...produto, [name]: value });
+    };
 
     const handlePriceChange = (event) => {
         let value = event.target.value;
@@ -30,17 +32,13 @@ const CriarProduto = (props) => {
         setProduto({ ...produto, imagens: imagesArray });
     };
 
-
     const handleSubmit = (event) => {
-
         event.preventDefault();
 
         if (produto.categoria === "default") {
-            alert("Selecione um produto")
+            alert("Selecione uma categoria");
             return;
         }
-
-
 
         const produtoComId = {
             id: uuidv4(),
@@ -48,62 +46,66 @@ const CriarProduto = (props) => {
         };
 
         const produtosAtuais = JSON.parse(localStorage.getItem('produtos')) || [];
-
         const novosProdutos = [...produtosAtuais, produtoComId];
-
         localStorage.setItem('produtos', JSON.stringify(novosProdutos));
 
         alert(`${produtoComId.nomeProduto} cadastrado com sucesso`);
-
-        console.log("olha abaixo o que tem no getItem:");
-        console.log(localStorage.getItem('produtos'));
-
         props.handlePage("home-fornecedor");
-
-    }
+    };
 
     return (
-
-        <div>
+        <Container>
             <NavegacaoHeader />
+            <Row className="justify-content-md-center" style={{ marginTop: '100px' }}>
+                <Col xs={12} md={6}>
+                    <Card className="text-light" style={{ backgroundColor: '#1c3bc5', borderRadius: '15px', borderColor: '#d4edda' }}>
+                        <Card.Body>
+                            <h1 className="text-center text-light">Cadastrar novo produto</h1>
+                            <Form onSubmit={handleSubmit}>
+                                <Form.Group controlId="nomeProduto" className="mb-3">
+                                    <Form.Label className="text-light">Nome do produto</Form.Label>
+                                    <Form.Control type="text" name="nomeProduto" value={produto.nomeProduto || ""} onChange={handleChange} placeholder="Nome do produto" required />
+                                </Form.Group>
 
-            <Wrapper>
-                <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column" }}>
-                    <Title>Cadastrar novo produto</Title>
+                                <Form.Group controlId="descricao" className="mb-3">
+                                    <Form.Label className="text-light">Descrição</Form.Label>
+                                    <Form.Control type="text" name="descricao" value={produto.descricao || ""} onChange={handleChange} placeholder="Descrição do produto" required />
+                                </Form.Group>
 
-                    <label htmlFor="nomeProduto">Nome do produto</label>
-                    <Input type="text" id="nomeProduto" name="nomeProduto" value={produto.nomeProduto || ""} onChange={handleChange} placeholder="Nome do produto" required />
+                                <Form.Group controlId="categoria" className="mb-3">
+                                    <Form.Label className="text-light">Categoria</Form.Label>
+                                    <Form.Control as="select" name="categoria" value={produto.categoria || "default"} onChange={handleChange} required>
+                                        <option value="default">Selecione uma categoria</option>
+                                        <option value="alimentacao">Alimentação</option>
+                                        <option value="vestuario">Vestuário</option>
+                                        <option value="racao">Ração</option>
+                                        <option value="bebidas">Bebidas</option>
+                                    </Form.Control>
+                                </Form.Group>
 
-                    <label htmlFor="descricao">Descrição</label>
-                    <Input type="text" id="descricao" name="descricao" value={produto.descricao || ""} onChange={handleChange} placeholder="Descrição do produto" required />
+                                <Form.Group controlId="preco" className="mb-3">
+                                    <Form.Label className="text-light">Preço</Form.Label>
+                                    <Form.Control type="text" name="preco" value={produto.preco || ""} onChange={handlePriceChange} placeholder="Preço do produto" required />
+                                </Form.Group>
 
-                    <label htmlFor="categoria">Categoria</label>
-                    <select name="categoria" id="categoria" onChange={handleChange}>
-                        <option value="default">Selecione uma categoria</option>
-                        <option value="alimentacao">Alimentação</option>
-                        <option value="vestuario">Vestuário</option>
-                        <option value="racao">Ração</option>
-                        <option value="bebidas">Bebidas</option>
-                    </select>
+                                <Form.Group controlId="quantidadeEstoque" className="mb-3">
+                                    <Form.Label className="text-light">Quantidade em estoque</Form.Label>
+                                    <Form.Control type="number" name="quantidadeEstoque" value={produto.quantidadeEstoque || ""} onChange={handleChange} placeholder="Quantidade em estoque do produto" required />
+                                </Form.Group>
 
+                                <Form.Group controlId="imagens" className="mb-3">
+                                    <Form.Label className="text-light">Imagens</Form.Label>
+                                    <Form.Control type="file" name="imagens" onChange={handleImageChange} multiple />
+                                </Form.Group>
 
-                    <label htmlFor="preco">Preço</label>
-                    <Input type="text" id="preco" name="preco" value={produto.preco || ""} onChange={handlePriceChange} placeholder="Preço do produto" required />
-
-                    <label htmlFor="quantidadeEstoque">Quantidade em estoque</label>
-                    <Input type="number" id="quantidadeEstoque" name="quantidadeEstoque" value={produto.quantidadeEstoque || ""} onChange={handleChange} placeholder="Quantidade em estoque do produto" required />
-
-                    <label htmlFor="imagens">Imagens</label>
-                    <Input type="text" id="imagens" name="imagens" value={produto.imagens || ""} onChange={handleChange} placeholder="Imagens do produto" required />
-                    <Input type="file" id="imagens" name="imagens" onChange={handleImageChange} multiple />
-
-                    <input type="submit" />
-                    <Button>Cadastrar</Button>
-                    <BotaoPrincipal>MEU NOME</BotaoPrincipal>
-                </form>
-            </Wrapper>
-        </div>
-    )
+                                <Button type="submit" className="w-100 mt-3" style={{ backgroundColor: '#FFCD46', borderColor: '#FFCD46', color: 'black' }}>Cadastrar</Button>
+                            </Form>
+                        </Card.Body>
+                    </Card>
+                </Col>
+            </Row>
+        </Container>
+    );
 }
 
-export default CriarProduto
+export default CriarProduto;
