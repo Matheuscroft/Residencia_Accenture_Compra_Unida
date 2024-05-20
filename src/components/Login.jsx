@@ -1,28 +1,38 @@
 import React from "react";
 import NavegacaoHeader from "./NavegacaoHeader";
-import { Input } from "./Estilos";
+import { Form, Button, Container, Row, Col, Card } from "react-bootstrap";
+import EsqueciSenha from "./EsqueciSenha";
 
 const Login = (props) => {
     return (
-        <div>
+        <Container>
             <NavegacaoHeader />
-            <h1>Fazer Login</h1>
-            <div>
-                <form action="" style={{ display: "flex", flexDirection: "column" }}>
-                    
-                    <label htmlFor="email">E-mail</label>
-                    <Input type="text" id="email" name="email" placeholder="Insira seu e-mail" required />
+            <Row className="justify-content-md-center" style={{ marginTop: '100px' }}>
+                <Col xs={12} md={6}>
+                    <Card className="text-light" style={{ backgroundColor: '#1c3bc5', borderRadius: '15px', borderColor: '#d4edda' }}>
+                        <Card.Body>
+                            <h1 className="text-center text-light">Login</h1>
+                            <Form>
+                                <Form.Group controlId="email" className="mb-3">
+                                    <Form.Label className="text-light">E-mail</Form.Label>
+                                    <Form.Control type="text" placeholder="Insira seu e-mail" required />
+                                </Form.Group>
 
-                    <label htmlFor="senha">Senha</label>
-                    <Input type="password" id="senha" name="senha" placeholder="Insira sua senha" required />
+                                <Form.Group controlId="senha" className="mb-3">
+                                    <Form.Label className="text-light">Senha</Form.Label>
+                                    <Form.Control type="password" placeholder="Insira sua senha" required />
+                                </Form.Group>
 
-                </form>
-            </div>
-            <a href="">Esqueci minha senha</a>
-            <button onClick={() => props.handlePage("home")}>Fazer login</button>
-            <button onClick={() => props.handlePage("cadastro")}>Cadastre-se</button>
-        </div>
+                                <EsqueciSenha />
+                                <Button className="w-100 mt-3" style={{ backgroundColor: '#FFCD46', borderColor: '#FFCD46', color: 'black' }} onClick={() => props.handlePage("home")}>Fazer login</Button>
+                                <Button className="w-100 mt-2" style={{ backgroundColor: '#FFCD46', borderColor: '#FFCD46', color: 'black' }} onClick={() => props.handlePage("cadastro")}>Cadastre-se</Button>
+                            </Form>
+                        </Card.Body>
+                    </Card>
+                </Col>
+            </Row>
+        </Container>
     )
 }
 
-export default Login
+export default Login;
