@@ -5,6 +5,9 @@ import CadastroFornecedor from './components/CadastroFornecedor';
 import HomeFornecedor from './components/HomeFornecedor';
 import CriarProduto from './components/CriarProduto'
 import CriarOferta from './components/CriarOferta';
+import Cadastro from './components/Cadastro';
+import CadastroCliente from './components/CadastroCliente'
+import HomeCliente from './components/HomeCliente';
 
 
 function App() {
@@ -20,6 +23,12 @@ function App() {
 
       return (
         <Home handlePage={handlePage} />
+      )
+
+    case "home-cliente":
+
+      return (
+        <HomeCliente handlePage={handlePage} />
       )
 
     case "home-fornecedor":
@@ -43,8 +52,21 @@ function App() {
     case "cadastro":
 
       return (
+        <Cadastro handlePage={handlePage} />
+      )
+
+    case "cadastro-cliente":
+
+      return (
+        <CadastroCliente handlePage={handlePage} />
+      )
+
+    case "cadastro-fornecedor":
+
+      return (
         <CadastroFornecedor handlePage={handlePage} />
       )
+
 
 
     default:
