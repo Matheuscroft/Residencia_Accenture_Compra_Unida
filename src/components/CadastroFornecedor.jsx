@@ -104,7 +104,7 @@ const CadastroFornecedor = (props) => {
                                     {errors.confirma_senha && <Alert variant="danger">{errors.confirma_senha}</Alert>}
                                 </Form.Group>
 
-                                <Button type="submit" className="w-100 mt-3" style={{ backgroundColor: 'yellow', borderColor: 'yellow', color: 'black' }}>Cadastrar</Button>
+                                <Button type="submit" className="w-100 mt-3" style={{ backgroundColor: '#FFCD46', borderColor: '#FFCD46', color: 'black' }}>Cadastrar</Button>
                             </Form>
                         </Card.Body>
                     </Card>
