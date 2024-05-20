@@ -1,0 +1,6 @@
+.login-form-container {
+    background-color: #d4edda; /* Verde claro */
+    border: 2px solid #155724; /* Verde escuro */
+    border-radius: 15px; /* Bordas arredondadas */
+    padding: 20px;
+}
