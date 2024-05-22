@@ -90,7 +90,7 @@ const listaOfertasLI = listaOfertas.map((oferta) => {
     return (
         <li key={oferta.id} style={{ display: "flex", alignItems: "center" }}>
             {produtoRelacionado && produtoRelacionado.imagens && produtoRelacionado.imagens.length > 0 && (
-                <img src={produtoRelacionado.imagens[0]} alt={produtoRelacionado.nomeProduto} style={{ width: "200px", height: "200px", marginRight: "10px" }} />
+                <img src={produtoRelacionado.imagens[0]} alt={produtoRelacionado.nomeProduto} style={{ width: "100px", height: "100px", marginRight: "10px" }} />
             )}
             {oferta.nomeOferta}
             <Button variant="warning" size="sm" onClick={() => handleEditEntidade({ ...oferta, tipo: "oferta" })} className="ms-2">Editar</Button>
