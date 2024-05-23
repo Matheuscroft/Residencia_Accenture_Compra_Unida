@@ -19,14 +19,10 @@ const CadastroCliente = (props) => {
     };
 
     const formatTelefone = (value) => {
-        
         value = value.replace(/\D/g, "");
-
-       
         if (value.length > 0) {
             value = `(${value.substring(0, 2)}) ${value.substring(2, 3)}${value.substring(3, 7)}-${value.substring(7, 11)}`;
         }
-
         return value;
     };
 
@@ -34,7 +30,6 @@ const CadastroCliente = (props) => {
         event.preventDefault();
         const newErrors = {};
 
-        
         ['cpf', 'endereco', 'telefone', 'email', 'senha', 'confirma_senha'].forEach(field => {
             if (!dadosCliente[field]) {
                 newErrors[field] = 'Este campo é obrigatório';
@@ -45,7 +40,7 @@ const CadastroCliente = (props) => {
             setErrors(newErrors);
         } else {
             alert(`${dadosCliente.nome} cadastrado com sucesso!`);
-            props.handlePage("home-cliente");
+            props.handlePage("login");
         }
     };
 
@@ -58,7 +53,6 @@ const CadastroCliente = (props) => {
                         <Card.Body>
                             <h1 className="text-center text-light">Cadastro - Cliente</h1>
                             <Form onSubmit={handleSubmit}>
-
                                 <Form.Group controlId="nome" className="mb-3">
                                     <Form.Label className="text-light">Nome Completo</Form.Label>
                                     <Form.Control type="text" name="nome" value={dadosCliente.nome || ""} onChange={handleChange} placeholder="Nome Completo" />
@@ -100,7 +94,7 @@ const CadastroCliente = (props) => {
                                     {errors.confirma_senha && <Alert variant="danger">{errors.confirma_senha}</Alert>}
                                 </Form.Group>
 
-                                <Button type="submit" className="w-100 mt-3" style={{ backgroundColor: 'yellow', borderColor: 'yellow', color: 'black' }}>Cadastrar</Button>
+                                <Button type="submit" className="w-100 mt-3" style={{ backgroundColor: '#FFCD46', borderColor: '#FFCD46', color: 'black' }}>Cadastrar</Button>
                             </Form>
                         </Card.Body>
                     </Card>
@@ -111,4 +105,3 @@ const CadastroCliente = (props) => {
 }
 
 export default CadastroCliente;
-
