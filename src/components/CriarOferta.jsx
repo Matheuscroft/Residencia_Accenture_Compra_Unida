@@ -1,22 +1,18 @@
 import React, { useState, useEffect } from "react";
 import NavegacaoHeader from "./NavegacaoHeader";
 import { Form, Button, Container, Row, Col, Card } from "react-bootstrap";
-import { v4 as uuidv4 } from 'uuid';
+import { getProdutos, addOferta } from "../auth/firebaseService"; 
 
 const CriarOferta = (props) => {
     const [oferta, setOferta] = useState({});
     const [produtos, setProdutos] = useState([]);
 
     useEffect(() => {
-        const produtosStorage = localStorage.getItem('produtos');
-        if (produtosStorage) {
-            const produtosConvertidos = JSON.parse(produtosStorage);
-            setProdutos(listaAnterior => {
-                const novosProdutos = produtosConvertidos.filter(novoProd =>
-                    !listaAnterior.some(prod => prod.nomeProduto === novoProd.nomeProduto));
-                return [...listaAnterior, ...novosProdutos];
-            });
-        }
+        const fetchProdutos = async () => {
+            const produtos = await getProdutos();
+            setProdutos(produtos);
+        };
+        fetchProdutos();
     }, []);
 
     const produtosSelect = produtos.map((produto, index) => (
@@ -43,7 +39,7 @@ const CriarOferta = (props) => {
         setOferta({ ...oferta, precoEspecial: value });
     };
 
-    const handleSubmit = (event) => {
+    const handleSubmit = async (event) => {
         event.preventDefault();
 
         if (oferta.produtoRelacionado === "default") {
@@ -62,17 +58,9 @@ const CriarOferta = (props) => {
             return;
         }
 
-        const ofertaComId = {
-            id: uuidv4(),
-            ...oferta,
-            produtoRelacionado: produtoSelecionado
-        };
-
-        const ofertasAtuais = JSON.parse(localStorage.getItem('ofertas')) || [];
-        const novasOfertas = [...ofertasAtuais, ofertaComId];
-        localStorage.setItem('ofertas', JSON.stringify(novasOfertas));
-
-        alert(`${ofertaComId.nomeOferta} cadastrado com sucesso`);
+        const ofertaComId = { ...oferta, produtoRelacionado: produtoSelecionado };
+        const id = await addOferta(ofertaComId);
+        alert(`${ofertaComId.nomeOferta} cadastrado com sucesso com ID: ${id}`);
         props.handlePage("home-fornecedor");
     };
 

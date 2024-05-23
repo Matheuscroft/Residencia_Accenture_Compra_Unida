@@ -1,9 +1,15 @@
-import React from "react";
+import React, { useState } from "react";
 import NavegacaoHeader from "./NavegacaoHeader";
 import { Form, Button, Container, Row, Col, Card } from "react-bootstrap";
 import EsqueciSenha from "./EsqueciSenha";
 
 const Login = (props) => {
+    const [showEsqueciSenha, setShowEsqueciSenha] = useState(false);
+
+    if (showEsqueciSenha) {
+        return <EsqueciSenha />;
+    }
+
     return (
         <Container>
             <NavegacaoHeader />
@@ -23,9 +29,9 @@ const Login = (props) => {
                                     <Form.Control type="password" placeholder="Insira sua senha" required />
                                 </Form.Group>
 
-                                <EsqueciSenha />
                                 <Button className="w-100 mt-3" style={{ backgroundColor: '#FFCD46', borderColor: '#FFCD46', color: 'black' }} onClick={() => props.handlePage("home")}>Fazer login</Button>
                                 <Button className="w-100 mt-2" style={{ backgroundColor: '#FFCD46', borderColor: '#FFCD46', color: 'black' }} onClick={() => props.handlePage("cadastro")}>Cadastre-se</Button>
+                                <Button className="w-100 mt-2" variant="link" style={{ color: '#FFCD46' }} onClick={() => setShowEsqueciSenha(true)}>Esqueci Minha Senha</Button>
                             </Form>
                         </Card.Body>
                     </Card>

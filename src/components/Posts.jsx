@@ -1,26 +1,28 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import { getOfertas } from "../auth/firebaseService"; // Adicione a função para obter ofertas
 
 const Posts = () => {
+    const [ofertas, setOfertas] = useState([]);
 
-    const posts = [
-        "Post 1", "Post 2", "Post 3"
-    ]
+    useEffect(() => {
+        const fetchOfertas = async () => {
+            const ofertas = await getOfertas();
+            setOfertas(ofertas);
+        };
+        fetchOfertas();
+    }, []);
 
-    const listPosts = posts.map((post) => {
-        return (
-            <li>{post}</li>
-        )
-    })
+    const listOfertas = ofertas.map((oferta, index) => (
+        <li key={index}>{oferta.nomeOferta}</li>
+    ));
 
     return (
         <div>
-            <h1>Posts</h1>
-            {posts.length ? listPosts : <p>Ainda não possui posts</p>}
+            <h1>Ofertas</h1>
+            {ofertas.length ? listOfertas : <p>Ainda não possui ofertas</p>}
         </div>
-    )
+    );
+};
 
-    
+export default Posts;
 
-}
-
-export default Posts

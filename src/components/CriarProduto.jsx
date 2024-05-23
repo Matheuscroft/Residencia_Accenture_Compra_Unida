@@ -1,10 +1,11 @@
 import React, { useState } from "react";
 import NavegacaoHeader from "./NavegacaoHeader";
-import { Form, Button, Container, Row, Col, Card, } from "react-bootstrap";
-import { v4 as uuidv4 } from 'uuid';
+import { Form, Button, Container, Row, Col, Card } from "react-bootstrap";
+import { addProduto, uploadImage } from "../auth/firebaseService"; // Corrija o caminho aqui
 
 const CriarProduto = (props) => {
     const [produto, setProduto] = useState({});
+    const [imagens, setImagens] = useState([]);
 
     const handleChange = (event) => {
         const name = event.target.name;
@@ -28,11 +29,10 @@ const CriarProduto = (props) => {
 
     const handleImageChange = (event) => {
         const files = event.target.files;
-        const imagesArray = Array.from(files).map(file => URL.createObjectURL(file));
-        setProduto({ ...produto, imagens: imagesArray });
+        setImagens(Array.from(files));
     };
 
-    const handleSubmit = (event) => {
+    const handleSubmit = async (event) => {
         event.preventDefault();
 
         if (produto.categoria === "default") {
@@ -40,17 +40,16 @@ const CriarProduto = (props) => {
             return;
         }
 
-        const produtoComId = {
-            id: uuidv4(),
-            ...produto
-        };
+        const imageUrls = await Promise.all(imagens.map(file => uploadImage(file)));
+        const produtoComImagens = { ...produto, imagens: imageUrls };
 
-        const produtosAtuais = JSON.parse(localStorage.getItem('produtos')) || [];
-        const novosProdutos = [...produtosAtuais, produtoComId];
-        localStorage.setItem('produtos', JSON.stringify(novosProdutos));
-
-        alert(`${produtoComId.nomeProduto} cadastrado com sucesso`);
-        props.handlePage("home-fornecedor");
+        const id = await addProduto(produtoComImagens);
+        if (id) {
+            alert(`${produto.nomeProduto} cadastrado com sucesso com ID: ${id}`);
+            props.handlePage("home-fornecedor");
+        } else {
+            alert("Erro ao cadastrar produto");
+        }
     };
 
     return (
