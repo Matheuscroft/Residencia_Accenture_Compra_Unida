@@ -19,10 +19,8 @@ const CadastroFornecedor = (props) => {
     };
 
     const formatTelefone = (value) => {
-       
         value = value.replace(/\D/g, "");
 
-        
         if (value.length > 0) {
             value = `(${value.substring(0, 2)}) ${value.substring(2, 3)}${value.substring(3, 7)}-${value.substring(7, 11)}`;
         }
@@ -34,7 +32,6 @@ const CadastroFornecedor = (props) => {
         event.preventDefault();
         const newErrors = {};
 
-        
         ['cnpj_mei', 'endereco', 'telefone', 'email', 'senha', 'confirma_senha'].forEach(field => {
             if (!dadosFornecedor[field]) {
                 newErrors[field] = 'Este campo é obrigatório';
@@ -104,7 +101,7 @@ const CadastroFornecedor = (props) => {
                                     {errors.confirma_senha && <Alert variant="danger">{errors.confirma_senha}</Alert>}
                                 </Form.Group>
 
-                                <Button type="submit" className="w-100 mt-3" style={{ backgroundColor: '#FFCD46', borderColor: '#FFCD46', color: 'black' }}>Cadastrar</Button>
+                                <Button type="submit" className="w-100 mt-3" style={{ backgroundColor: '#FFCD46', borderColor: '#FFCD46', color: 'black' }} onClick={() => props.handlePage("home-fornecedor")}>Cadastrar</Button>
                             </Form>
                         </Card.Body>
                     </Card>
@@ -115,4 +112,3 @@ const CadastroFornecedor = (props) => {
 }
 
 export default CadastroFornecedor;
-

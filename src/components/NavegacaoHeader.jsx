@@ -22,7 +22,7 @@ const NavegacaoHeader = (props) => {
                         <Nav.Link href="google.com" style={{ color: 'white' }}>Produtos</Nav.Link>
                         <Nav.Link href="google.com" style={{ color: 'white' }}>Contato</Nav.Link>
                     </Nav>
-                    <Button className="me-2" style={{ backgroundColor: '#FFCD46', borderColor: '#FFCD46', color: 'black' }} onClick={() => props.handlePage("home")}>Entrar</Button>
+                    <Button className="me-2" style={{ backgroundColor: '#FFCD46', borderColor: '#FFCD46', color: 'black' }} onClick={() => props.handlePage("login")}>Entrar</Button>
                     <Button style={{ backgroundColor: '#FFCD46', borderColor: '#FFCD46', color: 'black' }} onClick={() => props.handlePage("cadastro")}>Cadastre-se</Button>
                 </Navbar.Collapse>
             </Container>

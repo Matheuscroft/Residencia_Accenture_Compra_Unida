@@ -6,7 +6,7 @@ import EsqueciSenha from "./EsqueciSenha";
 const Login = (props) => {
     return (
         <Container>
-            <NavegacaoHeader />
+            <NavegacaoHeader handlePage={props.handlePage} />
             <Row className="justify-content-md-center" style={{ marginTop: '100px' }}>
                 <Col xs={12} md={6}>
                     <Card className="text-light" style={{ backgroundColor: '#1c3bc5', borderRadius: '15px', borderColor: '#d4edda' }}>

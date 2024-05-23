@@ -1,22 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import Mensagens from './Mensagens';
-import Posts from './Posts';
-import NavegacaoHome from './NavegacaoHome';
 import NavegacaoHeader from './NavegacaoHeader';
 import EditarProdutoModal from './EditarProdutoModal';
-
 import { Container, Row, Col, Button, Card } from 'react-bootstrap';
 
 const HomeFornecedor = (props) => {
-    const [exibeComponente, setExibeComponente] = useState("");
+
     const [listaProdutos, setListaProdutos] = useState([]);
     const [listaOfertas, setListaOfertas] = useState([]);
     const [selectedEntidade, setSelectedEntidade] = useState(null);
     const [showEditarModal, setShowEditarModal] = useState(false);
-
-    const handleComponente = (comp) => {
-        setExibeComponente(comp);
-    };
 
     useEffect(() => {
         const produtosStorage = localStorage.getItem('produtos');
@@ -76,53 +68,32 @@ const HomeFornecedor = (props) => {
 
     const listaProdutosLI = listaProdutos.map((produto) => (
         <li key={produto.id} style={{ display: "flex", alignItems: "center" }}>
-        {produto.imagens && produto.imagens.length > 0 && (
-            <img src={produto.imagens[0]} alt={produto.nomeProduto} style={{ width: "100px", height: "100px", marginRight: "10px" }} />
-        )}
-        {produto.nomeProduto}
-        <Button variant="warning" size="sm" onClick={() => handleEditEntidade({ ...produto, tipo: "produto" })} className="ms-2">Editar</Button>
-        <Button variant="danger" size="sm" onClick={() => excluirItem(produto.id, 'produto')} className="ms-2">X</Button>
-    </li>
-));
-
-const listaOfertasLI = listaOfertas.map((oferta) => {
-    const produtoRelacionado = listaProdutos.find(produto => produto.id === oferta.produtoRelacionado.id);
-    return (
-        <li key={oferta.id} style={{ display: "flex", alignItems: "center" }}>
-            {produtoRelacionado && produtoRelacionado.imagens && produtoRelacionado.imagens.length > 0 && (
-                <img src={produtoRelacionado.imagens[0]} alt={produtoRelacionado.nomeProduto} style={{ width: "100px", height: "100px", marginRight: "10px" }} />
+            {produto.imagens && produto.imagens.length > 0 && (
+                <img src={produto.imagens[0]} alt={produto.nomeProduto} style={{ width: "100px", height: "100px", marginRight: "10px" }} />
             )}
-            {oferta.nomeOferta}
-            <Button variant="warning" size="sm" onClick={() => handleEditEntidade({ ...oferta, tipo: "oferta" })} className="ms-2">Editar</Button>
-            <Button variant="danger" size="sm" onClick={() => excluirItem(oferta.id, 'oferta')} className="ms-2">X</Button>
+            {produto.nomeProduto}
+            <Button variant="warning" size="sm" onClick={() => handleEditEntidade({ ...produto, tipo: "produto" })} className="ms-2">Editar</Button>
+            <Button variant="danger" size="sm" onClick={() => excluirItem(produto.id, 'produto')} className="ms-2">X</Button>
         </li>
-    );
-});
+    ));
 
-switch (exibeComponente) {
-    case "mensagens":
+    const listaOfertasLI = listaOfertas.map((oferta) => {
+        const produtoRelacionado = listaProdutos.find(produto => produto.id === oferta.produtoRelacionado.id);
+        return (
+            <li key={oferta.id} style={{ display: "flex", alignItems: "center" }}>
+                {produtoRelacionado && produtoRelacionado.imagens && produtoRelacionado.imagens.length > 0 && (
+                    <img src={produtoRelacionado.imagens[0]} alt={produtoRelacionado.nomeProduto} style={{ width: "100px", height: "100px", marginRight: "10px" }} />
+                    )}
+                    {oferta.nomeOferta}
+                    <Button variant="warning" size="sm" onClick={() => handleEditEntidade({ ...oferta, tipo: "oferta" })} className="ms-2">Editar</Button>
+                    <Button variant="danger" size="sm" onClick={() => excluirItem(oferta.id, 'oferta')} className="ms-2">X</Button>
+                </li>
+            );
+        });
+    
         return (
             <div>
                 <NavegacaoHeader />
-                <NavegacaoHome handleComponente={handleComponente} handlePage={props.handlePage} />
-                <Mensagens />
-            </div>
-        );
-
-    case "posts":
-        return (
-            <div>
-                <NavegacaoHeader />
-                <NavegacaoHome handleComponente={handleComponente} handlePage={props.handlePage} />
-                <Posts />
-            </div>
-        );
-
-    default:
-        return (
-            <div>
-                <NavegacaoHeader />
-                <NavegacaoHome handleComponente={handleComponente} handlePage={props.handlePage} />
                 <Container style={{ marginTop: '20px' }}>
                     <Row className="mb-4">
                         <Col className="d-flex justify-content-center">
@@ -162,7 +133,6 @@ switch (exibeComponente) {
                 />
             </div>
         );
-}
-}
-
-export default HomeFornecedor;
+    }
+    
+    export default HomeFornecedor;
