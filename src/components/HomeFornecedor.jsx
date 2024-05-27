@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import NavegacaoHeader from './NavegacaoHeader';
 import EditarProdutoModal from './EditarProdutoModal';
 import { Container, Row, Col, Button, Card } from 'react-bootstrap';
+import { getProdutos, getOfertas, deletarProduto, deletarOferta, deletarImagem, editarProduto, editarOferta } from "../auth/firebaseService";
 
 const HomeFornecedor = (props) => {
 
@@ -11,36 +12,44 @@ const HomeFornecedor = (props) => {
     const [showEditarModal, setShowEditarModal] = useState(false);
 
     useEffect(() => {
-        const produtosStorage = localStorage.getItem('produtos');
-        if (produtosStorage) {
-            const produtosConvertidos = JSON.parse(produtosStorage);
-            setListaProdutos(listaAnterior => {
-                const novosProdutos = produtosConvertidos.filter(novoProd =>
-                    !listaAnterior.some(prod => prod.nomeProduto === novoProd.nomeProduto));
-                return [...listaAnterior, ...novosProdutos];
-            });
-        }
 
-        const ofertasStorage = localStorage.getItem('ofertas');
-        if (ofertasStorage) {
-            const ofertasConvertidas = JSON.parse(ofertasStorage);
-            setListaOfertas(listaAnterior => {
-                const novasOfertas = ofertasConvertidas.filter(novaOferta =>
-                    !listaAnterior.some(oferta => oferta.nomeOferta === novaOferta.nomeOferta));
-                return [...listaAnterior, ...novasOfertas];
-            });
-        }
+        const fetchProdutos = async () => {
+            const produtos = await getProdutos();
+            console.log("olha os produtos do getprodutos:")
+            console.log(produtos)
+            setListaProdutos(produtos);
+        };
+
+
+        const fetchOfertas = async () => {
+            const ofertas = await getOfertas();
+            console.log("olha as ofertas  do getofertas:")
+            console.log(ofertas)
+            setListaOfertas(ofertas);
+        };
+
+        fetchProdutos();
+        fetchOfertas();
+       
     }, []);
 
-    const excluirItem = (elementoID, tipo) => {
+    const excluirItem = async (elementoID, tipo) => {
+
         if (tipo === 'produto') {
+
+            const produto = listaProdutos.find(elemento => elemento.id === elementoID);
+            if (produto && Array.isArray(produto.imagens)) {
+                await Promise.all(produto.imagens.map(imagemUrl => deletarImagem(imagemUrl)));
+            }
+            await deletarProduto(elementoID);
             const novaListaProdutos = listaProdutos.filter(elemento => elemento.id !== elementoID);
             setListaProdutos(novaListaProdutos);
-            localStorage.setItem('produtos', JSON.stringify(novaListaProdutos));
+
         } else if (tipo === 'oferta') {
+
+            await deletarOferta(elementoID);
             const novaListaOfertas = listaOfertas.filter(elemento => elemento.id !== elementoID);
             setListaOfertas(novaListaOfertas);
-            localStorage.setItem('ofertas', JSON.stringify(novaListaOfertas));
         }
     };
 
@@ -49,19 +58,27 @@ const HomeFornecedor = (props) => {
         setShowEditarModal(true);
     };
 
-    const handleSaveEditProduto = (editedEntidade) => {
-        if (editedEntidade.tipo === "produto") {
+    const handleSalvarProdutoEditado = (entidadeEditada) => {
+        if (entidadeEditada.tipo === "produto") {
+
+            editarProduto(entidadeEditada.id, entidadeEditada);
+
             const novaListaProdutos = listaProdutos.map(produto =>
-                produto.id === editedEntidade.id ? editedEntidade : produto
+                produto.id === entidadeEditada.id ? entidadeEditada : produto
             );
+            
+            console.log(entidadeEditada.imagens)
             setListaProdutos(novaListaProdutos);
-            localStorage.setItem('produtos', JSON.stringify(novaListaProdutos));
-        } else if (editedEntidade.tipo === "oferta") {
+
+        } else if (entidadeEditada.tipo === "oferta") {
+
+            editarOferta(entidadeEditada.id, entidadeEditada);
+
             const novaListaOfertas = listaOfertas.map(oferta =>
-                oferta.id === editedEntidade.id ? editedEntidade : oferta
+                oferta.id === entidadeEditada.id ? entidadeEditada : oferta
             );
+            
             setListaOfertas(novaListaOfertas);
-            localStorage.setItem('ofertas', JSON.stringify(novaListaOfertas));
         }
         setShowEditarModal(false);
     };
@@ -129,7 +146,7 @@ const HomeFornecedor = (props) => {
                     show={showEditarModal}
                     onHide={() => setShowEditarModal(false)}
                     entidade={selectedEntidade}
-                    onEdit={handleSaveEditProduto}
+                    onEdit={handleSalvarProdutoEditado}
                 />
             </div>
         );

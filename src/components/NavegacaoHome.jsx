@@ -1,16 +1,23 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { Container, Row, Col, Card, Button } from 'react-bootstrap';
 import NavegacaoHeader from './NavegacaoHeader';
+import { getOfertas } from "../auth/firebaseService";
 
 const NavegacaoHome = (props) => {
     const [ofertas, setOfertas] = useState([]);
     const containerRefs = useRef({});
 
     useEffect(() => {
-        const ofertasStorage = localStorage.getItem('ofertas');
-        if (ofertasStorage) {
-            setOfertas(JSON.parse(ofertasStorage));
-        }
+
+        const fetchOfertas = async () => {
+            const ofertas = await getOfertas();
+            console.log("olha as ofertas  do getofertas:")
+            console.log(ofertas)
+            setOfertas(ofertas);
+        };
+
+        fetchOfertas();
+
     }, []);
 
     const categorias = ofertas.reduce((acc, oferta) => {

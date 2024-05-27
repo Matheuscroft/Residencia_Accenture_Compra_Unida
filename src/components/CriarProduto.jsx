@@ -2,9 +2,11 @@ import React, { useState } from "react";
 import NavegacaoHeader from "./NavegacaoHeader";
 import { Form, Button, Container, Row, Col, Card, } from "react-bootstrap";
 import { v4 as uuidv4 } from 'uuid';
+import { addProduto, uploadImagem } from "../auth/firebaseService";
 
 const CriarProduto = (props) => {
     const [produto, setProduto] = useState({});
+    const [imagens, setImagens] = useState([]);
 
     const handleChange = (event) => {
         const name = event.target.name;
@@ -30,9 +32,12 @@ const CriarProduto = (props) => {
         const files = event.target.files;
         const imagesArray = Array.from(files).map(file => URL.createObjectURL(file));
         setProduto({ ...produto, imagens: imagesArray });
+
+        //const files = event.target.files;
+        setImagens(Array.from(files));
     };
 
-    const handleSubmit = (event) => {
+    const handleSubmit = async (event) => {
         event.preventDefault();
 
         if (produto.categoria === "default") {
@@ -45,9 +50,17 @@ const CriarProduto = (props) => {
             ...produto
         };
 
-        const produtosAtuais = JSON.parse(localStorage.getItem('produtos')) || [];
-        const novosProdutos = [...produtosAtuais, produtoComId];
-        localStorage.setItem('produtos', JSON.stringify(novosProdutos));
+        const imageUrls = await Promise.all(imagens.map(file => uploadImagem(file)));
+        const produtoComImagens = { ...produto, imagens: imageUrls };
+
+        const id = await addProduto(produtoComImagens);
+        if (id) {
+            alert(`${produto.nomeProduto} cadastrado com sucesso com ID: ${id}`);
+            props.handlePage("home-fornecedor");
+        } else {
+            alert("Erro ao cadastrar produto");
+        }
+
 
         alert(`${produtoComId.nomeProduto} cadastrado com sucesso`);
         props.handlePage("home-fornecedor");

@@ -1,19 +1,29 @@
 import React, { useState, useEffect } from 'react';
 import { Modal, Button, Form } from 'react-bootstrap';
+import { getProdutos } from "../auth/firebaseService";
 
 const EditarProdutoModal = ({ entidade, show, onHide, onEdit }) => {
-    const [editedEntidade, setEditedEntidade] = useState({ ...entidade });
-    const [selectedFiles, setSelectedFiles] = useState([]);
+    const [entidadeEditada, setEntidadeEditada] = useState({ ...entidade });
+    const [arquivosSelecionados, setArquivosSelecionados] = useState([]);
     const [produtos, setProdutos] = useState([]);
 
 
     useEffect(() => {
         if (entidade) {
-            setEditedEntidade({ ...entidade });
+            setEntidadeEditada({ ...entidade });
+            setArquivosSelecionados([]);
         }
 
-        const storedProdutos = JSON.parse(localStorage.getItem('produtos')) || [];
-        setProdutos(storedProdutos);
+        console.log("entrei no editar. entidade: ", entidade)
+
+        const fetchProdutos = async () => {
+            const produtos = await getProdutos();
+            setProdutos(produtos);
+
+            
+
+        };
+        fetchProdutos();
 
     }, [entidade]);
 
@@ -23,52 +33,72 @@ const EditarProdutoModal = ({ entidade, show, onHide, onEdit }) => {
         value = (value / 100).toFixed(2) + "";
         value = value.replace(".", ",");
         value = "R$ " + value.replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
-        setEditedEntidade({ ...editedEntidade, [name]: value });
+        setEntidadeEditada({ ...entidadeEditada, [name]: value });
     };
 
     const handleFileChange = (event) => {
         const files = Array.from(event.target.files);
-        setSelectedFiles(files);
+        setArquivosSelecionados(files);
+        console.log("entrei no filechange: "+ event)
     };
 
     const handleChange = (event) => {
         const { name, value } = event.target;
 
-        console.log("name"+ name)
-        console.log("value"+ value)
-        if (name === "dataInicio" && editedEntidade.dataTermino && value > editedEntidade.dataTermino) {
-            setEditedEntidade({ ...editedEntidade, [name]: value, dataTermino: "" });
+        console.log("name: "+ name)
+        console.log("value: "+ value)
+        if (name === "dataInicio" && entidadeEditada.dataTermino && value > entidadeEditada.dataTermino) {
+            setEntidadeEditada({ ...entidadeEditada, [name]: value, dataTermino: "" });
+            return
         } else {
-            setEditedEntidade({ ...editedEntidade, [name]: value });
+            setEntidadeEditada({ ...entidadeEditada, [name]: value });
+            
         }
 
         if (name === "produtoRelacionado") {
-            const product = produtos.find(p => p.id === value);
-            setEditedEntidade({ ...editedEntidade, produtoRelacionado: product });
+            const produto = produtos.find(p => p.id === value);
+            setEntidadeEditada({ ...entidadeEditada, produtoRelacionado: produto });
+            return
         }
         
-        setEditedEntidade({ ...editedEntidade, [name]: value });
+        setEntidadeEditada({ ...entidadeEditada, [name]: value });
     };
 
     const handleSubmit = (event) => {
         event.preventDefault();
 
-        let updatedEntidade = { ...editedEntidade };
+        let entidadeAtualizada = { ...entidadeEditada };
 
         if (entidade.tipo === "produto") {
-            const fileURLs = selectedFiles.map(file => URL.createObjectURL(file));
-            updatedEntidade = {
-                ...updatedEntidade,
-                imagens: fileURLs
-            };
+
+            if (arquivosSelecionados && arquivosSelecionados.length > 0) {
+
+                const urlArquivos = arquivosSelecionados.map(file => URL.createObjectURL(file));
+                entidadeAtualizada = {
+                    ...entidadeAtualizada,
+                    imagens: urlArquivos
+                };
+
+            } else {
+                
+                entidadeAtualizada = {
+                    ...entidadeAtualizada,
+                    imagens: entidade.imagens
+                };
+            }
         }
 
-        if (entidade.tipo === "oferta" && editedEntidade.dataTermino && editedEntidade.dataInicio > editedEntidade.dataTermino) {
+        if (entidade.tipo === "oferta" && entidadeEditada.dataTermino && entidadeEditada.dataInicio > entidadeEditada.dataTermino) {
             alert("A data de término deve ser maior que a data de início!");
-            return; // Não salva as alterações se a data de término for menor que a data de início
+            return;
         }
 
-        onEdit(updatedEntidade);
+        if (entidade.produtoRelacionado && entidade.produtoRelacionado === "default") {
+            alert("Selecione um produto");
+            return;
+        }
+
+        onEdit(entidadeAtualizada);
     };
 
     return (
@@ -84,7 +114,7 @@ const EditarProdutoModal = ({ entidade, show, onHide, onEdit }) => {
                             <Form.Control
                                 type="text"
                                 name="nomeProduto"
-                                value={editedEntidade.nomeProduto}
+                                value={entidadeEditada.nomeProduto}
                                 onChange={handleChange}
                             />
                         </Form.Group>
@@ -96,7 +126,7 @@ const EditarProdutoModal = ({ entidade, show, onHide, onEdit }) => {
                             <Form.Control
                                 type="text"
                                 name="nomeOferta"
-                                value={editedEntidade.nomeOferta}
+                                value={entidadeEditada.nomeOferta}
                                 onChange={handleChange}
                             />
                         </Form.Group>
@@ -107,7 +137,7 @@ const EditarProdutoModal = ({ entidade, show, onHide, onEdit }) => {
                         <Form.Control
                             type="text"
                             name="descricao"
-                            value={editedEntidade.descricao}
+                            value={entidadeEditada.descricao}
                             onChange={handleChange}
                         />
                     </Form.Group>
@@ -117,7 +147,7 @@ const EditarProdutoModal = ({ entidade, show, onHide, onEdit }) => {
                             <Form.Control
                                 as="select"
                                 name="categoria"
-                                value={editedEntidade.categoria}
+                                value={entidadeEditada.categoria}
                                 onChange={handleChange}
                             >
                                 <option value="alimentacao">Alimentação</option>
@@ -134,17 +164,18 @@ const EditarProdutoModal = ({ entidade, show, onHide, onEdit }) => {
                                 <Form.Control
                                     as="select"
                                     name="produtoRelacionado"
-                                    value={editedEntidade.produtoRelacionado ? editedEntidade.produtoRelacionado.id : ""}
+                                    value={entidadeEditada.produtoRelacionado ? entidadeEditada.produtoRelacionado.id : ""}
 
                                     onChange={handleChange}
                                 >
                                     <option value="default">Selecione um produto</option>
                                     {produtos.map(produto => (
-                                        <option key={produto.id} value={produto.id}>{produto.nomeProduto}</option>
+                                        <option key={produto.id} value={produto.id} selected={entidadeEditada.produtoRelacionado && entidadeEditada.produtoRelacionado.id === produto.id}>{produto.nomeProduto}</option>
                                     ))}
+                                    
                                 </Form.Control>
                             </Form.Group>
-                            {/* Restante dos campos específicos para oferta */}
+                            
                         </>
                     )}
 
@@ -154,7 +185,7 @@ const EditarProdutoModal = ({ entidade, show, onHide, onEdit }) => {
                             <Form.Control
                                 type="text"
                                 name="preco"
-                                value={editedEntidade.preco}
+                                value={entidadeEditada.preco}
                                 onChange={handlePriceChange}
                             />
                         </Form.Group>
@@ -166,7 +197,7 @@ const EditarProdutoModal = ({ entidade, show, onHide, onEdit }) => {
                             <Form.Control
                                 type="text"
                                 name="precoEspecial"
-                                value={editedEntidade.precoEspecial}
+                                value={entidadeEditada.precoEspecial}
                                 onChange={handlePriceChange}
                             />
                         </Form.Group>
@@ -178,7 +209,7 @@ const EditarProdutoModal = ({ entidade, show, onHide, onEdit }) => {
                             <Form.Control
                                 type="number"
                                 name="quantidadeEstoque"
-                                value={editedEntidade.quantidadeEstoque}
+                                value={entidadeEditada.quantidadeEstoque}
                                 onChange={handleChange}
                             />
                         </Form.Group>
@@ -190,7 +221,7 @@ const EditarProdutoModal = ({ entidade, show, onHide, onEdit }) => {
                             <Form.Control
                                 type="number"
                                 name="quantidadeMinima"
-                                value={editedEntidade.quantidadeMinima}
+                                value={entidadeEditada.quantidadeMinima}
                                 onChange={handleChange}
                             />
                         </Form.Group>
@@ -215,7 +246,7 @@ const EditarProdutoModal = ({ entidade, show, onHide, onEdit }) => {
                                 <Form.Control
                                     type="date"
                                     name="dataInicio"
-                                    value={editedEntidade.dataInicio || ""}
+                                    value={entidadeEditada.dataInicio || ""}
                                     onChange={handleChange}
                                 />
                             </Form.Group>
@@ -224,9 +255,9 @@ const EditarProdutoModal = ({ entidade, show, onHide, onEdit }) => {
                                 <Form.Control
                                     type="date"
                                     name="dataTermino"
-                                    value={editedEntidade.dataTermino || ""}
+                                    value={entidadeEditada.dataTermino || ""}
                                     onChange={handleChange}
-                                    disabled={!editedEntidade.dataInicio}
+                                    disabled={!entidadeEditada.dataInicio}
                                 />
                             </Form.Group>
                         </>
