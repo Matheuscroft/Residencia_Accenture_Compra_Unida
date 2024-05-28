@@ -1,144 +1,217 @@
-import React, { useState, useEffect } from 'react';
-import Mensagens from './Mensagens'
-import Posts from './Posts'
-import NavegacaoHome from './NavegacaoHome';
+import React, { useEffect, useState, useRef } from 'react';
+import { Container, Row, Col, Card, Button, } from 'react-bootstrap';
 import NavegacaoHeader from './NavegacaoHeader';
-import EditarProdutoModal from './EditarProdutoModal';
-
-import Container from 'react-bootstrap/Container';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
+import { getOfertas } from "../auth/firebaseService";
 
 const HomeCliente = (props) => {
-
-    const [exibeComponente, setExibeComponente] = useState("")
-
-    const handleComponente = (comp) => {
-        setExibeComponente(comp)
-    }
-
-
-
-    const [listaProdutos, setListaProdutos] = useState([])
-    const [listaOfertas, setListaOfertas] = useState([])
+    const [ofertas, setOfertas] = useState([]);
+    const containerRefs = useRef({});
 
     useEffect(() => {
+        const fetchOfertas = async () => {
+            const ofertas = await getOfertas();
+            console.log("olha as ofertas  do getofertas:")
+            console.log(ofertas)
+            setOfertas(ofertas);
+        };
 
-        const produtosStorage = localStorage.getItem('produtos');
-
-        if (produtosStorage) {
-            const produtosConvertidos = JSON.parse(produtosStorage);
-            console.log("Produtos convertidos de volta:", produtosConvertidos);
-
-
-            setListaProdutos(listaAnterior => {
-                const novosProdutos = produtosConvertidos.filter(novoProd =>
-                    !listaAnterior.some(prod => prod.nomeProduto === novoProd.nomeProduto));
-                console.log("Novos produtos adicionados:", novosProdutos);
-                return [...listaAnterior, ...novosProdutos];
-            });
-        }
-
-        const ofertasStorage = localStorage.getItem('ofertas');
-
-        if (ofertasStorage) {
-            const ofertasConvertidas = JSON.parse(ofertasStorage);
-            console.log("Ofertas convertidas de volta:", ofertasConvertidas);
-
-
-            setListaOfertas(listaAnterior => {
-                const novasOfertas = ofertasConvertidas.filter(novaOferta =>
-                    !listaAnterior.some(oferta => oferta.nomeOferta === novaOferta.nomeOferta));
-                console.log("Novas ofertas adicionadas:", novasOfertas);
-                return [...listaAnterior, ...novasOfertas];
-            });
-        }
-
-        console.log("ATUALIZOU");
-
+        fetchOfertas();
     }, []);
 
-    useEffect(() => {
-        console.log("Conteúdo atual da lista:", listaProdutos);
-    }, [listaProdutos]);
+    const categorias = ofertas.reduce((acc, oferta) => {
+        const categoria = oferta.produtoRelacionado.categoria;
+        console.log('Categoria:', categoria);
+        if (!acc[categoria]) {
+            acc[categoria] = [];
+        }
+        acc[categoria].push(oferta);
+        return acc;
+    }, {});
+    console.log('Categorias:', categorias);
 
+    const categoriasPadrao = ["alimentacao", "vestuario", "racao", "bebidas"];
+    const categoriasFormatadas = {
+    alimentacao: "Alimentação",
+    vestuario: "Vestuário",
+    racao: "Ração",
+    bebidas: "Bebidas"
+};
 
-    const listaOfertasLI = listaOfertas.map((oferta, index) => {
-        
-        const produtoRelacionado = listaProdutos.find(produto => produto.id === oferta.produtoRelacionado.id);
+    const melhoresOfertas = ofertas
+        .map(oferta => ({
+            ...oferta,
+            diferencaPreco: oferta.preco - oferta.precoEspecial
+        }))
+        .sort((a, b) => b.diferencaPreco - a.diferencaPreco)
+        .slice(0, 10); 
 
-        return (
-            <li key={oferta.id} style={{ display: "flex", alignItems: "center" }}>
-                {produtoRelacionado && produtoRelacionado.imagens && produtoRelacionado.imagens.length > 0 && (
-                    <img src={produtoRelacionado.imagens[0]} alt={produtoRelacionado.nomeProduto} style={{ width: "50px", height: "50px", marginRight: "10px" }} />
-                )}
-                {oferta.nomeOferta}
-               
-            </li>
-        );
-    })
+    const scrollLeft = (categoria) => {
+        containerRefs.current[categoria].scrollBy({ left: -300, behavior: 'smooth' });
+    };
 
+    const scrollRight = (categoria) => {
+        containerRefs.current[categoria].scrollBy({ left: 300, behavior: 'smooth' });
+    };
 
-
-    switch (exibeComponente) {
-        case "mensagens":
-
-            return (
-                <div>
-                    <NavegacaoHeader />
-                    <NavegacaoHome handleComponente={handleComponente} handlePage={props.handlePage} />
-                    <Mensagens />
-                </div>
-            )
-
-        case "posts":
-
-            return (
-                <div>
-                    <NavegacaoHeader />
-                    <NavegacaoHome handleComponente={handleComponente} handlePage={props.handlePage} />
-                    <Posts />
-                </div>
-            )
-
-        default:
-
-            return (
-                <div>
-                    <NavegacaoHeader />
-                    <NavegacaoHome handleComponente={handleComponente} handlePage={props.handlePage} />
-
-
-
-                    <Container>
-                        <Row>
-                            <Col className="d-flex justify-content-center">
-                                <h1>HOME FORNECEDOR</h1>
-                            </Col>
-
+    return (
+        <div>
+            <NavegacaoHeader handlePage={props.handlePage} />
+            <Container style={{ marginTop: '100px' }}>
+                <h2 style={{ color: '#FFCD46' }}>Melhores Ofertas</h2>
+                <div style={{ position: 'relative', marginBottom: '40px' }}>
+                    <Button
+                        style={{ 
+                            position: 'absolute', 
+                            left: '-50px', 
+                            top: '50%', 
+                            transform: 'translateY(-50%)', 
+                            zIndex: 1, 
+                            backgroundColor: '#FFCD46', 
+                            borderColor: '#FFCD46' 
+                        }}
+                        onClick={() => scrollLeft('melhoresOfertas')}
+                    >
+                        &lt;
+                    </Button>
+                    <div 
+                        ref={(el) => (containerRefs.current['melhoresOfertas'] = el)} 
+                        style={{ 
+                            overflowX: 'auto', 
+                            whiteSpace: 'nowrap', 
+                            scrollbarWidth: 'none', /* Firefox */
+                            msOverflowStyle: 'none' /* Internet Explorer 10+ */
+                        }}
+                        className="scroll-container"
+                    >
+                        <Row style={{ display: 'flex', flexWrap: 'nowrap' }}>
+                            {melhoresOfertas.length > 0 ? (
+                                melhoresOfertas.map((oferta) => (
+                                    <Col key={oferta.id} xs={12} md={6} lg={4} className="mb-4" style={{ display: 'inline-block', float: 'none' }}>
+                                        <Card style={{ height: '300px', borderColor: '#FFCD46' }}>
+                                            {oferta.produtoRelacionado.imagens && oferta.produtoRelacionado.imagens.length > 0 && (
+                                                <Card.Img 
+                                                    variant="top" 
+                                                    src={oferta.produtoRelacionado.imagens[0]} 
+                                                    style={{ height: '150px', objectFit: 'cover', cursor: 'pointer' }} 
+                                                    onClick={() => props.handlePage("produto", oferta.produtoRelacionado)}
+                                                />
+                                            )}
+                                            <Card.Body>
+                                                <Card.Title>{oferta.nomeOferta}</Card.Title>
+                                                <Card.Text>{oferta.descricao}</Card.Text>
+                                                <Card.Text><strong>Preço Especial:</strong> {oferta.precoEspecial}</Card.Text>
+                                            </Card.Body>
+                                        </Card>
+                                    </Col>
+                                ))
+                            ) : (
+                                <Col xs={12} md={6} lg={4} className="mb-4" style={{ display: 'inline-block', float: 'none' }}>
+                                    <Card style={{ height: '300px', backgroundColor: '#1c3bc5', borderRadius: '15px', borderColor: '#d4edda' }}>
+                                        <Card.Body>
+                                            <Card.Title className="text-light">Sem ofertas</Card.Title>
+                                        </Card.Body>
+                                    </Card>
+                                </Col>
+                            )}
                         </Row>
-                        <Row>
-                            <Col className="d-flex justify-content-center" style={{ border: "solid green 2px" }}>
-                               
-                            </Col>
-                            <Col className="d-flex justify-content-center" style={{ border: "solid green 2px" }}>
-                                <div style={{ border: "solid blue 2px" }}>
-                                    
-                                    <p>Lista de Ofertas</p>
-                                    <ul>
-                                        {listaOfertasLI}
-                                    </ul>
-                                </div>
-                            </Col>
-                        </Row>
-                    </Container>
-                   
+                    </div>
+                    <Button
+                        style={{ 
+                            position: 'absolute', 
+                            right: '-50px', 
+                            top: '50%', 
+                            transform: 'translateY(-50%)', 
+                            zIndex: 1, 
+                            backgroundColor: '#FFCD46', 
+                            borderColor: '#FFCD46' 
+                        }}
+                        onClick={() => scrollRight('melhoresOfertas')}
+                    >
+                        &gt;
+                    </Button>
                 </div>
-            )
 
-            break;
-    }
+                {categoriasPadrao.map((categoria) => (
+                    <div key={categoria} style={{ marginBottom: '40px' }}>
+                        <h3 style={{ color: '#FFCD46' }}>{categoriasFormatadas[categoria]}</h3>
+                        <div style={{ position: 'relative' }}>
+                            <Button
+                                style={{ 
+                                    position: 'absolute', 
+                                    left: '-50px', 
+                                    top: '50%', 
+                                    transform: 'translateY(-50%)', 
+                                    zIndex: 1, 
+                                    backgroundColor: '#FFCD46', 
+                                    borderColor: '#FFCD46' 
+                                }}
+                                onClick={() => scrollLeft(categoria)}
+                            >
+                                &lt;
+                            </Button>
+                            <div 
+                                ref={(el) => (containerRefs.current[categoria] = el)} 
+                                style={{ 
+                                    overflowX: 'auto', 
+                                    whiteSpace: 'nowrap', 
+                                    scrollbarWidth: 'none', /* Firefox */
+                                    msOverflowStyle: 'none' /* Internet Explorer 10+ */
+                                }}
+                                className="scroll-container"
+                            >
+                                <Row style={{ display: 'flex', flexWrap: 'nowrap' }}>
+                                    {categorias[categoria] && categorias[categoria].length > 0 ? (
+                                        categorias[categoria].map((oferta) => (
+                                            <Col key={oferta.id} xs={12} md={6} lg={4} className="mb-4" style={{ display: 'inline-block', float: 'none' }}>
+                                                <Card style={{ height: '300px', borderColor: '#FFCD46' }}>
+                                                    {oferta.produtoRelacionado.imagens && oferta.produtoRelacionado.imagens.length > 0 && (
+                                                        <Card.Img 
+                                                            variant="top" 
+                                                            src={oferta.produtoRelacionado.imagens[0]} 
+                                                            style={{ height: '150px', objectFit: 'cover', cursor: 'pointer' }} 
+                                                            onClick={() => props.handlePage("produto", oferta.produtoRelacionado)}
+                                                        />
+                                                    )}
+                                                    <Card.Body>
+                                                        <Card.Title>{oferta.nomeOferta}</Card.Title>
+                                                        <Card.Text>{oferta.descricao}</Card.Text>
+                                                        <Card.Text><strong>Preço Especial:</strong> {oferta.precoEspecial}</Card.Text>
+                                                    </Card.Body>
+                                                </Card>
+                                            </Col>
+                                        ))
+                                    ) : (
+                                        <Col xs={12} md={6} lg={4} className="mb-4" style={{ display: 'inline-block', float: 'none' }}>
+                                            <Card style={{ height: '300px', backgroundColor: '#1c3bc5', borderRadius: '15px', borderColor: '#d4edda' }}>
+                                                <Card.Body>
+                                                    <Card.Title className="text-light">Sem ofertas</Card.Title>
+                                                </Card.Body>
+                                            </Card>
+                                        </Col>
+                                    )}
+                                </Row>
+                            </div>
+                            <Button
+                                style={{ 
+                                    position: 'absolute', 
+                                    right: '-50px', 
+                                    top: '50%', 
+                                    transform: 'translateY(-50%)', 
+                                    zIndex: 1, 
+                                    backgroundColor: '#FFCD46', 
+                                    borderColor: '#FFCD46' 
+                                }}
+                                onClick={() => scrollRight(categoria)}
+                            >
+                                &gt;
+                            </Button>
+                        </div>
+                    </div>
+                ))}
+            </Container>
+        </div>
+    );
+};
 
-}
+export default HomeCliente;
 
-export default HomeCliente

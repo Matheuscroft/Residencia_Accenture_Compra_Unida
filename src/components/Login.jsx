@@ -1,31 +1,69 @@
-import React from "react";
+import React, { useState } from "react";
 import NavegacaoHeader from "./NavegacaoHeader";
-import { Form, Button, Container, Row, Col, Card } from "react-bootstrap";
-import EsqueciSenha from "./EsqueciSenha";
+import { Form, Button, Container, Row, Col, Card, Alert } from "react-bootstrap";
 
 const Login = (props) => {
+    const [email, setEmail] = useState("");
+    const [senha, setSenha] = useState("");
+    const [userType, setUserType] = useState("cliente"); // Estado para armazenar o tipo de usuário
+    const [errors, setErrors] = useState({});
+
+    const handleChange = (event) => {
+        const { name, value } = event.target;
+        if (name === "email") setEmail(value);
+        if (name === "senha") setSenha(value);
+        if (name === "userType") setUserType(value); // Atualiza o tipo de usuário
+    };
+
+    const handleSubmit = (event) => {
+        event.preventDefault();
+        const newErrors = {};
+
+        if (!email) newErrors.email = "Este campo é obrigatório";
+        if (!senha) newErrors.senha = "Este campo é obrigatório";
+
+        if (Object.keys(newErrors).length > 0) {
+            setErrors(newErrors);
+        } else {
+            // Redireciona para a página correta com base no tipo de usuário
+            if (userType === "fornecedor") {
+                props.handlePage("home-fornecedor");
+            } else {
+                props.handlePage("home-cliente");
+            }
+        }
+    };
+
     return (
         <Container>
-            <NavegacaoHeader handlePage={props.handlePage} />
+            <NavegacaoHeader />
             <Row className="justify-content-md-center" style={{ marginTop: '100px' }}>
                 <Col xs={12} md={6}>
                     <Card className="text-light" style={{ backgroundColor: '#1c3bc5', borderRadius: '15px', borderColor: '#d4edda' }}>
                         <Card.Body>
                             <h1 className="text-center text-light">Login</h1>
-                            <Form>
+                            <Form onSubmit={handleSubmit}>
                                 <Form.Group controlId="email" className="mb-3">
                                     <Form.Label className="text-light">E-mail</Form.Label>
-                                    <Form.Control type="text" placeholder="Insira seu e-mail" required />
+                                    <Form.Control type="email" name="email" value={email} onChange={handleChange} placeholder="E-mail" required />
+                                    {errors.email && <Alert variant="danger">{errors.email}</Alert>}
                                 </Form.Group>
 
                                 <Form.Group controlId="senha" className="mb-3">
                                     <Form.Label className="text-light">Senha</Form.Label>
-                                    <Form.Control type="password" placeholder="Insira sua senha" required />
+                                    <Form.Control type="password" name="senha" value={senha} onChange={handleChange} placeholder="Senha" required />
+                                    {errors.senha && <Alert variant="danger">{errors.senha}</Alert>}
                                 </Form.Group>
 
-                                <EsqueciSenha />
-                                <Button className="w-100 mt-3" style={{ backgroundColor: '#FFCD46', borderColor: '#FFCD46', color: 'black' }} onClick={() => props.handlePage("home")}>Fazer login</Button>
-                                <Button className="w-100 mt-2" style={{ backgroundColor: '#FFCD46', borderColor: '#FFCD46', color: 'black' }} onClick={() => props.handlePage("cadastro")}>Cadastre-se</Button>
+                                <Form.Group controlId="userType" className="mb-3">
+                                    <Form.Label className="text-light">Tipo de Usuário</Form.Label>
+                                    <Form.Control as="select" name="userType" value={userType} onChange={handleChange} required>
+                                        <option value="cliente">Cliente</option>
+                                        <option value="fornecedor">Fornecedor</option>
+                                    </Form.Control>
+                                </Form.Group>
+
+                                <Button type="submit" className="w-100 mt-3" style={{ backgroundColor: '#FFCD46', borderColor: '#FFCD46', color: 'black' }}>Entrar</Button>
                             </Form>
                         </Card.Body>
                     </Card>

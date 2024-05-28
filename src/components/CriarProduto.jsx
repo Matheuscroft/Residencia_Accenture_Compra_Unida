@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import NavegacaoHeader from "./NavegacaoHeader";
-import { Form, Button, Container, Row, Col, Card, } from "react-bootstrap";
+import { Form, Button, Container, Row, Col, Card } from "react-bootstrap";
 import { v4 as uuidv4 } from 'uuid';
 import { addProduto, uploadImagem } from "../auth/firebaseService";
 
@@ -30,10 +30,6 @@ const CriarProduto = (props) => {
 
     const handleImageChange = (event) => {
         const files = event.target.files;
-        const imagesArray = Array.from(files).map(file => URL.createObjectURL(file));
-        setProduto({ ...produto, imagens: imagesArray });
-
-        //const files = event.target.files;
         setImagens(Array.from(files));
     };
 
@@ -51,7 +47,7 @@ const CriarProduto = (props) => {
         };
 
         const imageUrls = await Promise.all(imagens.map(file => uploadImagem(file)));
-        const produtoComImagens = { ...produto, imagens: imageUrls };
+        const produtoComImagens = { ...produtoComId, imagens: imageUrls };
 
         const id = await addProduto(produtoComImagens);
         if (id) {
@@ -60,10 +56,6 @@ const CriarProduto = (props) => {
         } else {
             alert("Erro ao cadastrar produto");
         }
-
-
-        alert(`${produtoComId.nomeProduto} cadastrado com sucesso`);
-        props.handlePage("home-fornecedor");
     };
 
     return (
@@ -117,9 +109,24 @@ const CriarProduto = (props) => {
                     </Card>
                 </Col>
             </Row>
+            <Row className="justify-content-md-center" style={{ marginTop: '10px' }}>
+                <Col xs={12} md={6}>
+                    <Card className="text-light" style={{ backgroundColor: '#1c3bc5', borderRadius: '15px', borderColor: '#d4edda', marginBottom: '10px' }}>
+                        <Card.Body>
+                            <h1 className="text-center text-light">Produto 1</h1>
+                            <p>Descrição do Produto 1</p>
+                        </Card.Body>
+                    </Card>
+                    <Card className="text-light" style={{ backgroundColor: '#1c3bc5', borderRadius: '15px', borderColor: '#d4edda', marginBottom: '10px' }}>
+                        <Card.Body>
+                            <h1 className="text-center text-light">Produto 2</h1>
+                            <p>Descrição do Produto 2</p>
+                        </Card.Body>
+                    </Card>
+                </Col>
+            </Row>
         </Container>
     );
 }
 
 export default CriarProduto;
-

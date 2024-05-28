@@ -46,3 +46,21 @@
     scrollbar-width: none;  /* Firefox */
 }
 
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
+    background-color: #1c3bc5;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+}
+
+.carousel-control-prev-icon:hover,
+.carousel-control-next-icon:hover {
+    background-color: #1c3bc5;
+    opacity: 0.8;
+}
+
+.carousel-control-prev,
+.carousel-control-next {
+    filter: brightness(1.2);
+}

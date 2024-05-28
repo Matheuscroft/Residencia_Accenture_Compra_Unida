@@ -1,4 +1,4 @@
-import { collection, addDoc, getDocs, deleteDoc, doc, updateDoc } from "firebase/firestore";
+import { collection, addDoc, getDocs, deleteDoc, doc, updateDoc, query, where } from "firebase/firestore";
 import { getStorage, ref, uploadBytes, getDownloadURL, deleteObject } from "firebase/storage";
 import db from "./firebase";
 
@@ -85,4 +85,14 @@ export const deletarOferta = async (ofertaId) => {
     } catch (e) {
         console.error("Erro ao deletar oferta: ", e);
     }
+};
+
+export const getMessages = async (fornecedorId) => {
+    const q = query(collection(db, "messages"), where("fornecedorId", "==", fornecedorId));
+    const querySnapshot = await getDocs(q);
+    return querySnapshot.docs.map(doc => doc.data());
+};
+
+export const sendMessage = async (fornecedorId, text) => {
+    await addDoc(collection(db, "messages"), { fornecedorId, text, timestamp: new Date() });
 };
