@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from "react";
-import NavegacaoHeader from "./NavegacaoHeader";
 import { Form, Button, Container, Row, Col, Card } from "react-bootstrap";
-import { v4 as uuidv4 } from 'uuid';
 import { addOferta, getProdutos } from "../auth/firebaseService";
 
 const CriarOferta = (props) => {
@@ -11,15 +9,13 @@ const CriarOferta = (props) => {
     useEffect(() => {
         const fetchProdutos = async () => {
             const produtos = await getProdutos();
-            console.log("olha os produtos do getprodutos:")
-            console.log(produtos)
             setProdutos(produtos);
         };
 
         fetchProdutos();
     }, []);
 
-    const produtosSelect = produtos.map((produto, index) => (
+    const produtosSelect = produtos.map((produto) => (
         <option value={produto.id} key={produto.id}>{produto.nomeProduto}</option>
     ));
 
@@ -72,17 +68,12 @@ const CriarOferta = (props) => {
             alert(`${oferta.nomeOferta} cadastrada com sucesso com ID: ${id}`);
             props.handlePage("home-fornecedor");
         } else {
-            alert("Erro ao cadastrar produto");
+            alert("Erro ao cadastrar oferta");
         }
-
-
-        alert(`${ofertaComProduto.nomeOferta} cadastrado com sucesso`);
-        props.handlePage("home-fornecedor");
     };
 
     return (
         <Container>
-            <NavegacaoHeader />
             <Row className="justify-content-md-center" style={{ marginTop: '100px' }}>
                 <Col xs={12} md={6}>
                     <Card className="text-light" style={{ backgroundColor: '#1c3bc5', borderRadius: '15px', borderColor: '#d4edda' }}>
@@ -129,6 +120,22 @@ const CriarOferta = (props) => {
 
                                 <Button type="submit" className="w-100 mt-3" style={{ backgroundColor: '#FFCD46', borderColor: '#FFCD46', color: 'black' }}>Cadastrar</Button>
                             </Form>
+                        </Card.Body>
+                    </Card>
+                </Col>
+            </Row>
+            <Row className="justify-content-md-center" style={{ marginTop: '10px' }}>
+                <Col xs={12} md={6}>
+                    <Card className="text-light" style={{ backgroundColor: '#1c3bc5', borderRadius: '15px', borderColor: '#d4edda', marginBottom: '10px' }}>
+                        <Card.Body>
+                            <h1 className="text-center text-light">Oferta 1</h1>
+                            <p>Descrição da Oferta 1</p>
+                        </Card.Body>
+                    </Card>
+                    <Card className="text-light" style={{ backgroundColor: '#1c3bc5', borderRadius: '15px', borderColor: '#d4edda', marginBottom: '10px' }}>
+                        <Card.Body>
+                            <h1 className="text-center text-light">Oferta 2</h1>
+                            <p>Descrição da Oferta 2</p>
                         </Card.Body>
                     </Card>
                 </Col>

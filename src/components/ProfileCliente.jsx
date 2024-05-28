@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import Mensagens from './Mensagens'
 import Posts from './Posts'
 import NavegacaoHome from './HomeCliente';
-import NavegacaoHeader from './NavegacaoHeader';
 import EditarProdutoModal from './EditarProdutoModal';
 
 import Container from 'react-bootstrap/Container';
@@ -85,7 +84,6 @@ const HomeCliente = (props) => {
 
             return (
                 <div>
-                    <NavegacaoHeader />
                     <NavegacaoHome handleComponente={handleComponente} handlePage={props.handlePage} />
                     <Mensagens />
                 </div>
@@ -95,7 +93,6 @@ const HomeCliente = (props) => {
 
             return (
                 <div>
-                    <NavegacaoHeader />
                     <NavegacaoHome handleComponente={handleComponente} handlePage={props.handlePage} />
                     <Posts />
                 </div>
@@ -105,7 +102,6 @@ const HomeCliente = (props) => {
 
             return (
                 <div>
-                    <NavegacaoHeader />
                     <NavegacaoHome handleComponente={handleComponente} handlePage={props.handlePage} />
 
 

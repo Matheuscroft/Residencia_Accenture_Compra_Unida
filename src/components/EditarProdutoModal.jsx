@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Modal, Button, Form } from 'react-bootstrap';
-import { getProdutos } from "../auth/firebaseService";
+import { getProdutos, uploadImagem } from "../auth/firebaseService";
 
 const EditarProdutoModal = ({ entidade, show, onHide, onEdit }) => {
     const [entidadeEditada, setEntidadeEditada] = useState({ ...entidade });
@@ -64,7 +64,7 @@ const EditarProdutoModal = ({ entidade, show, onHide, onEdit }) => {
         setEntidadeEditada({ ...entidadeEditada, [name]: value });
     };
 
-    const handleSubmit = (event) => {
+    const handleSubmit = async (event) => {
         event.preventDefault();
 
         let entidadeAtualizada = { ...entidadeEditada };
@@ -73,10 +73,11 @@ const EditarProdutoModal = ({ entidade, show, onHide, onEdit }) => {
 
             if (arquivosSelecionados && arquivosSelecionados.length > 0) {
 
-                const urlArquivos = arquivosSelecionados.map(file => URL.createObjectURL(file));
+                const imagemUrls = await Promise.all(arquivosSelecionados.map(file => uploadImagem(file)));
+        
                 entidadeAtualizada = {
                     ...entidadeAtualizada,
-                    imagens: urlArquivos
+                    imagens: imagemUrls
                 };
 
             } else {

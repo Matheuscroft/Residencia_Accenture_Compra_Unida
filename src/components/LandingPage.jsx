@@ -1,12 +1,11 @@
 import React from "react";
-import NavegacaoHeader from "../components/NavegacaoHeader";
 import landingImg from "../assets/LandingPage.jpg";
 import { Container, Row, Col, Button } from 'react-bootstrap';
 
 const LandingPage = (props) => {
     return (
         <div style={{ height: '100vh', overflow: 'hidden', fontFamily: 'Roboto, sans-serif' }}>
-            <NavegacaoHeader handlePage={props.handlePage} />
+            
             <div style={{  
                 position: 'absolute',
                 top: '56px', // Altura do Navbar
