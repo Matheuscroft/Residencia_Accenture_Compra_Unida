@@ -87,9 +87,9 @@ export const deletarOferta = async (ofertaId) => {
     }
 };
 
-export const addPedido = async (oferta) => {
+export const addPedido = async (pedido) => {
     try {
-        const docRef = await addDoc(collection(db, "pedidos"), oferta);
+        const docRef = await addDoc(collection(db, "pedidos"), pedido);
         return docRef.id;
     } catch (e) {
         console.error("Erro ao adicionar pedido: ", e);
@@ -99,6 +99,29 @@ export const addPedido = async (oferta) => {
 export const getPedidos = async () => {
     const querySnapshot = await getDocs(collection(db, "pedidos"));
     return querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+};
+
+export const addCarrinho = async (ofertas) => {
+    try {
+        const docRef = await addDoc(collection(db, "carrinho"), {ofertas});
+        return docRef.id;
+    } catch (e) {
+        console.error("Erro ao atualizar carrinho: ", e);
+    }
+};
+
+export const updateCarrinho = async (id, ofertas) => {
+    try {
+        const docRef = doc(db, "carrinho", id);
+        await updateDoc(docRef, { ofertas });
+    } catch (e) {
+        console.error("Erro ao atualizar carrinho: ", e);
+    }
+};
+
+export const getCarrinho = async () => {
+    const querySnapshot = await getDocs(collection(db, "carrinho"));
+    return querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }))[0];
 };
 
 export const getMessages = async (fornecedorId) => {

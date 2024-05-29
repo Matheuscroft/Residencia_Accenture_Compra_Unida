@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Container, Row, Col, Card, Button, Form } from 'react-bootstrap';
-import { addPedido } from '../auth/firebaseService';
+import { addPedido, updateCarrinho, getCarrinho, addCarrinho } from '../auth/firebaseService';
 
 const Carrinho = (props) => {
     const [pedidos, setPedidos] = useState([]);
@@ -16,12 +16,64 @@ const Carrinho = (props) => {
         setQuantidades(quantidadesIniciais);
     }, [oferta]);
 
-    const handleQuantidadeChange = (id, quantidade) => {
+    useEffect(() => {
+        const carregarCarrinho = async () => {
+            if (props.oferta && props.oferta.length > 0) {
+                const carrinhoAtual = await getCarrinho();
+                let ofertasAtualizadas;
+                
+                if (carrinhoAtual) {
+                    ofertasAtualizadas = [...carrinhoAtual.ofertas, ...props.oferta];
+                    await updateCarrinho(carrinhoAtual.id, ofertasAtualizadas);
+                } else {
+                    const id = await addCarrinho(props.oferta);
+                    ofertasAtualizadas = props.oferta;
+                }
+                
+                setOfertas(ofertasAtualizadas);
+    
+                const quantidadesIniciais = {};
+                ofertasAtualizadas.forEach(item => {
+                    quantidadesIniciais[item.id] = item.quantidadeCarrinho || 1;
+                });
+                setQuantidades(quantidadesIniciais);
+            } else {
+                const carrinho = await getCarrinho();
+                if (carrinho) {
+                    setOfertas(carrinho.ofertas);
+                    const quantidadesIniciais = {};
+                    carrinho.ofertas.forEach(item => {
+                        quantidadesIniciais[item.id] = item.quantidadeCarrinho || 1;
+                    });
+                    setQuantidades(quantidadesIniciais);
+                }
+            }
+        };
+        carregarCarrinho();
+    }, [props.oferta]);
+    
+
+    const handleQuantidadeChange = async (id, quantidade) => {
         setQuantidades({
             ...quantidades,
             [id]: quantidade
         });
+    
+        const updatedOfertas = ofertas.map(item => {
+            if (item.id === id) {
+                item.quantidadeCarrinho = quantidade;
+            }
+            return item;
+        });
+    
+        setOfertas(updatedOfertas);
+    
+        const carrinho = await getCarrinho();
+        if (carrinho) {
+            await updateCarrinho(carrinho.id, updatedOfertas);
+        }
     };
+    
 
     const handleRemove = (id) => {
         const newOferta = oferta.filter(item => item.id !== id);
@@ -29,14 +81,21 @@ const Carrinho = (props) => {
     };
 
     const handleSubmit = async () => {
+        const updatedOfertas = ofertas.map(item => {
+            item.quantidadeVendas = (item.quantidadeVendas || 0) + item.quantidadeCarrinho;
+            item.quantidadeCarrinho = 0;
+            item.status = 'vendida';
+            return item;
+        });
+    
         const novoPedido = {
-            ofertaRelacionada: oferta,
+            ofertaRelacionada: [...updatedOfertas],
             dataDePedido: new Date(),
-            valorPedido: oferta.reduce((total, item) => total + (parseFloat(item.precoEspecial.replace('R$', '').replace(',', '.')) * quantidades[item.id]), 0).toFixed(2)
+            valorPedido: updatedOfertas.reduce((total, item) => total + (parseFloat(item.precoEspecial.replace('R$', '').replace(',', '.')) * item.quantidadeVendas), 0).toFixed(2)
         };
-
+    
         setPedidos([...pedidos, novoPedido]);
-
+    
         const id = await addPedido(novoPedido);
         if (id) {
             alert(`${novoPedido.ofertaRelacionada[0].nomeOferta} cadastrado com sucesso com ID: ${id}`);
@@ -44,7 +103,15 @@ const Carrinho = (props) => {
         } else {
             alert("Erro ao cadastrar pedido");
         }
+    
+        const carrinho = await getCarrinho();
+        if (carrinho) {
+            await updateCarrinho(carrinho.id, []);
+        }
+    
+        setOfertas([]);
     };
+    
 
     const calculateTotal = () => {
         return oferta.reduce((total, item) => total + (parseFloat(item.precoEspecial.replace('R$', '').replace(',', '.')) * quantidades[item.id]), 0).toFixed(2);
