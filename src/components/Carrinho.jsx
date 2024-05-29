@@ -18,39 +18,39 @@ const Carrinho = (props) => {
 
     useEffect(() => {
         const carregarCarrinho = async () => {
-            // Verifica se o carrinho já possui ofertas
             const carrinhoAtual = await getCarrinho();
             let ofertasAtualizadas;
-        
+    
             if (props.oferta && props.oferta.length > 0) {
-                // Se houver uma nova oferta via props, adiciona ao carrinho
                 if (carrinhoAtual) {
                     ofertasAtualizadas = [...carrinhoAtual.ofertas];
-        
-                    // Adiciona apenas as novas ofertas que não estão no carrinho
+    
                     props.oferta.forEach(novaOferta => {
-                        if (!ofertasAtualizadas.find(oferta => oferta.id === novaOferta.id)) {
+                        const ofertaExistente = ofertasAtualizadas.find(oferta => oferta.id === novaOferta.id);
+                        if (ofertaExistente) {
+                            // Atualiza a quantidade se for diferente
+                            if (ofertaExistente.quantidadeCarrinho !== novaOferta.quantidadeCarrinho) {
+                                ofertaExistente.quantidadeCarrinho = novaOferta.quantidadeCarrinho;
+                            }
+                        } else {
                             ofertasAtualizadas.push(novaOferta);
                         }
                     });
-        
-                    // Atualiza o carrinho no Firebase
+    
                     await updateCarrinho(carrinhoAtual.id, ofertasAtualizadas);
                 } else {
-                    // Se não houver carrinho, cria um novo com as ofertas recebidas
                     const id = await addCarrinho(props.oferta);
                     ofertasAtualizadas = props.oferta;
                 }
-        
+    
                 setOfertas(ofertasAtualizadas);
-        
+    
                 const quantidadesIniciais = {};
                 ofertasAtualizadas.forEach(item => {
                     quantidadesIniciais[item.id] = item.quantidadeCarrinho || 1;
                 });
                 setQuantidades(quantidadesIniciais);
             } else {
-                // Se não houver nova oferta, apenas carrega o carrinho atual
                 if (carrinhoAtual) {
                     setOfertas(carrinhoAtual.ofertas);
                     const quantidadesIniciais = {};
@@ -58,14 +58,14 @@ const Carrinho = (props) => {
                         quantidadesIniciais[item.id] = item.quantidadeCarrinho || 1;
                     });
                     setQuantidades(quantidadesIniciais);
+
                 }
             }
         };
-        
+    
         carregarCarrinho();
-
-       
     }, []);
+    
     
 
     const handleQuantidadeChange = async (id, quantidade) => {
@@ -140,9 +140,21 @@ const Carrinho = (props) => {
     };
     
 
-    const calculateTotal = () => {
-        return oferta.reduce((total, item) => total + (parseFloat(item.precoEspecial.replace('R$', '').replace(',', '.')) * quantidades[item.id]), 0).toFixed(2);
+    const calcularTotal = () => {
+    
+        let total = 0;
+    
+        ofertas.forEach(item => {
+           
+            const valorOferta = parseFloat(item.precoEspecial.replace('R$', '').replace(',', '.')) * item.quantidadeCarrinho;
+            
+            total += valorOferta;
+        });
+    
+       
+        return total.toFixed(2);
     };
+    
 
     return (
         <Container>
@@ -187,8 +199,8 @@ const Carrinho = (props) => {
                     <Card>
                         <Card.Body>
                             <h5>Resumo</h5>
-                            <p>Total em produtos: R$ {calculateTotal()}</p>
-                            <h3>Total: R$ {calculateTotal()}</h3>
+                            <p>Total em produtos: R$ {calcularTotal()}</p>
+                            <h3>Total: R$ {calcularTotal()}</h3>
                             <Button variant="warning" onClick={handleSubmit} className="w-100">Confirmar</Button>
                         </Card.Body>
                     </Card>
