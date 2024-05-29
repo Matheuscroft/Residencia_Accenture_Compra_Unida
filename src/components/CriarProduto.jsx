@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import NavegacaoHeader from "./NavegacaoHeader";
 import { Form, Button, Container, Row, Col, Card } from "react-bootstrap";
 import { v4 as uuidv4 } from 'uuid';
 import { addProduto, uploadImagem } from "../auth/firebaseService";
@@ -46,8 +45,8 @@ const CriarProduto = (props) => {
             ...produto
         };
 
-        const imageUrls = await Promise.all(imagens.map(file => uploadImagem(file)));
-        const produtoComImagens = { ...produtoComId, imagens: imageUrls };
+        const imagemUrls = await Promise.all(imagens.map(file => uploadImagem(file)));
+        const produtoComImagens = { ...produtoComId, imagens: imagemUrls };
 
         const id = await addProduto(produtoComImagens);
         if (id) {
@@ -60,7 +59,6 @@ const CriarProduto = (props) => {
 
     return (
         <Container>
-            <NavegacaoHeader />
             <Row className="justify-content-md-center" style={{ marginTop: '100px' }}>
                 <Col xs={12} md={6}>
                     <Card className="text-light" style={{ backgroundColor: '#1c3bc5', borderRadius: '15px', borderColor: '#d4edda' }}>

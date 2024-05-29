@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import NavegacaoHeader from './NavegacaoHeader';
 import EditarProdutoModal from './EditarProdutoModal';
 import { Container, Row, Col, Button, Card } from 'react-bootstrap';
 import { getProdutos, getOfertas, deletarProduto, deletarOferta, deletarImagem, editarProduto, editarOferta } from "../auth/firebaseService";
@@ -110,7 +109,6 @@ const HomeFornecedor = (props) => {
     
         return (
             <div>
-                <NavegacaoHeader />
                 <Container style={{ marginTop: '20px' }}>
                     <Row className="mb-4">
                         <Col className="d-flex justify-content-center">

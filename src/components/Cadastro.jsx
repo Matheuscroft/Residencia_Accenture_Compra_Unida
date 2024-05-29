@@ -1,5 +1,4 @@
 import React from 'react';
-import NavegacaoHeader from './NavegacaoHeader';
 import { Container, Row, Col, Card, Button } from 'react-bootstrap';
 import ClienteImg from '../assets/Cliente.jpg';
 import FornecedorImg from '../assets/Fornecedor.jpg'; 
@@ -7,7 +6,6 @@ import FornecedorImg from '../assets/Fornecedor.jpg';
 const Cadastro = (props) => {
     return (
         <div>
-            <NavegacaoHeader handlePage={props.handlePage} />
             <Container style={{ marginTop: '20px' }}>
                 <Row className="mb-4">
                     <Col className="d-flex justify-content-center">

@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Container, Row, Col, Card, Carousel } from 'react-bootstrap';
-import NavegacaoHeader from './NavegacaoHeader';
 import { getOfertas } from '../auth/firebaseService';
-import Countdown from 'react-countdown';
+//import Countdown from 'react-countdown';
 import Chat from './Chat';
 import '../App.css';
 
@@ -21,7 +20,6 @@ const Produto = (props) => {
 
     return (
         <Container>
-            <NavegacaoHeader handlePage={props.handlePage} />
             <Row className="justify-content-md-center" style={{ marginTop: '100px' }}>
                 <Col xs={12} md={6}>
                     <Card className="text-light" style={{ backgroundColor: '#1c3bc5', borderRadius: '15px', borderColor: '#d4edda' }}>
@@ -42,7 +40,7 @@ const Produto = (props) => {
                                     <p><strong>Quantidade mínima:</strong> {oferta.quantidadeMinima}</p>
                                     <p><strong>Data de início:</strong> {oferta.dataInicio}</p>
                                     <p><strong>Data de término:</strong> {oferta.dataTermino}</p>
-                                    <Countdown date={oferta.dataTermino} />
+                                 {/*   <Countdown date={oferta.dataTermino} />*/}
                                 </div>
                             ))}
                             <Chat fornecedorId={produto.fornecedorId} />

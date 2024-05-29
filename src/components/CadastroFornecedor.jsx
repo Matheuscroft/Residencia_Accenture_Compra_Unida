@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import NavegacaoHeader from "./NavegacaoHeader";
 import { Form, Button, Container, Row, Col, Card, Alert } from "react-bootstrap";
 
 const CadastroFornecedor = (props) => {
@@ -48,7 +47,6 @@ const CadastroFornecedor = (props) => {
 
     return (
         <Container>
-            <NavegacaoHeader />
             <Row className="justify-content-md-center" style={{ marginTop: '100px' }}>
                 <Col xs={12} md={6}>
                     <Card className="text-light" style={{ backgroundColor: '#1c3bc5', borderRadius: '15px', borderColor: '#d4edda' }}>

@@ -1,6 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { Container, Row, Col, Card, Button } from 'react-bootstrap';
-import NavegacaoHeader from './NavegacaoHeader';
 import { getOfertas } from "../auth/firebaseService";
 
 const NavegacaoHome = (props) => {
@@ -49,7 +48,6 @@ const NavegacaoHome = (props) => {
 
     return (
         <div>
-            <NavegacaoHeader handlePage={props.handlePage} />
             <Container style={{ marginTop: '100px' }}>
                 <h2 style={{ color: '#FFCD46' }}>Melhores Ofertas</h2>
                 <div style={{ position: 'relative', marginBottom: '40px' }}>

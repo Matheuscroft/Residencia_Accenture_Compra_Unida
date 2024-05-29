@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from "react";
-import NavegacaoHeader from "./NavegacaoHeader";
 import { Form, Button, Container, Row, Col, Card } from "react-bootstrap";
-import { v4 as uuidv4 } from 'uuid';
 import { addOferta, getProdutos } from "../auth/firebaseService";
 
 const CriarOferta = (props) => {
@@ -76,7 +74,6 @@ const CriarOferta = (props) => {
 
     return (
         <Container>
-            <NavegacaoHeader />
             <Row className="justify-content-md-center" style={{ marginTop: '100px' }}>
                 <Col xs={12} md={6}>
                     <Card className="text-light" style={{ backgroundColor: '#1c3bc5', borderRadius: '15px', borderColor: '#d4edda' }}>
