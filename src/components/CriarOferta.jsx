@@ -58,12 +58,13 @@ const CriarOferta = (props) => {
             return;
         }
 
-        const ofertaComProduto = {
+        const ofertaComProdutoEQntVendas = {
             ...oferta,
-            produtoRelacionado: produtoSelecionado
+            produtoRelacionado: produtoSelecionado,
+            quantidadeVendas: 0
         };
 
-        const id = await addOferta(ofertaComProduto);
+        const id = await addOferta(ofertaComProdutoEQntVendas);
         if (id) {
             alert(`${oferta.nomeOferta} cadastrada com sucesso com ID: ${id}`);
             props.handlePage("home-fornecedor");

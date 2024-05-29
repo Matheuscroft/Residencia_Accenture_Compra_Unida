@@ -83,7 +83,7 @@ const HomeFornecedor = (props) => {
     };
 
     const listaProdutosLI = listaProdutos.map((produto) => (
-        <li key={produto.id} style={{ display: "flex", alignItems: "center" }}>
+        <li key={produto.id} style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
             {produto.imagens && produto.imagens.length > 0 && (
                 <img src={produto.imagens[0]} alt={produto.nomeProduto} style={{ width: "100px", height: "100px", marginRight: "10px" }} />
             )}
