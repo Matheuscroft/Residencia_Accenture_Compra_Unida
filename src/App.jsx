@@ -13,123 +13,133 @@ import CriarProduto from './components/CriarProduto';
 import HomeCliente from './components/HomeCliente';
 import Produto from './components/Produto';
 import NavegacaoHeader from './components/NavegacaoHeader';
+import NavegacaoHeaderCliente from './components/NavegacaoHeaderCliente';
 import Carrinho from './components/Carrinho';
 import MeusPedidos from './components/MeusPedidos';
+import EsqueciSenha from './components/EsqueciSenha';
 
 const App = () => {
+    const [carrinho, setCarrinho] = useState([]);
     const [paginaAtual, setPaginaAtual] = useState({ page: "landing", data: null });
+
+    const addToCart = (produto) => {
+        setCarrinho([...carrinho, produto]);
+    };
 
     const handlePage = (page, data = null) => {
         setPaginaAtual({ page, data });
     };
 
-    switch (paginaAtual.page) {
-        case "login":
-            return (
-                <div>
-                    <NavegacaoHeader handlePage={handlePage} />
-                    <Login handlePage={handlePage} />
-                </div>
-            )
-        case "cadastro-fornecedor":
-            return (
-                <div>
-                    <NavegacaoHeader handlePage={handlePage} />
-                    <CadastroFornecedor handlePage={handlePage} />
-                </div>
-            )
-        case "home-fornecedor":
-            return (
-                <div>
-                    <NavegacaoHeader handlePage={handlePage} />
-                    <HomeFornecedor handlePage={handlePage} />
-                </div>
-            )
-        case "cadastro-cliente":
-            return (
-                <div>
-                    <NavegacaoHeader handlePage={handlePage} />
-                    <CadastroCliente handlePage={handlePage} />
-                </div>
-            )
-        case "cadastro":
-            return (
-                <div>
-                    <NavegacaoHeader handlePage={handlePage} />
-                    <Cadastro handlePage={handlePage} />
-                </div>
-            )
-        case "posts":
-            return (
-                <div>
-                    <NavegacaoHeader handlePage={handlePage} />
-                    <Posts />
-                </div>
-            )
-        case "mensagens":
-            return (
-                <div>
-                    <NavegacaoHeader handlePage={handlePage} />
-                    <Mensagens />
-                </div>
-            )
-        case "criar-oferta":
-            return (
-                <div>
-                    <NavegacaoHeader handlePage={handlePage} />
-                    <CriarOferta handlePage={handlePage} />
-                </div>
-            )
-        case "criar-produto":
-            return (
-                <div>
-                    <NavegacaoHeader handlePage={handlePage} />
-                    <CriarProduto handlePage={handlePage} />
-                </div>
-            )
-        case "home-cliente":
-            return (
-                <div>
-                    <NavegacaoHeader handlePage={handlePage} />
-                    <HomeCliente handlePage={handlePage} />
-                </div>
-            )
-        case "produto":
-            return (
-                <div>
-                    <NavegacaoHeader handlePage={handlePage} />
-                    <Produto handlePage={handlePage} produto={paginaAtual.data} />
-                </div>
-            )
-        case "carrinho":
-            return (
-                <div>
-                    <NavegacaoHeader handlePage={handlePage} />
-                    <Carrinho handlePage={handlePage} oferta={paginaAtual.data} />
-                </div>
-            )
-        case "meus-pedidos":
-            return (
-                <div>
-                    <NavegacaoHeader handlePage={handlePage} />
-                    <MeusPedidos handlePage={handlePage} />
-                </div>
-            )
-        case "gerenciar-pedidos":
-            return (
-                <div>
-                    <NavegacaoHeader handlePage={handlePage} />
-                    <MeusPedidos handlePage={handlePage} />
-                </div>
-            )
-        default:
-            return (
-                <div>
-                    <NavegacaoHeader handlePage={handlePage} />
-                    <LandingPage handlePage={handlePage} />
-                </div>
-            )
-    }
+    return (
+        <div>
+            {paginaAtual.page === "home-cliente" ? (
+                <NavegacaoHeaderCliente handlePage={handlePage} paginaAtual={paginaAtual.page} />
+            ) : (
+                <NavegacaoHeader handlePage={handlePage} paginaAtual={paginaAtual.page} />
+            )}
+            {(() => {
+                switch (paginaAtual.page) {
+                    case "login":
+                        return (
+                            <div>
+                                <Login handlePage={handlePage} />
+                            </div>
+                        );
+                    case "cadastro-fornecedor":
+                        return (
+                            <div>
+                                <CadastroFornecedor handlePage={handlePage} />
+                            </div>
+                        );
+                    case "home-fornecedor":
+                        return (
+                            <div>
+                                <HomeFornecedor handlePage={handlePage} />
+                            </div>
+                        );
+                    case "cadastro-cliente":
+                        return (
+                            <div>
+                                <CadastroCliente handlePage={handlePage} />
+                            </div>
+                        );
+                    case "cadastro":
+                        return (
+                            <div>
+                                <Cadastro handlePage={handlePage} />
+                            </div>
+                        );
+                    case "esqueci-senha":
+                        return (
+                            <div>
+                                <EsqueciSenha />
+                            </div>
+                        );
+                    case "posts":
+                        return (
+                            <div>
+                                <Posts />
+                            </div>
+                        );
+                    case "mensagens":
+                        return (
+                            <div>
+                                <Mensagens />
+                            </div>
+                        );
+                    case "criar-oferta":
+                        return (
+                            <div>
+                                <CriarOferta handlePage={handlePage} />
+                            </div>
+                        );
+                    case "criar-produto":
+                        return (
+                            <div>
+                                <CriarProduto handlePage={handlePage} />
+                            </div>
+                        );
+                    case "home-cliente":
+                        return (
+                            <div>
+                                <HomeCliente addToCart={addToCart} handlePage={handlePage} />
+                            </div>
+                        );
+                    case "produto":
+                        return (
+                            <div>
+                                <Produto handlePage={handlePage} produto={paginaAtual.data} />
+                            </div>
+                        );
+                    case "carrinho":
+                        return (
+                            <div>
+                                <Carrinho handlePage={handlePage} oferta={paginaAtual.data} />
+                            </div>
+                        );
+                    case "meus-pedidos":
+                        return (
+                            <div>
+                                <MeusPedidos handlePage={handlePage} />
+                            </div>
+                        );
+                    case "gerenciar-pedidos":
+                        return (
+                            <div>
+                                <MeusPedidos handlePage={handlePage} />
+                            </div>
+                        );
+                    default:
+                        return (
+                            <div>
+                                <LandingPage handlePage={handlePage} />
+                            </div>
+                        );
+                }
+            })()}
+        </div>
+    );
 };
 
 export default App;
+

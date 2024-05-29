@@ -24,7 +24,6 @@ const Login = (props) => {
         if (Object.keys(newErrors).length > 0) {
             setErrors(newErrors);
         } else {
-            
             if (userType === "fornecedor") {
                 props.handlePage("home-fornecedor");
             } else {
@@ -63,6 +62,9 @@ const Login = (props) => {
 
                                 <Button type="submit" className="w-100 mt-3" style={{ backgroundColor: '#FFCD46', borderColor: '#FFCD46', color: 'black' }}>Entrar</Button>
                             </Form>
+                            <Form.Text className="text-light text-center mt-3">
+                                <a href="EsqueciSenha" onClick={() => props.handlePage("esqueci-senha")} style={{ color: '#FFCD46' }}>Esqueci minha senha</a>
+                            </Form.Text>
                         </Card.Body>
                     </Card>
                 </Col>

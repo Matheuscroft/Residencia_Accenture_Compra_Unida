@@ -1,16 +1,17 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { Container, Row, Col, Card, Button, } from 'react-bootstrap';
+import { Container, Row, Col, Card, Button } from 'react-bootstrap';
 import { getOfertas } from "../auth/firebaseService";
 
 const HomeCliente = (props) => {
     const [ofertas, setOfertas] = useState([]);
     const containerRefs = useRef({});
+    const cardRefs = useRef({});
 
     useEffect(() => {
         const fetchOfertas = async () => {
             const ofertas = await getOfertas();
-            console.log("olha as ofertas  do getofertas:")
-            console.log(ofertas)
+            console.log("olha as ofertas do getofertas:");
+            console.log(ofertas);
             setOfertas(ofertas);
         };
 
@@ -52,6 +53,12 @@ const HomeCliente = (props) => {
         containerRefs.current[categoria].scrollBy({ left: 300, behavior: 'smooth' });
     };
 
+    const getMaxHeight = (categoria) => {
+        if (!cardRefs.current[categoria]) return 'auto';
+        const heights = cardRefs.current[categoria].map(ref => ref ? ref.clientHeight : 0);
+        return Math.max(...heights);
+    };
+
     return (
         <div>
             <Container style={{ marginTop: '100px' }}>
@@ -83,9 +90,17 @@ const HomeCliente = (props) => {
                     >
                         <Row style={{ display: 'flex', flexWrap: 'nowrap' }}>
                             {melhoresOfertas.length > 0 ? (
-                                melhoresOfertas.map((oferta) => (
+                                melhoresOfertas.map((oferta, index) => (
                                     <Col key={oferta.id} xs={12} md={6} lg={4} className="mb-4" style={{ display: 'inline-block', float: 'none' }}>
-                                        <Card style={{ height: '300px', borderColor: '#FFCD46' }}>
+                                        <Card
+                                            ref={el => {
+                                                if (!cardRefs.current['melhoresOfertas']) {
+                                                    cardRefs.current['melhoresOfertas'] = [];
+                                                }
+                                                cardRefs.current['melhoresOfertas'][index] = el;
+                                            }}
+                                            style={{ borderColor: '#FFCD46', overflow: 'hidden', height: getMaxHeight('melhoresOfertas'), display: 'flex', flexDirection: 'column' }}
+                                        >
                                             {oferta.produtoRelacionado.imagens && oferta.produtoRelacionado.imagens.length > 0 && (
                                                 <Card.Img
                                                     variant="top"
@@ -94,17 +109,26 @@ const HomeCliente = (props) => {
                                                     onClick={() => props.handlePage("produto", oferta.produtoRelacionado)}
                                                 />
                                             )}
-                                            <Card.Body>
-                                                <Card.Title>{oferta.nomeOferta}</Card.Title>
-                                                <Card.Text>{oferta.descricao}</Card.Text>
-                                                <Card.Text><strong>Preço Especial:</strong> {oferta.precoEspecial}</Card.Text>
+                                            <Card.Body style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+                                                <div>
+                                                    <Card.Title style={{ whiteSpace: 'normal', overflow: 'visible' }}>{oferta.nomeOferta}</Card.Title>
+                                                    <Card.Text style={{ whiteSpace: 'normal', overflow: 'visible' }}>{oferta.descricao}</Card.Text>
+                                                    <Card.Text><strong>Preço Especial:</strong> {oferta.precoEspecial}</Card.Text>
+                                                </div>
+                                                <Button
+                                                    variant="warning"
+                                                    onClick={() => props.handlePage("carrinho", [oferta])}
+                                                    style={{ marginTop: '20px', width: '100%' }}
+                                                >
+                                                    Adicionar ao Carrinho
+                                                </Button>
                                             </Card.Body>
                                         </Card>
                                     </Col>
                                 ))
                             ) : (
                                 <Col xs={12} md={6} lg={4} className="mb-4" style={{ display: 'inline-block', float: 'none' }}>
-                                    <Card style={{ height: '300px', backgroundColor: '#1c3bc5', borderRadius: '15px', borderColor: '#d4edda' }}>
+                                    <Card style={{ backgroundColor: '#1c3bc5', borderRadius: '15px', borderColor: '#d4edda' }}>
                                         <Card.Body>
                                             <Card.Title className="text-light">Sem ofertas</Card.Title>
                                         </Card.Body>
@@ -159,9 +183,17 @@ const HomeCliente = (props) => {
                             >
                                 <Row style={{ display: 'flex', flexWrap: 'nowrap' }}>
                                     {categorias[categoria] && categorias[categoria].length > 0 ? (
-                                        categorias[categoria].map((oferta) => (
+                                        categorias[categoria].map((oferta, index) => (
                                             <Col key={oferta.id} xs={12} md={6} lg={4} className="mb-4" style={{ display: 'inline-block', float: 'none' }}>
-                                                <Card style={{ height: '300px', borderColor: '#FFCD46' }}>
+                                                <Card
+                                                    ref={el => {
+                                                        if (!cardRefs.current[categoria]) {
+                                                            cardRefs.current[categoria] = [];
+                                                        }
+                                                        cardRefs.current[categoria][index] = el;
+                                                    }}
+                                                    style={{ borderColor: '#FFCD46', overflow: 'hidden', height: getMaxHeight(categoria), display: 'flex', flexDirection: 'column' }}
+                                                >
                                                     {oferta.produtoRelacionado.imagens && oferta.produtoRelacionado.imagens.length > 0 && (
                                                         <Card.Img
                                                             variant="top"
@@ -170,17 +202,26 @@ const HomeCliente = (props) => {
                                                             onClick={() => props.handlePage("produto", oferta.produtoRelacionado)}
                                                         />
                                                     )}
-                                                    <Card.Body>
-                                                        <Card.Title>{oferta.nomeOferta}</Card.Title>
-                                                        <Card.Text>{oferta.descricao}</Card.Text>
-                                                        <Card.Text><strong>Preço Especial:</strong> {oferta.precoEspecial}</Card.Text>
+                                                    <Card.Body style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+                                                        <div>
+                                                            <Card.Title style={{ whiteSpace: 'normal', overflow: 'visible' }}>{oferta.nomeOferta}</Card.Title>
+                                                            <Card.Text style={{ whiteSpace: 'normal', overflow: 'visible' }}>{oferta.descricao}</Card.Text>
+                                                            <Card.Text><strong>Preço Especial:</strong> {oferta.precoEspecial}</Card.Text>
+                                                        </div>
+                                                        <Button
+                                                            variant="warning"
+                                                            onClick={() => props.handlePage("carrinho", [oferta])}
+                                                            style={{ marginTop: '20px', width: '100%' }}
+                                                        >
+                                                            Adicionar ao Carrinho
+                                                        </Button>
                                                     </Card.Body>
                                                 </Card>
                                             </Col>
                                         ))
                                     ) : (
                                         <Col xs={12} md={6} lg={4} className="mb-4" style={{ display: 'inline-block', float: 'none' }}>
-                                            <Card style={{ height: '300px', backgroundColor: '#1c3bc5', borderRadius: '15px', borderColor: '#d4edda' }}>
+                                            <Card style={{ backgroundColor: '#1c3bc5', borderRadius: '15px', borderColor: '#d4edda' }}>
                                                 <Card.Body>
                                                     <Card.Title className="text-light">Sem ofertas</Card.Title>
                                                 </Card.Body>
