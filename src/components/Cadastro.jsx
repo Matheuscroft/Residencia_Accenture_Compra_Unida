@@ -1,7 +1,7 @@
 import React from 'react';
 import { Container, Row, Col, Card, Button } from 'react-bootstrap';
-import ClienteImg from '../assets/Cliente.jpg'; // Certifique-se de que o caminho está correto
-import FornecedorImg from '../assets/Fornecedor.jpg'; // Certifique-se de que o caminho está correto
+import ClienteImg from '../assets/Cliente.jpg';
+import FornecedorImg from '../assets/Fornecedor.jpg'; 
 
 const Cadastro = (props) => {
     return (

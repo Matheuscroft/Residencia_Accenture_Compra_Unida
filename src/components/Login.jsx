@@ -11,7 +11,7 @@ const Login = (props) => {
         const { name, value } = event.target;
         if (name === "email") setEmail(value);
         if (name === "senha") setSenha(value);
-        if (name === "userType") setUserType(value); // Atualiza o tipo de usuário
+        if (name === "userType") setUserType(value); 
     };
 
     const handleSubmit = (event) => {
@@ -24,7 +24,7 @@ const Login = (props) => {
         if (Object.keys(newErrors).length > 0) {
             setErrors(newErrors);
         } else {
-            // Redireciona para a página correta com base no tipo de usuário
+            
             if (userType === "fornecedor") {
                 props.handlePage("home-fornecedor");
             } else {

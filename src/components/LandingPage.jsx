@@ -40,9 +40,9 @@ const LandingPage = (props) => {
                                 borderColor: '#FFCD46', 
                                 color: 'black', 
                                 marginTop: '20px', 
-                                padding: '15px 30px', // Aumenta o padding
-                                fontSize: '1.25rem', // Aumenta o tamanho da fonte
-                                width: 'auto' // Ajusta a largura conforme necessário
+                                padding: '15px 30px', 
+                                fontSize: '1.25rem', 
+                                width: 'auto' 
                             }} onClick={() => props.handlePage("cadastro")}>Cadastre-se agora e impulsione seu negócio</Button>
                         </Col>
                     </Row>

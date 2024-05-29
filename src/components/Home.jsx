@@ -41,8 +41,6 @@ const Home = (props) => {
                     <NavegacaoHome handleComponente={handleComponente} handlePage={props.handlePage}/>
                 </div>
             )
-
-            break;
     }
 
 }
