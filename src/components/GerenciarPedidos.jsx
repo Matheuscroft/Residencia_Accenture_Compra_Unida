@@ -3,7 +3,7 @@ import { Container, Row, Col, Card, Button } from 'react-bootstrap';
 import { getPedidos } from '../auth/firebaseService';
 import { format } from 'date-fns';
 
-const MeusPedidos = (props) => {
+const GerenciarPedidos = (props) => {
     
 
     const [listaPedidos, setListaPedidos] = useState([]);
@@ -47,7 +47,7 @@ const MeusPedidos = (props) => {
 
     return (
         <Container>
-            <h1 className="text-center">Meus Pedidos</h1>
+            <h1 className="text-center">Pedidos Efetuados</h1>
             <Row>
                 <Col xs={12} md={2}>
                 </Col>
@@ -63,4 +63,4 @@ const MeusPedidos = (props) => {
     );
 };
 
-export default MeusPedidos;
+export default GerenciarPedidos;

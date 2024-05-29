@@ -7,7 +7,7 @@ import Chat from './Chat';
 import '../App.css';
 
 const Produto = (props) => {
-    const produto = props.produto; // Recebe o produto via props
+    const produto = props.produto;
     const [ofertas, setOfertas] = useState([]);
 
     useEffect(() => {
@@ -81,7 +81,7 @@ const Produto = (props) => {
                             ))}
                                 <Button
                                     variant="warning"
-                                    onClick={() => props.handlePage("carrinho") }
+                                    onClick={() => props.handlePage("carrinho", ofertas)}
                                     style={{ marginTop: '20px', width: '100%' }}
                                 >
                                     Adicionar ao Carrinho

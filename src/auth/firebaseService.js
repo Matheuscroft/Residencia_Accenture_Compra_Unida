@@ -87,6 +87,20 @@ export const deletarOferta = async (ofertaId) => {
     }
 };
 
+export const addPedido = async (oferta) => {
+    try {
+        const docRef = await addDoc(collection(db, "pedidos"), oferta);
+        return docRef.id;
+    } catch (e) {
+        console.error("Erro ao adicionar pedido: ", e);
+    }
+};
+
+export const getPedidos = async () => {
+    const querySnapshot = await getDocs(collection(db, "pedidos"));
+    return querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+};
+
 export const getMessages = async (fornecedorId) => {
     const q = query(collection(db, "messages"), where("fornecedorId", "==", fornecedorId));
     const querySnapshot = await getDocs(q);

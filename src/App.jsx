@@ -14,6 +14,7 @@ import HomeCliente from './components/HomeCliente';
 import Produto from './components/Produto';
 import NavegacaoHeader from './components/NavegacaoHeader';
 import Carrinho from './components/Carrinho';
+import MeusPedidos from './components/MeusPedidos';
 
 const App = () => {
     const [paginaAtual, setPaginaAtual] = useState({ page: "landing", data: null });
@@ -104,7 +105,21 @@ const App = () => {
             return (
                 <div>
                     <NavegacaoHeader handlePage={handlePage} />
-                    <Carrinho handlePage={handlePage} />
+                    <Carrinho handlePage={handlePage} oferta={paginaAtual.data} />
+                </div>
+            )
+        case "meus-pedidos":
+            return (
+                <div>
+                    <NavegacaoHeader handlePage={handlePage} />
+                    <MeusPedidos handlePage={handlePage} />
+                </div>
+            )
+        case "gerenciar-pedidos":
+            return (
+                <div>
+                    <NavegacaoHeader handlePage={handlePage} />
+                    <MeusPedidos handlePage={handlePage} />
                 </div>
             )
         default:

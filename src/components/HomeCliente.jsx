@@ -30,11 +30,11 @@ const HomeCliente = (props) => {
 
     const categoriasPadrao = ["alimentacao", "vestuario", "racao", "bebidas"];
     const categoriasFormatadas = {
-    alimentacao: "Alimentação",
-    vestuario: "Vestuário",
-    racao: "Ração",
-    bebidas: "Bebidas"
-};
+        alimentacao: "Alimentação",
+        vestuario: "Vestuário",
+        racao: "Ração",
+        bebidas: "Bebidas"
+    };
 
     const melhoresOfertas = ofertas
         .map(oferta => ({
@@ -42,7 +42,7 @@ const HomeCliente = (props) => {
             diferencaPreco: oferta.preco - oferta.precoEspecial
         }))
         .sort((a, b) => b.diferencaPreco - a.diferencaPreco)
-        .slice(0, 10); 
+        .slice(0, 10);
 
     const scrollLeft = (categoria) => {
         containerRefs.current[categoria].scrollBy({ left: -300, behavior: 'smooth' });
@@ -58,24 +58,24 @@ const HomeCliente = (props) => {
                 <h2 style={{ color: '#FFCD46' }}>Melhores Ofertas</h2>
                 <div style={{ position: 'relative', marginBottom: '40px' }}>
                     <Button
-                        style={{ 
-                            position: 'absolute', 
-                            left: '-50px', 
-                            top: '50%', 
-                            transform: 'translateY(-50%)', 
-                            zIndex: 1, 
-                            backgroundColor: '#FFCD46', 
-                            borderColor: '#FFCD46' 
+                        style={{
+                            position: 'absolute',
+                            left: '-50px',
+                            top: '50%',
+                            transform: 'translateY(-50%)',
+                            zIndex: 1,
+                            backgroundColor: '#FFCD46',
+                            borderColor: '#FFCD46'
                         }}
                         onClick={() => scrollLeft('melhoresOfertas')}
                     >
                         &lt;
                     </Button>
-                    <div 
-                        ref={(el) => (containerRefs.current['melhoresOfertas'] = el)} 
-                        style={{ 
-                            overflowX: 'auto', 
-                            whiteSpace: 'nowrap', 
+                    <div
+                        ref={(el) => (containerRefs.current['melhoresOfertas'] = el)}
+                        style={{
+                            overflowX: 'auto',
+                            whiteSpace: 'nowrap',
                             scrollbarWidth: 'none', /* Firefox */
                             msOverflowStyle: 'none' /* Internet Explorer 10+ */
                         }}
@@ -87,10 +87,10 @@ const HomeCliente = (props) => {
                                     <Col key={oferta.id} xs={12} md={6} lg={4} className="mb-4" style={{ display: 'inline-block', float: 'none' }}>
                                         <Card style={{ height: '300px', borderColor: '#FFCD46' }}>
                                             {oferta.produtoRelacionado.imagens && oferta.produtoRelacionado.imagens.length > 0 && (
-                                                <Card.Img 
-                                                    variant="top" 
-                                                    src={oferta.produtoRelacionado.imagens[0]} 
-                                                    style={{ height: '150px', objectFit: 'cover', cursor: 'pointer' }} 
+                                                <Card.Img
+                                                    variant="top"
+                                                    src={oferta.produtoRelacionado.imagens[0]}
+                                                    style={{ height: '150px', objectFit: 'cover', cursor: 'pointer' }}
                                                     onClick={() => props.handlePage("produto", oferta.produtoRelacionado)}
                                                 />
                                             )}
@@ -114,14 +114,14 @@ const HomeCliente = (props) => {
                         </Row>
                     </div>
                     <Button
-                        style={{ 
-                            position: 'absolute', 
-                            right: '-50px', 
-                            top: '50%', 
-                            transform: 'translateY(-50%)', 
-                            zIndex: 1, 
-                            backgroundColor: '#FFCD46', 
-                            borderColor: '#FFCD46' 
+                        style={{
+                            position: 'absolute',
+                            right: '-50px',
+                            top: '50%',
+                            transform: 'translateY(-50%)',
+                            zIndex: 1,
+                            backgroundColor: '#FFCD46',
+                            borderColor: '#FFCD46'
                         }}
                         onClick={() => scrollRight('melhoresOfertas')}
                     >
@@ -134,24 +134,24 @@ const HomeCliente = (props) => {
                         <h3 style={{ color: '#FFCD46' }}>{categoriasFormatadas[categoria]}</h3>
                         <div style={{ position: 'relative' }}>
                             <Button
-                                style={{ 
-                                    position: 'absolute', 
-                                    left: '-50px', 
-                                    top: '50%', 
-                                    transform: 'translateY(-50%)', 
-                                    zIndex: 1, 
-                                    backgroundColor: '#FFCD46', 
-                                    borderColor: '#FFCD46' 
+                                style={{
+                                    position: 'absolute',
+                                    left: '-50px',
+                                    top: '50%',
+                                    transform: 'translateY(-50%)',
+                                    zIndex: 1,
+                                    backgroundColor: '#FFCD46',
+                                    borderColor: '#FFCD46'
                                 }}
                                 onClick={() => scrollLeft(categoria)}
                             >
                                 &lt;
                             </Button>
-                            <div 
-                                ref={(el) => (containerRefs.current[categoria] = el)} 
-                                style={{ 
-                                    overflowX: 'auto', 
-                                    whiteSpace: 'nowrap', 
+                            <div
+                                ref={(el) => (containerRefs.current[categoria] = el)}
+                                style={{
+                                    overflowX: 'auto',
+                                    whiteSpace: 'nowrap',
                                     scrollbarWidth: 'none', /* Firefox */
                                     msOverflowStyle: 'none' /* Internet Explorer 10+ */
                                 }}
@@ -163,10 +163,10 @@ const HomeCliente = (props) => {
                                             <Col key={oferta.id} xs={12} md={6} lg={4} className="mb-4" style={{ display: 'inline-block', float: 'none' }}>
                                                 <Card style={{ height: '300px', borderColor: '#FFCD46' }}>
                                                     {oferta.produtoRelacionado.imagens && oferta.produtoRelacionado.imagens.length > 0 && (
-                                                        <Card.Img 
-                                                            variant="top" 
-                                                            src={oferta.produtoRelacionado.imagens[0]} 
-                                                            style={{ height: '150px', objectFit: 'cover', cursor: 'pointer' }} 
+                                                        <Card.Img
+                                                            variant="top"
+                                                            src={oferta.produtoRelacionado.imagens[0]}
+                                                            style={{ height: '150px', objectFit: 'cover', cursor: 'pointer' }}
                                                             onClick={() => props.handlePage("produto", oferta.produtoRelacionado)}
                                                         />
                                                     )}
@@ -190,14 +190,14 @@ const HomeCliente = (props) => {
                                 </Row>
                             </div>
                             <Button
-                                style={{ 
-                                    position: 'absolute', 
-                                    right: '-50px', 
-                                    top: '50%', 
-                                    transform: 'translateY(-50%)', 
-                                    zIndex: 1, 
-                                    backgroundColor: '#FFCD46', 
-                                    borderColor: '#FFCD46' 
+                                style={{
+                                    position: 'absolute',
+                                    right: '-50px',
+                                    top: '50%',
+                                    transform: 'translateY(-50%)',
+                                    zIndex: 1,
+                                    backgroundColor: '#FFCD46',
+                                    borderColor: '#FFCD46'
                                 }}
                                 onClick={() => scrollRight(categoria)}
                             >

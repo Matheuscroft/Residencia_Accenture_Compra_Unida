@@ -112,7 +112,13 @@ const HomeFornecedor = (props) => {
                 <Container style={{ marginTop: '20px' }}>
                     <Row className="mb-4">
                         <Col className="d-flex justify-content-center">
-                            <h1>HOME FORNECEDOR</h1>
+                        <Button
+                                    variant="warning"
+                                    onClick={() => props.handlePage("gerenciar-pedidos")}
+                                    style={{ marginTop: '20px', width: '100%' }}
+                                >
+                                    Ver Pedidos
+                                </Button>
                         </Col>
                     </Row>
                     <Row>

@@ -1,18 +1,45 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Container, Row, Col, Card, Button } from 'react-bootstrap';
 //import { CartContext } from './CartContext';
+import { addPedido } from '../auth/firebaseService';
 
 const Carrinho = (props) => {
     //const { cart, removeFromCart } = useContext(CartContext);
     const [pedidos, setPedidos] = useState([])
+    const oferta = props.oferta;
 
     /* const calculateTotal = () => {
          return cart.reduce((total, oferta) => total + parseFloat(oferta.precoEspecial.replace('R$', '').replace(',', '.')), 0).toFixed(2);
      };*/
 
-    const handleSubmit = () => {
+    useEffect(() => {
 
-        setPedidos()
+        console.log("olha a oferta")
+        console.log(oferta)
+
+    }, [])
+
+    const handleSubmit = async () => {
+
+
+        const novoPedido = {
+            ofertaRelacionada: oferta,
+            dataDePedido: new Date(),
+            valorPedido: oferta.reduce((total, item) => total + parseFloat(item.precoEspecial.replace('R$', '').replace(',', '.')), 0).toFixed(2) // Calculate total order value
+        };
+
+        console.log("olha o novoPedido")
+        console.log(novoPedido)
+
+        setPedidos([...pedidos, novoPedido]);
+
+        const id = await addPedido(novoPedido);
+        if (id) {
+            alert(`${novoPedido.ofertaRelacionada[0].nomeOferta} cadastrado com sucesso com ID: ${id}`);
+            props.handlePage("meus-pedidos");
+        } else {
+            alert("Erro ao cadastrar pedido");
+        }
 
 
         props.handlePage("meus-pedidos")
@@ -23,8 +50,10 @@ const Carrinho = (props) => {
             <h1 className="text-center">Carrinho de Compras</h1>
             <Row>
                 <Col xs={12} md={2}>
+                    <h1>AMO VC</h1>
                 </Col>
                 <Col xs={12} md={6}>
+                    <h1>{oferta[0].nomeOferta}</h1>
                 </Col>
                 <Col xs={12} md={4}>
                     <Button
@@ -34,6 +63,7 @@ const Carrinho = (props) => {
                     >
                         Finalizar pedido
                     </Button>
+
                 </Col>
             </Row>
             {/*cart.length > 0 ? (
