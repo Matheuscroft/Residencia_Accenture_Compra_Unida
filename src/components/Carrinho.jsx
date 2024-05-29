@@ -121,35 +121,50 @@ const Carrinho = (props) => {
         <Container>
             <h1 className="text-center">Carrinho de Compras</h1>
             <Row>
-                {ofertas.map(item => (
-                    <Col xs={12} key={item.id} className="mb-4">
-                        <Card style={{ backgroundColor: '#1c3bc5', borderColor: '#FFCD46', cursor: 'pointer' }} onClick={() => props.handlePage("produto", item.produtoRelacionado)}>
-                            <Card.Body>
-                                <h3 className="text-light">{item.nomeOferta}</h3>
-                                <p className="text-light"><strong>Descrição:</strong> {item.descricao}</p>
-                                <p className="text-light"><strong>Preço Especial:</strong> {item.precoEspecial}</p>
-                                <Form.Control
-                                    type="number"
-                                    value={quantidades[item.id]}
-                                    onChange={(e) => handleQuantidadeChange(item.id, parseInt(e.target.value))}
-                                    min="1"
-                                />
-                                <Button variant="danger" onClick={(e) => { e.stopPropagation(); handleRemove(item.id); }}>Remover</Button>
-                            </Card.Body>
-                        </Card>
-                    </Col>
-                ))}
-            </Row>
-            <h3 className="text-center">Total: R$ {calculateTotal()}</h3>
-            <Row>
-                <Col xs={12}>
-                    <Button
-                        variant="warning"
-                        onClick={handleSubmit}
-                        style={{ marginTop: '20px', width: '100%' }}
-                    >
-                        Finalizar pedido
-                    </Button>
+                <Col xs={12} md={8}>
+                    <Card className="mb-4">
+                        <Card.Header className="d-flex justify-content-between align-items-center">
+                            <Button variant="link" onClick={() => props.handlePage("home")}>Continuar comprando</Button>
+                            <Button variant="warning" onClick={handleSubmit}>Finalizar pedido</Button>
+                        </Card.Header>
+                        <Card.Body>
+                            {ofertas.map(item => (
+                                <Row key={item.id} className="mb-3 align-items-center">
+                                    <Col xs={2}>
+                                        <img src={item.produtoRelacionado.imagens[0]} alt={item.nomeOferta} style={{ width: '100%' }} />
+                                    </Col>
+                                    <Col xs={4}>
+                                        <h5>{item.nomeOferta}</h5>
+                                        <p>{item.descricao}</p>
+                                    </Col>
+                                    <Col xs={2}>
+                                        <Form.Control
+                                            type="number"
+                                            value={quantidades[item.id]}
+                                            onChange={(e) => handleQuantidadeChange(item.id, parseInt(e.target.value))}
+                                            min="1"
+                                        />
+                                    </Col>
+                                    <Col xs={2}>
+                                        <p>{item.precoEspecial}</p>
+                                    </Col>
+                                    <Col xs={2}>
+                                        <Button variant="danger" onClick={(e) => { e.stopPropagation(); handleRemove(item.id); }}>Remover</Button>
+                                    </Col>
+                                </Row>
+                            ))}
+                        </Card.Body>
+                    </Card>
+                </Col>
+                <Col xs={12} md={4}>
+                    <Card>
+                        <Card.Body>
+                            <h5>Resumo</h5>
+                            <p>Total em produtos: R$ {calculateTotal()}</p>
+                            <h3>Total: R$ {calculateTotal()}</h3>
+                            <Button variant="warning" onClick={handleSubmit} className="w-100">Confirmar</Button>
+                        </Card.Body>
+                    </Card>
                 </Col>
             </Row>
         </Container>
