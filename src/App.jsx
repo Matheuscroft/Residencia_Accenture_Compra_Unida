@@ -32,7 +32,7 @@ const App = () => {
 
     return (
         <div>
-            {paginaAtual.page === "home-cliente" ? (
+            {paginaAtual.page === "home-cliente" || paginaAtual.page === "carrinho" || paginaAtual.page === "produto" || paginaAtual.page === "meus-pedidos" ? (
                 <NavegacaoHeaderCliente handlePage={handlePage} paginaAtual={paginaAtual.page} />
             ) : (
                 <NavegacaoHeader handlePage={handlePage} paginaAtual={paginaAtual.page} />

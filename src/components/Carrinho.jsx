@@ -6,13 +6,14 @@ const Carrinho = (props) => {
     const [pedidos, setPedidos] = useState([]);
     const [quantidades, setQuantidades] = useState({});
     const oferta = props.oferta || []; 
+    const [ofertas, setOfertas] = useState(props.oferta || []);
 
     useEffect(() => {
-        const initialQuantidades = {};
+        const quantidadesIniciais = {};
         oferta.forEach(item => {
-            initialQuantidades[item.id] = 1; 
+            quantidadesIniciais[item.id] = item.quantidadeCarrinho || 1;
         });
-        setQuantidades(initialQuantidades);
+        setQuantidades(quantidadesIniciais);
     }, [oferta]);
 
     const handleQuantidadeChange = (id, quantidade) => {
@@ -53,7 +54,7 @@ const Carrinho = (props) => {
         <Container>
             <h1 className="text-center">Carrinho de Compras</h1>
             <Row>
-                {oferta.map(item => (
+                {ofertas.map(item => (
                     <Col xs={12} key={item.id} className="mb-4">
                         <Card style={{ backgroundColor: '#1c3bc5', borderColor: '#FFCD46', cursor: 'pointer' }} onClick={() => props.handlePage("produto", item.produtoRelacionado)}>
                             <Card.Body>

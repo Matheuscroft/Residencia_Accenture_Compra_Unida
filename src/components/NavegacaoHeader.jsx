@@ -19,7 +19,7 @@ const NavegacaoHeader = (props) => {
                 <Navbar.Collapse id="basic-navbar-nav">
                     <Nav className="me-auto">
                         <Nav.Link href="google.com" style={{ color: 'white' }}>Home</Nav.Link>
-                        <Nav.Link href="google.com" style={{ color: 'white' }}>Produtos</Nav.Link>
+                        <Nav.Link style={{ color: 'white' }} onClick={() => props.handlePage("home-cliente")}>Produtos</Nav.Link>
                         <Nav.Link href="google.com" style={{ color: 'white' }}>Contato</Nav.Link>
                     </Nav>
                     <Button className="me-2" style={{ backgroundColor: '#FFCD46', borderColor: '#FFCD46', color: 'black' }} onClick={() => props.handlePage("login")}>Entrar</Button>

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Container, Row, Col, Card, Carousel, Button, ProgressBar } from 'react-bootstrap';
+import { Container, Row, Col, Card, Carousel, Button, ProgressBar, Form } from 'react-bootstrap';
 import { getOfertas } from '../auth/firebaseService';
 import { format } from 'date-fns';
 import Countdown from 'react-countdown';
@@ -13,7 +13,10 @@ const Produto = (props) => {
     useEffect(() => {
         const fetchOfertas = async () => {
             const todasOfertas = await getOfertas();
-            const ofertasProduto = todasOfertas.filter(oferta => oferta.produtoRelacionado.id === produto.id);
+            const ofertasProduto = todasOfertas.filter(oferta => oferta.produtoRelacionado.id === produto.id).map(oferta => ({
+                ...oferta,
+                quantidadeCarrinho: 1
+            }));
             setOfertas(ofertasProduto);
         };
         fetchOfertas();
@@ -26,6 +29,14 @@ const Produto = (props) => {
 
     const calcularProgresso = (quantidadeMinima, vendidos) => {
         return (vendidos / quantidadeMinima) * 100;
+    };
+
+    const handleMudancaQuantidade = (index, value) => {
+        setOfertas((ofertasAnteriores) => {
+            const novasOfertas = [...ofertasAnteriores];
+            novasOfertas[index].quantidadeCarrinho = Math.max(1, value);
+            return novasOfertas;
+        });
     };
 
     return (
@@ -59,26 +70,36 @@ const Produto = (props) => {
                     <div className="d-flex flex-column align-items-end">
                         <Card className="text-center" style={{ borderColor: '#FFCD46', borderRadius: '15px' }}>
                             <Card.Body>
-                            {ofertas.map((oferta, index) => (
-                                <div key={index} className="mt-3">
-                                    <div className="mt-3" style={{ fontSize: "20px" }}>
-                                        <strong>Tempo restante: </strong>
-                                        <Countdown date={new Date(oferta.dataTermino)} />
+                                {ofertas.map((oferta, index) => (
+                                    <div key={index} className="mt-3">
+                                        <div className="mt-3" style={{ fontSize: "20px" }}>
+                                            <strong>Tempo restante: </strong>
+                                            <Countdown date={new Date(oferta.dataTermino)} />
+                                        </div>
+                                        <p>Oferta termina em: {formatarData(oferta.dataTermino)}</p>
+
+                                        <p style={{ marginTop: "50px" }}><strong>Quantidade mínima:</strong> {oferta.quantidadeMinima}</p>
+
+                                        <p><strong>Quantidade vendida:</strong> {oferta.quantidadeVendida}</p>
+                                        <ProgressBar
+                                            now={calcularProgresso(oferta.quantidadeMinima, oferta.quantidadeVendas)}
+                                            label={`${oferta.quantidadeVendas} / ${oferta.quantidadeMinima}`}
+                                        />
+
+                                        <p style={{ textDecoration: 'line-through', color: "red", marginTop: "50px" }}><strong>De:</strong> {oferta.produtoRelacionado.preco}</p>
+                                        <p style={{ fontSize: "20px" }}><strong>Por:</strong> {oferta.precoEspecial}</p>
+                                        <div className="d-flex align-items-center justify-content-center" >
+                                            <Button variant="outline-secondary" onClick={() => handleMudancaQuantidade(index, oferta.quantidadeCarrinho - 1)}>-</Button>
+                                            <Form.Control
+                                                type="number"
+                                                value={oferta.quantidadeCarrinho}
+                                                onChange={(e) => handleMudancaQuantidade(index, parseInt(e.target.value))}
+                                                style={{ width: '60px', margin: '0 10px' }}
+                                            />
+                                            <Button variant="outline-secondary" onClick={() => handleMudancaQuantidade(index, oferta.quantidadeCarrinho + 1)}>+</Button>
+                                        </div>
                                     </div>
-                                    <p>Oferta termina em: {formatarData(oferta.dataTermino)}</p>
-                                    
-                                    <p style={{ marginTop: "50px" }}><strong>Quantidade mínima:</strong> {oferta.quantidadeMinima}</p>
-                                    
-                                    <p><strong>Quantidade vendida:</strong> {oferta.quantidadeVendida}</p>
-                                    <ProgressBar 
-                                        now={calcularProgresso(oferta.quantidadeMinima, oferta.quantidadeVendas)} 
-                                        label={`${oferta.quantidadeVendas} / ${oferta.quantidadeMinima}`} 
-                                    />
-                                    
-                                    <p style={{ textDecoration: 'line-through', color: "red", marginTop: "50px" }}><strong>De:</strong> {oferta.produtoRelacionado.preco}</p>
-                                    <p style={{ fontSize: "20px" }}><strong>Por:</strong> {oferta.precoEspecial}</p>
-                                </div>
-                            ))}
+                                ))}
                                 <Button
                                     variant="warning"
                                     onClick={() => props.handlePage("carrinho", ofertas)}
