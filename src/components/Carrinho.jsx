@@ -18,39 +18,54 @@ const Carrinho = (props) => {
 
     useEffect(() => {
         const carregarCarrinho = async () => {
+            // Verifica se o carrinho já possui ofertas
+            const carrinhoAtual = await getCarrinho();
+            let ofertasAtualizadas;
+        
             if (props.oferta && props.oferta.length > 0) {
-                const carrinhoAtual = await getCarrinho();
-                let ofertasAtualizadas;
-                
+                // Se houver uma nova oferta via props, adiciona ao carrinho
                 if (carrinhoAtual) {
-                    ofertasAtualizadas = [...carrinhoAtual.ofertas, ...props.oferta];
+                    ofertasAtualizadas = [...carrinhoAtual.ofertas];
+        
+                    // Adiciona apenas as novas ofertas que não estão no carrinho
+                    props.oferta.forEach(novaOferta => {
+                        if (!ofertasAtualizadas.find(oferta => oferta.id === novaOferta.id)) {
+                            ofertasAtualizadas.push(novaOferta);
+                        }
+                    });
+        
+                    // Atualiza o carrinho no Firebase
                     await updateCarrinho(carrinhoAtual.id, ofertasAtualizadas);
                 } else {
+                    // Se não houver carrinho, cria um novo com as ofertas recebidas
                     const id = await addCarrinho(props.oferta);
                     ofertasAtualizadas = props.oferta;
                 }
-                
+        
                 setOfertas(ofertasAtualizadas);
-    
+        
                 const quantidadesIniciais = {};
                 ofertasAtualizadas.forEach(item => {
                     quantidadesIniciais[item.id] = item.quantidadeCarrinho || 1;
                 });
                 setQuantidades(quantidadesIniciais);
             } else {
-                const carrinho = await getCarrinho();
-                if (carrinho) {
-                    setOfertas(carrinho.ofertas);
+                // Se não houver nova oferta, apenas carrega o carrinho atual
+                if (carrinhoAtual) {
+                    setOfertas(carrinhoAtual.ofertas);
                     const quantidadesIniciais = {};
-                    carrinho.ofertas.forEach(item => {
+                    carrinhoAtual.ofertas.forEach(item => {
                         quantidadesIniciais[item.id] = item.quantidadeCarrinho || 1;
                     });
                     setQuantidades(quantidadesIniciais);
                 }
             }
         };
+        
         carregarCarrinho();
-    }, [props.oferta]);
+
+       
+    }, []);
     
 
     const handleQuantidadeChange = async (id, quantidade) => {
@@ -75,9 +90,21 @@ const Carrinho = (props) => {
     };
     
 
-    const handleRemove = (id) => {
-        const newOferta = oferta.filter(item => item.id !== id);
-        props.setOferta(newOferta);
+    const handleRemove = async (id) => {
+        
+        const novaOferta = ofertas.filter(item => item.id !== id);
+        setOfertas(novaOferta);
+
+        const carrinho = await getCarrinho();
+        if (carrinho) {
+            const ofertasAtualizadas = carrinho.ofertas.filter(item => item.id !== id);
+            await updateCarrinho(carrinho.id, ofertasAtualizadas);
+        }
+
+        console.log("removeu")
+        console.log(novaOferta)
+        console.log("olha carrinho")
+        console.log(carrinho)
     };
 
     const handleSubmit = async () => {
@@ -149,7 +176,7 @@ const Carrinho = (props) => {
                                         <p>{item.precoEspecial}</p>
                                     </Col>
                                     <Col xs={2}>
-                                        <Button variant="danger" onClick={(e) => { e.stopPropagation(); handleRemove(item.id); }}>Remover</Button>
+                                    <Button variant="danger" onClick={() => handleRemove(item.id)}>Remover</Button>
                                     </Col>
                                 </Row>
                             ))}
