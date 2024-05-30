@@ -2,8 +2,6 @@ import React, { useState } from 'react';
 import './App.css';
 import LandingPage from './components/LandingPage';
 import Cadastro from './components/Cadastro';
-import Posts from './components/Posts';
-import Mensagens from './components/Mensagens';
 import CriarOferta from './components/CriarOferta';
 import Login from './components/Login';
 import CadastroCliente from './components/CadastroCliente';
@@ -75,18 +73,7 @@ const App = () => {
                                 <EsqueciSenha />
                             </div>
                         );
-                    case "posts":
-                        return (
-                            <div>
-                                <Posts />
-                            </div>
-                        );
-                    case "mensagens":
-                        return (
-                            <div>
-                                <Mensagens />
-                            </div>
-                        );
+                    
                     case "criar-oferta":
                         return (
                             <div>
