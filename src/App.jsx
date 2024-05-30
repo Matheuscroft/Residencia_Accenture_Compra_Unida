@@ -11,7 +11,6 @@ import CriarProduto from './components/CriarProduto';
 import HomeCliente from './components/HomeCliente';
 import Produto from './components/Produto';
 import NavegacaoHeader from './components/NavegacaoHeader';
-import NavegacaoHeaderCliente from './components/NavegacaoHeaderCliente';
 import Carrinho from './components/Carrinho';
 import MeusPedidos from './components/MeusPedidos';
 import EsqueciSenha from './components/EsqueciSenha';
@@ -28,104 +27,107 @@ const App = () => {
         setPaginaAtual({ page, data });
     };
 
-    return (
-        <div>
-            {paginaAtual.page === "home-cliente" || paginaAtual.page === "carrinho" || paginaAtual.page === "produto" || paginaAtual.page === "meus-pedidos" ? (
-                <NavegacaoHeaderCliente handlePage={handlePage} paginaAtual={paginaAtual.page} />
-            ) : (
-                <NavegacaoHeader handlePage={handlePage} paginaAtual={paginaAtual.page} />
-            )}
-            {(() => {
-                switch (paginaAtual.page) {
-                    case "login":
-                        return (
-                            <div>
-                                <Login handlePage={handlePage} />
-                            </div>
-                        );
-                    case "cadastro-fornecedor":
-                        return (
-                            <div>
-                                <CadastroFornecedor handlePage={handlePage} />
-                            </div>
-                        );
-                    case "home-fornecedor":
-                        return (
-                            <div>
-                                <HomeFornecedor handlePage={handlePage} />
-                            </div>
-                        );
-                    case "cadastro-cliente":
-                        return (
-                            <div>
-                                <CadastroCliente handlePage={handlePage} />
-                            </div>
-                        );
-                    case "cadastro":
-                        return (
-                            <div>
-                                <Cadastro handlePage={handlePage} />
-                            </div>
-                        );
-                    case "esqueci-senha":
-                        return (
-                            <div>
-                                <EsqueciSenha />
-                            </div>
-                        );
-                    
-                    case "criar-oferta":
-                        return (
-                            <div>
-                                <CriarOferta handlePage={handlePage} />
-                            </div>
-                        );
-                    case "criar-produto":
-                        return (
-                            <div>
-                                <CriarProduto handlePage={handlePage} />
-                            </div>
-                        );
-                    case "home-cliente":
-                        return (
-                            <div>
-                                <HomeCliente addToCart={addToCart} handlePage={handlePage} />
-                            </div>
-                        );
-                    case "produto":
-                        return (
-                            <div>
-                                <Produto handlePage={handlePage} produto={paginaAtual.data} />
-                            </div>
-                        );
-                    case "carrinho":
-                        return (
-                            <div>
-                                <Carrinho handlePage={handlePage} oferta={paginaAtual.data} />
-                            </div>
-                        );
-                    case "meus-pedidos":
-                        return (
-                            <div>
-                                <MeusPedidos handlePage={handlePage} />
-                            </div>
-                        );
-                    case "gerenciar-pedidos":
-                        return (
-                            <div>
-                                <MeusPedidos handlePage={handlePage} />
-                            </div>
-                        );
-                    default:
-                        return (
-                            <div>
-                                <LandingPage handlePage={handlePage} />
-                            </div>
-                        );
-                }
-            })()}
-        </div>
-    );
+    switch (paginaAtual.page) {
+        case "login":
+            return (
+                <div>
+                    <NavegacaoHeader handlePage={handlePage} paginaAtual={paginaAtual.page} />
+                    <Login handlePage={handlePage} />
+                </div>
+            );
+        case "cadastro-fornecedor":
+            return (
+                <div>
+                    <NavegacaoHeader handlePage={handlePage} paginaAtual={paginaAtual.page} />
+                    <CadastroFornecedor handlePage={handlePage} />
+                </div>
+            );
+        case "home-fornecedor":
+            return (
+                <div>
+                    <NavegacaoHeader handlePage={handlePage} paginaAtual={paginaAtual.page} />
+                    <HomeFornecedor handlePage={handlePage} />
+                </div>
+            );
+        case "cadastro-cliente":
+            return (
+                <div>
+                    <NavegacaoHeader handlePage={handlePage} paginaAtual={paginaAtual.page} />
+                    <CadastroCliente handlePage={handlePage} />
+                </div>
+            );
+        case "cadastro":
+            return (
+                <div>
+                    <NavegacaoHeader handlePage={handlePage} paginaAtual={paginaAtual.page} />
+                    <Cadastro handlePage={handlePage} />
+                </div>
+            );
+        case "esqueci-senha":
+            return (
+                <div>
+                    <NavegacaoHeader handlePage={handlePage} paginaAtual={paginaAtual.page} />
+                    <EsqueciSenha />
+                </div>
+            );
+
+        case "criar-oferta":
+            return (
+                <div>
+                    <NavegacaoHeader handlePage={handlePage} paginaAtual={paginaAtual.page} />
+                    <CriarOferta handlePage={handlePage} />
+                </div>
+            );
+        case "criar-produto":
+            return (
+                <div>
+                    <NavegacaoHeader handlePage={handlePage} paginaAtual={paginaAtual.page} />
+                    <CriarProduto handlePage={handlePage} />
+                </div>
+            );
+        case "home-cliente":
+            return (
+                <div>   
+                    <NavegacaoHeader handlePage={handlePage} paginaAtual={paginaAtual.page} />
+                    <HomeCliente addToCart={addToCart} handlePage={handlePage} />
+                </div>
+            );
+        case "produto":
+            return (
+                <div>
+                    <NavegacaoHeader handlePage={handlePage} paginaAtual={paginaAtual.page} />
+                    <Produto handlePage={handlePage} produto={paginaAtual.data} />
+                </div>
+            );
+        case "carrinho":
+            return (
+                <div>
+                    <NavegacaoHeader handlePage={handlePage} paginaAtual={paginaAtual.page} />
+                    <Carrinho handlePage={handlePage} oferta={paginaAtual.data} />
+                </div>
+            );
+        case "meus-pedidos":
+            return (
+                <div>
+                    <NavegacaoHeader handlePage={handlePage} paginaAtual={paginaAtual.page} />
+                    <MeusPedidos handlePage={handlePage} />
+                </div>
+            );
+        case "gerenciar-pedidos":
+            return (
+                <div>
+                    <NavegacaoHeader handlePage={handlePage} paginaAtual={paginaAtual.page} />
+                    <MeusPedidos handlePage={handlePage} />
+                </div>
+            );
+        default:
+            return (
+                <div>
+                    <NavegacaoHeader handlePage={handlePage} paginaAtual={paginaAtual.page} />
+                    <LandingPage handlePage={handlePage} />
+                </div>
+            );
+    }
 };
 
 export default App;

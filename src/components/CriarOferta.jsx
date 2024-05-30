@@ -61,7 +61,8 @@ const CriarOferta = (props) => {
         const ofertaComProdutoEQntVendas = {
             ...oferta,
             produtoRelacionado: produtoSelecionado,
-            quantidadeVendas: 0
+            quantidadeVendas: 0,
+            dataTermino: oferta.dataTermino 
         };
 
         const id = await addOferta(ofertaComProdutoEQntVendas);
