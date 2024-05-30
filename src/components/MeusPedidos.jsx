@@ -37,7 +37,7 @@ const MeusPedidos = (props) => {
                             <p>{oferta.precoEspecial}</p>
                         </Col>
                         <Col xs={2}>
-                            <p>Qtd: {oferta.quantidadeMinima}</p>
+                            <p>Qtd: {oferta.quantidadeVendas}</p>
                         </Col>
                     </Row>
                 ))}
