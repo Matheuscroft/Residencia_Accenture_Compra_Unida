@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import { Container, Row, Col, Card, Button } from 'react-bootstrap';
 import { getOfertas } from "../auth/firebaseService";
 import Countdown from 'react-countdown';
-import '../App.css'; // Certifique-se de que o caminho do CSS está correto
+import '../App.css'; 
 
 const HomeCliente = (props) => {
     const [ofertas, setOfertas] = useState([]);
@@ -79,25 +79,6 @@ const HomeCliente = (props) => {
         props.handlePage("carrinho", [ofertaComQntCarrinho])
     };
 
-<<<<<<< HEAD
-    const formatarData = (dataString) => {
-        const data = new Date(dataString);
-        return data.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit', year: '2-digit' });
-=======
-    const handleCarrinho = (oferta) => {
-
-        const ofertaComQntCarrinho = {
-            ...oferta,
-            quantidadeCarrinho: 1
-        };
-
-        console.log("entrou no handle carrinho")
-        console.log(ofertaComQntCarrinho)
-
-        props.handlePage("carrinho", [ofertaComQntCarrinho])
->>>>>>> refs/remotes/origin/main
-    };
-
     return (
         <div>
             <Container style={{ marginTop: '20px' }}>
@@ -126,7 +107,7 @@ const HomeCliente = (props) => {
                             whiteSpace: 'nowrap',
                             scrollbarWidth: 'none', /* Firefox */
                             msOverflowStyle: 'none', /* Internet Explorer 10+ */
-                            scrollBehavior: 'smooth' /* Suavizar o scroll */
+                            scrollBehavior: 'smooth' 
                         }}
                         className="scroll-container"
                     >
@@ -165,14 +146,7 @@ const HomeCliente = (props) => {
                                                 </div>
                                                 <Button
                                                     variant="warning"
-<<<<<<< HEAD
-                                                    onClick={(e) => {
-                                                        e.stopPropagation();
-                                                        props.handlePage("carrinho", [oferta]);
-                                                    }}
-=======
                                                     onClick={() => handleCarrinho(oferta)}
->>>>>>> refs/remotes/origin/main
                                                     style={{ marginTop: '20px', width: '100%' }}
                                                 >
                                                     Adicionar ao Carrinho
@@ -254,18 +228,16 @@ const HomeCliente = (props) => {
                                                 }}
                                                 className="offer-card"
                                                 onClick={() => props.handlePage("produto", oferta.produtoRelacionado)}
+                                                style={{ backgroundColor: '#1c3bc5' }}
                                             >
-                                                <div style={{ backgroundColor: 'white' }}>
-                                                    {oferta.produtoRelacionado.imagens && oferta.produtoRelacionado.imagens.length > 0 && (
-                                                        <Card.Img
-                                                            variant="top"
-                                                            src={oferta.produtoRelacionado.imagens[0]}
-                                                            style={{ height: '150px', objectFit: 'contain', cursor: 'pointer' }}
-                                                        />
-                                                    )}
-<<<<<<< HEAD
-                                                </div>
-                                                <Card.Body style={{ backgroundColor: '#1c3bc5', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+                                                {oferta.produtoRelacionado.imagens && oferta.produtoRelacionado.imagens.length > 0 && (
+                                                    <Card.Img
+                                                        variant="top"
+                                                        src={oferta.produtoRelacionado.imagens[0]}
+                                                        style={{ height: '150px', objectFit: 'contain', cursor: 'pointer' }}
+                                                    />
+                                                )}
+                                                <Card.Body style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
                                                     <div>
                                                         <Card.Title style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', color: 'white' }} title={oferta.nomeOferta}>{oferta.nomeOferta}</Card.Title>
                                                         <Card.Text style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', color: 'white' }} title={oferta.descricao}>{oferta.descricao}</Card.Text>
@@ -285,30 +257,6 @@ const HomeCliente = (props) => {
                                                     >
                                                         Adicionar ao Carrinho
                                                     </Button>
-=======
-                                                    <Card.Body style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
-                                                        <div>
-                                                            <Card.Title style={{ whiteSpace: 'normal', overflow: 'visible' }}>{oferta.nomeOferta}</Card.Title>
-                                                            <Card.Text style={{ whiteSpace: 'normal', overflow: 'visible' }}>{oferta.descricao}</Card.Text>
-                                                            <Card.Text><strong>Preço Especial:</strong> {oferta.precoEspecial}</Card.Text>
-                                                        </div>
-                                                        <Button
-                                                            variant="warning"
-                                                            onClick={() => handleCarrinho(oferta)}
-                                                            style={{ marginTop: '20px', width: '100%' }}
-                                                        >
-                                                            Adicionar ao Carrinho
-                                                        </Button>
-                                                    </Card.Body>
-                                                </Card>
-                                            </Col>
-                                        ))
-                                    ) : (
-                                        <Col xs={12} md={6} lg={4} className="mb-4" style={{ display: 'inline-block', float: 'none' }}>
-                                            <Card style={{ backgroundColor: '#1c3bc5', borderRadius: '15px', borderColor: '#d4edda' }}>
-                                                <Card.Body>
-                                                    <Card.Title className="text-light">Sem ofertas</Card.Title>
->>>>>>> refs/remotes/origin/main
                                                 </Card.Body>
                                             </Card>
                                         </Col>
