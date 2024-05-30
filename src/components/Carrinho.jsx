@@ -126,10 +126,7 @@ const Carrinho = (props) => {
 
         for (const oferta of ofertasAtualizadas) {
             const produto = todosProdutos.find(prod => prod.id === oferta.produtoRelacionado.id);
-            console.log("produto.id");
-            console.log(produto.id);
-            console.log("oferta.produtoRelacionado.id");
-            console.log(oferta.produtoRelacionado.id);
+            
             if (produto) {
                 const novaQuantidadeEstoque = produto.quantidadeEstoque - oferta.quantidadeVendas;
                 const produtoComEstoqueAtualizado = {
