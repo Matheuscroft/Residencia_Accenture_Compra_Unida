@@ -120,6 +120,7 @@ const HomeCliente = (props) => {
                                             }}
                                             className="offer-card"
                                             onClick={() => props.handlePage("produto", oferta.produtoRelacionado)}
+                                            style={{ backgroundColor: '#1c3bc5', borderColor: '#1c3bc5' }}
                                         >
                                             <div style={{ backgroundColor: 'white' }}>
                                                 {oferta.produtoRelacionado.imagens && oferta.produtoRelacionado.imagens.length > 0 && (
@@ -227,16 +228,18 @@ const HomeCliente = (props) => {
                                                 }}
                                                 className="offer-card"
                                                 onClick={() => props.handlePage("produto", oferta.produtoRelacionado)}
-                                                style={{ backgroundColor: '#1c3bc5' }}
+                                                style={{ backgroundColor: '#1c3bc5', borderColor: '#1c3bc5' }}
                                             >
-                                                {oferta.produtoRelacionado.imagens && oferta.produtoRelacionado.imagens.length > 0 && (
-                                                    <Card.Img
-                                                        variant="top"
-                                                        src={oferta.produtoRelacionado.imagens[0]}
-                                                        style={{ height: '150px', objectFit: 'contain', cursor: 'pointer' }}
-                                                    />
-                                                )}
-                                                <Card.Body style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+                                                <div style={{ backgroundColor: 'white' }}>
+                                                    {oferta.produtoRelacionado.imagens && oferta.produtoRelacionado.imagens.length > 0 && (
+                                                        <Card.Img
+                                                            variant="top"
+                                                            src={oferta.produtoRelacionado.imagens[0]}
+                                                            style={{ height: '150px', objectFit: 'contain', cursor: 'pointer' }}
+                                                        />
+                                                    )}
+                                                </div>
+                                                <Card.Body style={{ backgroundColor: '#1c3bc5', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
                                                     <div>
                                                         <Card.Title style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', color: 'white' }} title={oferta.nomeOferta}>{oferta.nomeOferta}</Card.Title>
                                                         <Card.Text style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', color: 'white' }} title={oferta.descricao}>{oferta.descricao}</Card.Text>
@@ -262,12 +265,12 @@ const HomeCliente = (props) => {
                                     ))
                                 ) : (
                                     <Col xs={12} md={6} lg={4} className="mb-4" style={{ display: 'inline-block', float: 'none' }}>
-                                        <Card style={{ backgroundColor: '#1c3bc5', borderRadius: '15px', borderColor: '#d4edda' }}>
-                                            <Card.Body>
-                                                <Card.Title className="text-light">Sem ofertas</Card.Title>
-                                            </Card.Body>
-                                        </Card>
-                                    </Col>
+                                    <Card style={{ backgroundColor: '#1c3bc5', borderRadius: '15px', borderColor: '#d4edda' }}>
+                                        <Card.Body>
+                                            <Card.Title className="text-light">Sem ofertas</Card.Title>
+                                        </Card.Body>
+                                    </Card>
+                                </Col>
                                 )}
                             </Row>
                         </div>
