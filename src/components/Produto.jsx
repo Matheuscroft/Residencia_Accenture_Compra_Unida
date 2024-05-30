@@ -78,7 +78,8 @@ const Produto = (props) => {
                                         </div>
                                         <p>Oferta termina em: {formatarData(oferta.dataTermino)}</p>
 
-                                        <p style={{ marginTop: "50px" }}><strong>Quantidade mínima:</strong> {oferta.quantidadeMinima}</p>
+                                        <p style={{ marginTop: "50px" }}><strong>Estoque disponível:</strong> {oferta.produtoRelacionado.quantidadeEstoque}</p>
+                                        <p><strong>Quantidade mínima:</strong> {oferta.quantidadeMinima}</p>
 
                                         <p><strong>Quantidade vendida:</strong> {oferta.quantidadeVendida}</p>
                                         <ProgressBar

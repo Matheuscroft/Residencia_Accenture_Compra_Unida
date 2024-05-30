@@ -10,8 +10,7 @@ const HomeCliente = (props) => {
     useEffect(() => {
         const fetchOfertas = async () => {
             const ofertas = await getOfertas();
-            console.log("olha as ofertas do getofertas:");
-            console.log(ofertas);
+            
             setOfertas(ofertas);
         };
 
@@ -20,14 +19,14 @@ const HomeCliente = (props) => {
 
     const categorias = ofertas.reduce((acc, oferta) => {
         const categoria = oferta.produtoRelacionado.categoria;
-        console.log('Categoria:', categoria);
+        
         if (!acc[categoria]) {
             acc[categoria] = [];
         }
         acc[categoria].push(oferta);
         return acc;
     }, {});
-    console.log('Categorias:', categorias);
+   
 
     const categoriasPadrao = ["alimentacao", "vestuario", "racao", "bebidas"];
     const categoriasFormatadas = {
@@ -65,9 +64,6 @@ const HomeCliente = (props) => {
             ...oferta,
             quantidadeCarrinho: 1
         };
-
-        console.log("entrou no handle carrinho")
-        console.log(ofertaComQntCarrinho)
 
         props.handlePage("carrinho", [ofertaComQntCarrinho])
     };

@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { Container, Row, Col, Card, Button, Form } from 'react-bootstrap';
-import { addPedido, updateCarrinho, getCarrinho, addCarrinho } from '../auth/firebaseService';
+import { addPedido, updateCarrinho, getCarrinho, addCarrinho, editarOferta, getProdutos, editarProduto } from '../auth/firebaseService';
 
 const Carrinho = (props) => {
     const [pedidos, setPedidos] = useState([]);
     const [quantidades, setQuantidades] = useState({});
-    const oferta = props.oferta || []; 
+    const oferta = props.oferta || [];
     const [ofertas, setOfertas] = useState(props.oferta || []);
 
     useEffect(() => {
@@ -24,11 +24,11 @@ const Carrinho = (props) => {
         const carregarCarrinho = async () => {
             const carrinhoAtual = await getCarrinho();
             let ofertasAtualizadas;
-    
+
             if (props.oferta && props.oferta.length > 0) {
                 if (carrinhoAtual) {
                     ofertasAtualizadas = [...carrinhoAtual.ofertas];
-    
+
                     props.oferta.forEach(novaOferta => {
                         const ofertaExistente = ofertasAtualizadas.find(oferta => oferta.id === novaOferta.id);
                         if (ofertaExistente) {
@@ -40,15 +40,15 @@ const Carrinho = (props) => {
                             ofertasAtualizadas.push(novaOferta);
                         }
                     });
-    
+
                     await updateCarrinho(carrinhoAtual.id, ofertasAtualizadas);
                 } else {
                     const id = await addCarrinho(props.oferta);
                     ofertasAtualizadas = props.oferta;
                 }
-    
+
                 setOfertas(ofertasAtualizadas);
-    
+
                 const quantidadesIniciais = {};
                 ofertasAtualizadas.forEach(item => {
                     quantidadesIniciais[item.id] = item.quantidadeCarrinho || 1;
@@ -66,36 +66,36 @@ const Carrinho = (props) => {
                 }
             }
         };
-    
+
         carregarCarrinho();
     }, []);
-    
-    
+
+
 
     const handleQuantidadeChange = async (id, quantidade) => {
         setQuantidades({
             ...quantidades,
             [id]: quantidade
         });
-    
+
         const updatedOfertas = ofertas.map(item => {
             if (item.id === id) {
                 item.quantidadeCarrinho = quantidade;
             }
             return item;
         });
-    
+
         setOfertas(updatedOfertas);
-    
+
         const carrinho = await getCarrinho();
         if (carrinho) {
             await updateCarrinho(carrinho.id, updatedOfertas);
         }
     };
-    
+
 
     const handleRemove = async (id) => {
-        
+
         const novaOferta = ofertas.filter(item => item.id !== id);
         setOfertas(novaOferta);
 
@@ -112,21 +112,46 @@ const Carrinho = (props) => {
     };
 
     const handleSubmit = async () => {
-        const updatedOfertas = ofertas.map(item => {
+        const ofertasAtualizadas = ofertas.map(item => {
             item.quantidadeVendas = (item.quantidadeVendas || 0) + item.quantidadeCarrinho;
             item.quantidadeCarrinho = 0;
-            item.status = 'vendida';
+            item.status = 'pendente';
             return item;
         });
-    
+
+
+        const todosProdutos = await getProdutos();
+
+
+
+        for (const oferta of ofertasAtualizadas) {
+            const produto = todosProdutos.find(prod => prod.id === oferta.produtoRelacionado.id);
+            console.log("produto.id");
+            console.log(produto.id);
+            console.log("oferta.produtoRelacionado.id");
+            console.log(oferta.produtoRelacionado.id);
+            if (produto) {
+                const novaQuantidadeEstoque = produto.quantidadeEstoque - oferta.quantidadeVendas;
+                const produtoComEstoqueAtualizado = {
+                    ...produto,
+                    quantidadeEstoque: novaQuantidadeEstoque
+                };
+
+                await editarProduto(oferta.produtoRelacionado.id, produtoComEstoqueAtualizado);
+                console.log("QuantidadeEstoque");
+                console.log(produtoComEstoqueAtualizado.quantidadeEstoque);
+            }
+        }
+
+
         const novoPedido = {
-            ofertaRelacionada: [...updatedOfertas],
+            ofertaRelacionada: [...ofertasAtualizadas],
             dataDePedido: new Date(),
-            valorPedido: updatedOfertas.reduce((total, item) => total + (parseFloat(item.precoEspecial.replace('R$', '').replace(',', '.')) * item.quantidadeVendas), 0).toFixed(2)
+            valorPedido: ofertasAtualizadas.reduce((total, item) => total + (parseFloat(item.precoEspecial.replace('R$', '').replace(',', '.')) * item.quantidadeVendas), 0).toFixed(2)
         };
-    
+
         setPedidos([...pedidos, novoPedido]);
-    
+
         const id = await addPedido(novoPedido);
         if (id) {
             alert(`${novoPedido.ofertaRelacionada[0].nomeOferta} cadastrado com sucesso com ID: ${id}`);
@@ -134,37 +159,29 @@ const Carrinho = (props) => {
         } else {
             alert("Erro ao cadastrar pedido");
         }
-    
+
         const carrinho = await getCarrinho();
         if (carrinho) {
             await updateCarrinho(carrinho.id, []);
         }
-    
+
         setOfertas([]);
     };
-    
+
 
     const calcularTotal = () => {
-    
+
         let total = 0;
-    
+
         ofertas.forEach(item => {
-           
-            console.log("oferta")
-            console.log(item)
-            console.log("item.precoEspecial")
-            console.log(item.precoEspecial.replace('R$', '').replace(',', '.'))
-            console.log("item.quantidadeCarrinho")
-            console.log(item.quantidadeCarrinho)
             const valorOferta = parseFloat(item.precoEspecial.replace('R$', '').replace(',', '.')) * item.quantidadeCarrinho;
-            
             total += valorOferta;
         });
-    
-       
+
+
         return total.toFixed(2);
     };
-    
+
 
     return (
         <Container>
@@ -198,7 +215,7 @@ const Carrinho = (props) => {
                                         <p>{item.precoEspecial}</p>
                                     </Col>
                                     <Col xs={2}>
-                                    <Button variant="danger" onClick={() => handleRemove(item.id)}>Remover</Button>
+                                        <Button variant="danger" onClick={() => handleRemove(item.id)}>Remover</Button>
                                     </Col>
                                 </Row>
                             ))}

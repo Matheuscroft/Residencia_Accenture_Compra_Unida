@@ -38,7 +38,7 @@ const HomeFornecedor = (props) => {
 
             const produto = listaProdutos.find(elemento => elemento.id === elementoID);
             if (produto && Array.isArray(produto.imagens)) {
-                await Promise.all(produto.imagens.map(imagemUrl => deletarImagem(imagemUrl)));
+                //await Promise.all(produto.imagens.map(imagemUrl => deletarImagem(imagemUrl)));
             }
             await deletarProduto(elementoID);
             const novaListaProdutos = listaProdutos.filter(elemento => elemento.id !== elementoID);
