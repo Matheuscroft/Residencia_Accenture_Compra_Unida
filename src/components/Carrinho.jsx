@@ -14,6 +14,10 @@ const Carrinho = (props) => {
             quantidadesIniciais[item.id] = item.quantidadeCarrinho || 1;
         });
         setQuantidades(quantidadesIniciais);
+
+        console.log("oferta:")
+        console.log(oferta)
+
     }, [oferta]);
 
     useEffect(() => {
@@ -146,6 +150,12 @@ const Carrinho = (props) => {
     
         ofertas.forEach(item => {
            
+            console.log("oferta")
+            console.log(item)
+            console.log("item.precoEspecial")
+            console.log(item.precoEspecial.replace('R$', '').replace(',', '.'))
+            console.log("item.quantidadeCarrinho")
+            console.log(item.quantidadeCarrinho)
             const valorOferta = parseFloat(item.precoEspecial.replace('R$', '').replace(',', '.')) * item.quantidadeCarrinho;
             
             total += valorOferta;

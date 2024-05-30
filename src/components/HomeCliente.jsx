@@ -59,6 +59,19 @@ const HomeCliente = (props) => {
         return Math.max(...heights);
     };
 
+    const handleCarrinho = (oferta) => {
+
+        const ofertaComQntCarrinho = {
+            ...oferta,
+            quantidadeCarrinho: 1
+        };
+
+        console.log("entrou no handle carrinho")
+        console.log(ofertaComQntCarrinho)
+
+        props.handlePage("carrinho", [ofertaComQntCarrinho])
+    };
+
     return (
         <div>
             <Container style={{ marginTop: '100px' }}>
@@ -117,7 +130,7 @@ const HomeCliente = (props) => {
                                                 </div>
                                                 <Button
                                                     variant="warning"
-                                                    onClick={() => props.handlePage("carrinho", [oferta])}
+                                                    onClick={() => handleCarrinho(oferta)}
                                                     style={{ marginTop: '20px', width: '100%' }}
                                                 >
                                                     Adicionar ao Carrinho
@@ -210,7 +223,7 @@ const HomeCliente = (props) => {
                                                         </div>
                                                         <Button
                                                             variant="warning"
-                                                            onClick={() => props.handlePage("carrinho", [oferta])}
+                                                            onClick={() => handleCarrinho(oferta)}
                                                             style={{ marginTop: '20px', width: '100%' }}
                                                         >
                                                             Adicionar ao Carrinho
