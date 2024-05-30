@@ -42,7 +42,8 @@ const CriarProduto = (props) => {
 
         const produtoComId = {
             id: uuidv4(),
-            ...produto
+            ...produto,
+            preco: produto.preco
         };
 
         const imagemUrls = await Promise.all(imagens.map(file => uploadImagem(file)));

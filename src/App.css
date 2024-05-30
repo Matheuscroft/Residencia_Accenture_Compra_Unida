@@ -68,3 +68,24 @@ body {
 .carousel-control-next {
     filter: brightness(1.2);
 }
+
+.offer-card {
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.offer-card:hover {
+    transform: scale(1.05);
+    z-index: 2;
+}
+
+.offer-card .card-body div {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.offer-card:hover .card-body div {
+    white-space: normal;
+    overflow: visible;
+}
