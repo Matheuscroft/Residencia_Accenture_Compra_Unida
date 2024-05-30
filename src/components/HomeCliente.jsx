@@ -142,7 +142,10 @@ const HomeCliente = (props) => {
                                                 </div>
                                                 <Button
                                                     variant="warning"
-                                                    onClick={() => handleCarrinho(oferta)}
+                                                    onClick={(e) => {
+                                                        e.stopPropagation();
+                                                        handleCarrinho(oferta);
+                                                    }}
                                                     style={{ marginTop: '20px', width: '100%' }}
                                                 >
                                                     Adicionar ao Carrinho
@@ -247,7 +250,7 @@ const HomeCliente = (props) => {
                                                         variant="warning"
                                                         onClick={(e) => {
                                                             e.stopPropagation();
-                                                            props.handlePage("carrinho", [oferta]);
+                                                            handleCarrinho(oferta);
                                                         }}
                                                         style={{ marginTop: '20px', width: '100%' }}
                                                     >
