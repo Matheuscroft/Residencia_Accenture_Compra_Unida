@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Container, Row, Col, Card, Button, Form } from 'react-bootstrap';
+import { Container, Row, Col, Card, Button, Form, Alert } from 'react-bootstrap';
 import { addPedido, updateCarrinho, getCarrinho, addCarrinho, editarOferta, getProdutos, editarProduto } from '../auth/firebaseService';
 
 const Carrinho = (props) => {
@@ -7,6 +7,8 @@ const Carrinho = (props) => {
     const [quantidades, setQuantidades] = useState({});
     const oferta = props.oferta || [];
     const [ofertas, setOfertas] = useState(props.oferta || []);
+    const [showAlert, setShowAlert] = useState(false);
+
 
     useEffect(() => {
         const quantidadesIniciais = {};
@@ -71,27 +73,32 @@ const Carrinho = (props) => {
     }, []);
 
 
-
     const handleQuantidadeChange = async (id, quantidade) => {
+        const item = ofertas.find(item => item.id === id);
+        const quantidadeMaxima = item.produtoRelacionado.quantidadeEstoque;
+        const quantidadeAtualizada = Math.max(1, Math.min(quantidade, quantidadeMaxima));
+    
         setQuantidades({
             ...quantidades,
-            [id]: quantidade
+            [id]: quantidadeAtualizada
         });
-
+    
         const updatedOfertas = ofertas.map(item => {
             if (item.id === id) {
-                item.quantidadeCarrinho = quantidade;
+                item.quantidadeCarrinho = quantidadeAtualizada;
             }
             return item;
         });
-
+    
         setOfertas(updatedOfertas);
-
+    
         const carrinho = await getCarrinho();
         if (carrinho) {
             await updateCarrinho(carrinho.id, updatedOfertas);
         }
     };
+    
+    
 
 
     const handleRemove = async (id) => {
@@ -104,19 +111,21 @@ const Carrinho = (props) => {
             const ofertasAtualizadas = carrinho.ofertas.filter(item => item.id !== id);
             await updateCarrinho(carrinho.id, ofertasAtualizadas);
         }
-
-        console.log("removeu")
-        console.log(novaOferta)
-        console.log("olha carrinho")
-        console.log(carrinho)
     };
 
     const handleSubmit = async () => {
+
+        if (ofertas.length === 0) { // Verifica se o carrinho está vazio
+            setShowAlert(true); // Mostra o alerta
+            return;
+        }
+
         const ofertasAtualizadas = ofertas.map(item => {
-            item.quantidadeVendas = (item.quantidadeVendas || 0) + item.quantidadeCarrinho;
+            const quantidadeVendaPedidoAtual = item.quantidadeCarrinho;
+            item.quantidadeVendas = (item.quantidadeVendas || 0) + quantidadeVendaPedidoAtual;
             item.quantidadeCarrinho = 0;
             item.status = 'pendente';
-            return item;
+            return { ...item, quantidadeVendaPedidoAtual };
         });
 
 
@@ -126,10 +135,7 @@ const Carrinho = (props) => {
 
         for (const oferta of ofertasAtualizadas) {
             const produto = todosProdutos.find(prod => prod.id === oferta.produtoRelacionado.id);
-            console.log("produto.id");
-            console.log(produto.id);
-            console.log("oferta.produtoRelacionado.id");
-            console.log(oferta.produtoRelacionado.id);
+
             if (produto) {
                 const novaQuantidadeEstoque = produto.quantidadeEstoque - oferta.quantidadeVendas;
                 const produtoComEstoqueAtualizado = {
@@ -138,16 +144,20 @@ const Carrinho = (props) => {
                 };
 
                 await editarProduto(oferta.produtoRelacionado.id, produtoComEstoqueAtualizado);
-                console.log("QuantidadeEstoque");
-                console.log(produtoComEstoqueAtualizado.quantidadeEstoque);
+
+                oferta.produtoRelacionado = produtoComEstoqueAtualizado;
+                await editarOferta(oferta.id, oferta);
             }
         }
 
 
         const novoPedido = {
-            ofertaRelacionada: [...ofertasAtualizadas],
+            ofertaRelacionada: ofertasAtualizadas.map(item => {
+                const { quantidadeVendaPedidoAtual, ...rest } = item;
+                return { ...rest, quantidadeVendas: quantidadeVendaPedidoAtual };  // Usa a quantidade do pedido atual
+            }),
             dataDePedido: new Date(),
-            valorPedido: ofertasAtualizadas.reduce((total, item) => total + (parseFloat(item.precoEspecial.replace('R$', '').replace(',', '.')) * item.quantidadeVendas), 0).toFixed(2)
+            valorPedido: ofertasAtualizadas.reduce((total, item) => total + (parseFloat(item.precoEspecial.replace('R$', '').replace(',', '.')) * item.quantidadeVendaPedidoAtual), 0).toFixed(2)
         };
 
         setPedidos([...pedidos, novoPedido]);
@@ -185,13 +195,16 @@ const Carrinho = (props) => {
 
     return (
         <Container>
+            {showAlert && <Alert variant="danger" onClose={() => setShowAlert(false)} dismissible>
+                O carrinho está vazio! Por favor, adicione alguma oferta.
+            </Alert>}
             <h1 className="text-center">Carrinho de Compras</h1>
             <Row>
                 <Col xs={12} md={8}>
                     <Card className="mb-4">
                         <Card.Header className="d-flex justify-content-between align-items-center">
                             <Button variant="link" onClick={() => props.handlePage("home")}>Continuar comprando</Button>
-                            <Button variant="warning" onClick={handleSubmit}>Finalizar pedido</Button>
+                            <Button variant="warning" onClick={handleSubmit} disabled={ofertas.length === 0}>Finalizar pedido</Button>
                         </Card.Header>
                         <Card.Body>
                             {ofertas.map(item => (
@@ -209,6 +222,7 @@ const Carrinho = (props) => {
                                             value={quantidades[item.id]}
                                             onChange={(e) => handleQuantidadeChange(item.id, parseInt(e.target.value))}
                                             min="1"
+                                            max={item.produtoRelacionado.quantidadeEstoque}
                                         />
                                     </Col>
                                     <Col xs={2}>
@@ -228,7 +242,7 @@ const Carrinho = (props) => {
                             <h5>Resumo</h5>
                             <p>Total em produtos: R$ {calcularTotal()}</p>
                             <h3>Total: R$ {calcularTotal()}</h3>
-                            <Button variant="warning" onClick={handleSubmit} className="w-100">Confirmar</Button>
+                            <Button variant="warning" onClick={handleSubmit} className="w-100" disabled={ofertas.length === 0}>Confirmar</Button>
                         </Card.Body>
                     </Card>
                 </Col>

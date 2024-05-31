@@ -14,13 +14,9 @@ const EditarProdutoModal = ({ entidade, show, onHide, onEdit }) => {
             setArquivosSelecionados([]);
         }
 
-        console.log("entrei no editar. entidade: ", entidade)
-
         const fetchProdutos = async () => {
             const produtos = await getProdutos();
             setProdutos(produtos);
-
-            
 
         };
         fetchProdutos();

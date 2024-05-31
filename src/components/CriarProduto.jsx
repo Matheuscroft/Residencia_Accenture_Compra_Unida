@@ -40,14 +40,13 @@ const CriarProduto = (props) => {
             return;
         }
 
-        const produtoComId = {
-            id: uuidv4(),
+        const produtoComPreco = {
             ...produto,
             preco: produto.preco
         };
 
         const imagemUrls = await Promise.all(imagens.map(file => uploadImagem(file)));
-        const produtoComImagens = { ...produtoComId, imagens: imagemUrls };
+        const produtoComImagens = { ...produtoComPreco, imagens: imagemUrls };
 
         const id = await addProduto(produtoComImagens);
         if (id) {
