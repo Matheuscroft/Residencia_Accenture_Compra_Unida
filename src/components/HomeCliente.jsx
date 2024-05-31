@@ -54,12 +54,6 @@ const HomeCliente = (props) => {
         containerRefs.current[categoria].scrollBy({ left: 300, behavior: 'smooth' });
     };
 
-    const getMaxHeight = (categoria) => {
-        if (!cardRefs.current[categoria]) return 'auto';
-        const heights = cardRefs.current[categoria].map(ref => ref ? ref.clientHeight : 0);
-        return Math.max(...heights);
-    };
-
     const formatarData = (dataString) => {
         const data = new Date(dataString);
         return data.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit', year: '2-digit' });
@@ -85,6 +79,10 @@ const HomeCliente = (props) => {
         const vendidos = oferta.quantidadeVendas || 0;
         const estoque = oferta.produtoRelacionado.quantidadeEstoque;
         return vendidos > estoque * 0.5 ? 'Desconto concedido!' : '';
+    };
+
+    const getMaxHeight = (categoria) => {
+        return '400px'; 
     };
 
     return (
@@ -227,6 +225,7 @@ const HomeCliente = (props) => {
                                     scrollbarWidth: 'none', /* Firefox */
                                     msOverflowStyle: 'none', /* Internet Explorer 10+ */
                                     scrollBehavior: 'smooth',
+                                    maxHeight: getMaxHeight(categoria) 
                                 }}
                                 className="scroll-container"
                             >

@@ -1,14 +1,14 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import { Container, Row, Col, Card, Button, Form, Alert } from 'react-bootstrap';
 import { addPedido, updateCarrinho, getCarrinho, addCarrinho, editarOferta, getProdutos, editarProduto } from '../auth/firebaseService';
 
 const Carrinho = (props) => {
     const [pedidos, setPedidos] = useState([]);
     const [quantidades, setQuantidades] = useState({});
-    const oferta = props.oferta || [];
     const [ofertas, setOfertas] = useState(props.oferta || []);
     const [showAlert, setShowAlert] = useState(false);
 
+    const oferta = useMemo(() => props.oferta || [], [props.oferta]);
 
     useEffect(() => {
         const quantidadesIniciais = {};
@@ -70,7 +70,7 @@ const Carrinho = (props) => {
         };
 
         carregarCarrinho();
-    }, []);
+    }, [props.oferta]);
 
 
     const handleQuantidadeChange = async (id, quantidade) => {

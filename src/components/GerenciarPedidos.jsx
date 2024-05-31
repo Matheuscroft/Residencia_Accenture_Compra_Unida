@@ -1,7 +1,6 @@
-import React, { useContext, useEffect, useState } from 'react';
-import { Container, Row, Col, Card, Button } from 'react-bootstrap';
+import React, { useEffect, useState } from 'react';
+import { Container, Row, Col, } from 'react-bootstrap';
 import { getPedidos } from '../auth/firebaseService';
-import { format } from 'date-fns';
 
 const GerenciarPedidos = (props) => {
     
