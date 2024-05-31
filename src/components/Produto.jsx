@@ -34,10 +34,12 @@ const Produto = (props) => {
     const handleMudancaQuantidade = (index, value) => {
         setOfertas((ofertasAnteriores) => {
             const novasOfertas = [...ofertasAnteriores];
-            novasOfertas[index].quantidadeCarrinho = Math.max(1, value);
+            const quantidadeMaxima = novasOfertas[index].produtoRelacionado.quantidadeEstoque;
+            novasOfertas[index].quantidadeCarrinho = Math.min(Math.max(1, value), quantidadeMaxima);
             return novasOfertas;
         });
     };
+    
 
     return (
         <Container>
@@ -95,7 +97,8 @@ const Produto = (props) => {
                                                 type="number"
                                                 value={oferta.quantidadeCarrinho}
                                                 onChange={(e) => handleMudancaQuantidade(index, parseInt(e.target.value))}
-                                                style={{ width: '60px', margin: '0 10px' }}
+                                                style={{ width: '80px', margin: '0 10px' }}
+                                                max={oferta.produtoRelacionado.quantidadeEstoque}
                                             />
                                             <Button variant="outline-secondary" onClick={() => handleMudancaQuantidade(index, oferta.quantidadeCarrinho + 1)}>+</Button>
                                         </div>

@@ -73,27 +73,32 @@ const Carrinho = (props) => {
     }, []);
 
 
-
     const handleQuantidadeChange = async (id, quantidade) => {
+        const item = ofertas.find(item => item.id === id);
+        const quantidadeMaxima = item.produtoRelacionado.quantidadeEstoque;
+        const quantidadeAtualizada = Math.max(1, Math.min(quantidade, quantidadeMaxima));
+    
         setQuantidades({
             ...quantidades,
-            [id]: quantidade
+            [id]: quantidadeAtualizada
         });
-
+    
         const updatedOfertas = ofertas.map(item => {
             if (item.id === id) {
-                item.quantidadeCarrinho = quantidade;
+                item.quantidadeCarrinho = quantidadeAtualizada;
             }
             return item;
         });
-
+    
         setOfertas(updatedOfertas);
-
+    
         const carrinho = await getCarrinho();
         if (carrinho) {
             await updateCarrinho(carrinho.id, updatedOfertas);
         }
     };
+    
+    
 
 
     const handleRemove = async (id) => {
@@ -217,6 +222,7 @@ const Carrinho = (props) => {
                                             value={quantidades[item.id]}
                                             onChange={(e) => handleQuantidadeChange(item.id, parseInt(e.target.value))}
                                             min="1"
+                                            max={item.produtoRelacionado.quantidadeEstoque}
                                         />
                                     </Col>
                                     <Col xs={2}>
