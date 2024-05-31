@@ -8,12 +8,22 @@ const MeusPedidos = (props) => {
     useEffect(() => {
         const fetchPedidos = async () => {
             const pedidos = await getPedidos();
-            const pedidosOrdenados = pedidos.sort((a, b) => new Date(b.dataDePedido) - new Date(a.dataDePedido));
+        
+            const pedidosComData = pedidos.map(pedido => {
+                if (pedido.dataDePedido && pedido.dataDePedido.seconds) {
+                    pedido.dataDePedido = new Date(pedido.dataDePedido.seconds * 1000);
+                } else {
+                    pedido.dataDePedido = new Date(pedido.dataDePedido);
+                }
+                return pedido;
+            });
+        
+            const pedidosOrdenados = pedidosComData.sort((a, b) => new Date(b.dataDePedido) - new Date(a.dataDePedido));
             setListaPedidos(pedidosOrdenados);
-            console.log(pedidosOrdenados
-                
-            )
+            console.log("olha os pedidosOrdenados")
+            console.log(pedidosOrdenados)
         };
+        
         fetchPedidos();
     }, []);
 
@@ -21,7 +31,8 @@ const MeusPedidos = (props) => {
         <Card key={pedido.id} className="mb-4">
             <Card.Header>
                 <div>
-                    <h4>Pedido ID: {pedido.id}</h4>
+                    <h4>Pedido: {pedido.id}</h4>
+                    <p>Data do Pedido: {pedido.dataDePedido.toLocaleDateString('pt-BR')}</p>
                     <p>Valor do Pedido: R$ {pedido.valorPedido}</p>
                 </div>
             </Card.Header>
