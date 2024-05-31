@@ -1,13 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import EditarProdutoModal from './EditarProdutoModal';
-import { Container, Row, Col, Button, Card } from 'react-bootstrap';
-import { getProdutos, getOfertas, deletarProduto, deletarOferta, deletarImagem, editarProduto, editarOferta } from "../auth/firebaseService";
+import { Container, Row, Col, Button, Card, Alert } from 'react-bootstrap';
+import { getProdutos, getOfertas, deletarProduto, deletarOferta, editarProduto, editarOferta } from "../auth/firebaseService";
 
 const HomeFornecedor = (props) => {
     const [listaProdutos, setListaProdutos] = useState([]);
     const [listaOfertas, setListaOfertas] = useState([]);
     const [selectedEntidade, setSelectedEntidade] = useState(null);
     const [showEditarModal, setShowEditarModal] = useState(false);
+    const [showAlert, setShowAlert] = useState(false);
+    const [alertMessage, setAlertMessage] = useState('');
 
     useEffect(() => {
         const fetchProdutos = async () => {
@@ -65,14 +67,25 @@ const HomeFornecedor = (props) => {
                 );
                 setListaOfertas(novaListaOfertas);
             }
+            setAlertMessage('Produto cadastrado com sucesso!');
         } else if (entidadeEditada.tipo === "oferta") {
-            editarOferta(entidadeEditada.id, entidadeEditada);
+            await editarOferta(entidadeEditada.id, entidadeEditada);
             const novaListaOfertas = listaOfertas.map(oferta =>
                 oferta.id === entidadeEditada.id ? entidadeEditada : oferta
             );
             setListaOfertas(novaListaOfertas);
+            setAlertMessage('Oferta cadastrada com sucesso!');
         }
         setShowEditarModal(false);
+        setShowAlert(true);
+        setTimeout(() => setShowAlert(false), 3000); // Oculta o alerta após 3 segundos
+    };
+
+    const truncateText = (text, maxLength) => {
+        if (text.length > maxLength) {
+            return text.substring(0, maxLength) + '...';
+        }
+        return text;
     };
 
     const listaProdutosLI = listaProdutos.map((produto) => (
@@ -82,11 +95,11 @@ const HomeFornecedor = (props) => {
                     <img src={produto.imagens[0]} alt={produto.nomeProduto} style={{ width: "100px", height: "100px", marginRight: "10px" }} />
                 )}
                 <div className="flex-grow-1">
-                    <h5>{produto.nomeProduto}</h5>
-                    <p>{produto.descricao}</p>
+                    <h5>{truncateText(produto.nomeProduto, 20)}</h5>
+                    <p>{truncateText(produto.descricao, 50)}</p>
                     <p>{produto.preco}</p>
                 </div>
-                <div>
+                <div className="ms-auto">
                     <Button variant="warning" size="sm" onClick={() => handleEditEntidade({ ...produto, tipo: "produto" })} className="ms-2">Editar</Button>
                     <Button variant="danger" size="sm" onClick={() => excluirItem(produto.id, 'produto')} className="ms-2">X</Button>
                 </div>
@@ -103,11 +116,11 @@ const HomeFornecedor = (props) => {
                         <img src={produtoRelacionado.imagens[0]} alt={produtoRelacionado.nomeProduto} style={{ width: "100px", height: "100px", marginRight: "10px" }} />
                     )}
                     <div className="flex-grow-1">
-                        <h5>{oferta.nomeOferta}</h5>
-                        <p>{produtoRelacionado ? produtoRelacionado.descricao : ''}</p>
+                        <h5>{truncateText(oferta.nomeOferta, 20)}</h5>
+                        <p>{produtoRelacionado ? truncateText(produtoRelacionado.descricao, 50) : ''}</p>
                         <p>{produtoRelacionado ? produtoRelacionado.preco : ''}</p>
                     </div>
-                    <div>
+                    <div className="ms-auto">
                         <Button variant="warning" size="sm" onClick={() => handleEditEntidade({ ...oferta, tipo: "oferta" })} className="ms-2">Editar</Button>
                         <Button variant="danger" size="sm" onClick={() => excluirItem(oferta.id, 'oferta')} className="ms-2">X</Button>
                     </div>
@@ -119,6 +132,11 @@ const HomeFornecedor = (props) => {
     return (
         <div>
             <Container style={{ marginTop: '20px' }}>
+                {showAlert && (
+                    <Alert variant="success" onClose={() => setShowAlert(false)} dismissible>
+                        {alertMessage}
+                    </Alert>
+                )}
                 <Row className="mb-4">
                     <Col className="d-flex justify-content-center">
                         <Button
@@ -130,30 +148,38 @@ const HomeFornecedor = (props) => {
                         </Button>
                     </Col>
                 </Row>
-                <Row>
+                <Row className="mb-4">
                     <Col>
                         <Card className="mb-4" style={{ borderColor: '#1c3bc5', borderWidth: '2px' }}>
                             <Card.Body className="d-flex flex-column align-items-center">
-                                <Button className='botao-cadastrar mb-3 align-self-center' style={{ backgroundColor: '#FFCD46', borderColor: '#FFCD46', color: 'black' }} onClick={() => props.handlePage("criar-produto")}>ADICIONAR PRODUTO</Button>
+                                <Button
+                                    className='botao-cadastrar'
+                                    style={{ backgroundColor: '#FFCD46', borderColor: '#FFCD46', color: 'black', width: '50%' }}
+                                    onClick={() => props.handlePage("criar-produto")}
+                                >
+                                    ADICIONAR PRODUTO
+                                </Button>
                                 <h5>Lista de Produtos</h5>
-                                <Card className="mb-4" style={{ borderColor: '#1c3bc5', borderWidth: '2px' }}>
-                                    <Card.Body>
-                                        {listaProdutosLI}
-                                    </Card.Body>
-                                </Card>
+                                <div style={{ minHeight: listaProdutos.length > 8 ? '600px' : 'auto', overflowY: listaProdutos.length > 8 ? 'auto' : 'visible', width: '100%' }}>
+                                    {listaProdutosLI}
+                                </div>
                             </Card.Body>
                         </Card>
                     </Col>
                     <Col>
                         <Card className="mb-4" style={{ borderColor: '#1c3bc5', borderWidth: '2px' }}>
                             <Card.Body className="d-flex flex-column align-items-center">
-                                <Button className='botao-cadastrar mb-3 align-self-center' style={{ backgroundColor: '#FFCD46', borderColor: '#FFCD46', color: 'black' }} onClick={() => props.handlePage("criar-oferta")}>ADICIONAR OFERTA</Button>
+                                <Button
+                                    className='botao-cadastrar'
+                                    style={{ backgroundColor: '#FFCD46', borderColor: '#FFCD46', color: 'black', width: '50%' }}
+                                    onClick={() => props.handlePage("criar-oferta")}
+                                >
+                                    ADICIONAR OFERTA
+                                </Button>
                                 <h5>Lista de Ofertas</h5>
-                                <Card className="mb-4" style={{ borderColor: '#1c3bc5', borderWidth: '2px' }}>
-                                    <Card.Body>
-                                        {listaOfertasLI}
-                                    </Card.Body>
-                                </Card>
+                                <div style={{ maxHeight: listaOfertas.length > 8 ? '600px' : 'auto', overflowY: listaOfertas.length > 8 ? 'auto' : 'visible', width: '100%' }}>
+                                    {listaOfertasLI}
+                                </div>
                             </Card.Body>
                         </Card>
                     </Col>

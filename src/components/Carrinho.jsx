@@ -72,7 +72,6 @@ const Carrinho = (props) => {
         carregarCarrinho();
     }, [props.oferta]);
 
-
     const handleQuantidadeChange = async (id, quantidade) => {
         const item = ofertas.find(item => item.id === id);
         const quantidadeMaxima = item.produtoRelacionado.quantidadeEstoque;
@@ -97,12 +96,8 @@ const Carrinho = (props) => {
             await updateCarrinho(carrinho.id, updatedOfertas);
         }
     };
-    
-    
-
 
     const handleRemove = async (id) => {
-
         const novaOferta = ofertas.filter(item => item.id !== id);
         setOfertas(novaOferta);
 
@@ -114,7 +109,6 @@ const Carrinho = (props) => {
     };
 
     const handleSubmit = async () => {
-
         if (ofertas.length === 0) { // Verifica se o carrinho está vazio
             setShowAlert(true); // Mostra o alerta
             return;
@@ -128,10 +122,7 @@ const Carrinho = (props) => {
             return { ...item, quantidadeVendaPedidoAtual };
         });
 
-
         const todosProdutos = await getProdutos();
-
-
 
         for (const oferta of ofertasAtualizadas) {
             const produto = todosProdutos.find(prod => prod.id === oferta.produtoRelacionado.id);
@@ -149,7 +140,6 @@ const Carrinho = (props) => {
                 await editarOferta(oferta.id, oferta);
             }
         }
-
 
         const novoPedido = {
             ofertaRelacionada: ofertasAtualizadas.map(item => {
@@ -178,20 +168,15 @@ const Carrinho = (props) => {
         setOfertas([]);
     };
 
-
     const calcularTotal = () => {
-
         let total = 0;
-
         ofertas.forEach(item => {
             const valorOferta = parseFloat(item.precoEspecial.replace('R$', '').replace(',', '.')) * item.quantidadeCarrinho;
             total += valorOferta;
         });
 
-
         return total.toFixed(2);
     };
-
 
     return (
         <Container>
@@ -203,7 +188,7 @@ const Carrinho = (props) => {
                 <Col xs={12} md={8}>
                     <Card className="mb-4">
                         <Card.Header className="d-flex justify-content-between align-items-center">
-                            <Button variant="link" onClick={() => props.handlePage("home")}>Continuar comprando</Button>
+                            <Button variant="link" onClick={() => props.handlePage("home-cliente")} style={{ color: 'black' }}>Continuar comprando</Button>
                             <Button variant="warning" onClick={handleSubmit} disabled={ofertas.length === 0}>Finalizar pedido</Button>
                         </Card.Header>
                         <Card.Body>

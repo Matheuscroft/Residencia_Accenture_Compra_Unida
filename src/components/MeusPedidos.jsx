@@ -20,12 +20,14 @@ const MeusPedidos = (props) => {
         
             const pedidosOrdenados = pedidosComData.sort((a, b) => new Date(b.dataDePedido) - new Date(a.dataDePedido));
             setListaPedidos(pedidosOrdenados);
-            console.log("olha os pedidosOrdenados")
-            console.log(pedidosOrdenados)
         };
         
         fetchPedidos();
     }, []);
+
+    const handleProdutoClick = (produto) => {
+        props.handlePage("produto", produto);
+    };
 
     const listaPedidosLI = listaPedidos.map((pedido) => (
         <Card key={pedido.id} className="mb-4">
@@ -38,7 +40,7 @@ const MeusPedidos = (props) => {
             </Card.Header>
             <Card.Body>
                 {pedido.ofertaRelacionada.map((oferta, index) => (
-                    <Row key={index} className="mb-3 align-items-center">
+                    <Row key={index} className="mb-3 align-items-center" onClick={() => handleProdutoClick(oferta.produtoRelacionado)} style={{ cursor: 'pointer' }}>
                         <Col xs={2}>
                             {oferta.produtoRelacionado.imagens && oferta.produtoRelacionado.imagens.length > 0 && (
                                 <img src={oferta.produtoRelacionado.imagens[0]} alt={oferta.produtoRelacionado.nomeProduto} style={{ width: '100%' }} />

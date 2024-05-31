@@ -126,22 +126,7 @@ const CriarOferta = (props) => {
                     </Card>
                 </Col>
             </Row>
-            <Row className="justify-content-md-center" style={{ marginTop: '10px' }}>
-                <Col xs={12} md={6}>
-                    <Card className="text-light" style={{ backgroundColor: '#1c3bc5', borderRadius: '15px', borderColor: '#d4edda', marginBottom: '10px' }}>
-                        <Card.Body>
-                            <h1 className="text-center text-light">Oferta 1</h1>
-                            <p>Descrição da Oferta 1</p>
-                        </Card.Body>
-                    </Card>
-                    <Card className="text-light" style={{ backgroundColor: '#1c3bc5', borderRadius: '15px', borderColor: '#d4edda', marginBottom: '10px' }}>
-                        <Card.Body>
-                            <h1 className="text-center text-light">Oferta 2</h1>
-                            <p>Descrição da Oferta 2</p>
-                        </Card.Body>
-                    </Card>
-                </Col>
-            </Row>
+            
         </Container>
     );
 }
