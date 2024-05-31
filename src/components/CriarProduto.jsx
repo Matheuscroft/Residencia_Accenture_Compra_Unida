@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { Form, Button, Container, Row, Col, Card } from "react-bootstrap";
-import { v4 as uuidv4 } from "uuid";
 import { addProduto, uploadImagem } from "../auth/firebaseService";
 
 const CriarProduto = (props) => {
@@ -103,22 +102,6 @@ const CriarProduto = (props) => {
 
                                 <Button type="submit" className="w-100 mt-3" style={{ backgroundColor: '#FFCD46', borderColor: '#FFCD46', color: 'black' }}>Cadastrar</Button>
                             </Form>
-                        </Card.Body>
-                    </Card>
-                </Col>
-            </Row>
-            <Row className="justify-content-md-center" style={{ marginTop: '10px' }}>
-                <Col xs={12} md={6}>
-                    <Card className="text-light" style={{ backgroundColor: '#1c3bc5', borderRadius: '15px', borderColor: '#d4edda', marginBottom: '10px' }}>
-                        <Card.Body>
-                            <h1 className="text-center text-light">Produto 1</h1>
-                            <p>Descrição do Produto 1</p>
-                        </Card.Body>
-                    </Card>
-                    <Card className="text-light" style={{ backgroundColor: '#1c3bc5', borderRadius: '15px', borderColor: '#d4edda', marginBottom: '10px' }}>
-                        <Card.Body>
-                            <h1 className="text-center text-light">Produto 2</h1>
-                            <p>Descrição do Produto 2</p>
                         </Card.Body>
                     </Card>
                 </Col>
