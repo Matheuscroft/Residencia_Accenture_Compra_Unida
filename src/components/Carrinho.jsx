@@ -133,10 +133,17 @@ const Carrinho = (props) => {
                     ...produto,
                     quantidadeEstoque: novaQuantidadeEstoque
                 };
+                console.log("produtoComEstoqueAtualizado.id")
+                console.log(produtoComEstoqueAtualizado.id)
+                console.log("produto.id")
+                console.log(produto.id)
+                console.log("oferta.produtoRelacionado.id")
+                console.log(oferta.produtoRelacionado.id)
 
                 await editarProduto(oferta.produtoRelacionado.id, produtoComEstoqueAtualizado);
-                console.log("QuantidadeEstoque");
-                console.log(produtoComEstoqueAtualizado.quantidadeEstoque);
+
+                oferta.produtoRelacionado = produtoComEstoqueAtualizado;
+                await editarOferta(oferta.id, oferta);
             }
         }
 

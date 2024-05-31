@@ -57,10 +57,10 @@ const HomeFornecedor = (props) => {
         setShowEditarModal(true);
     };
 
-    const handleSalvarProdutoEditado = (entidadeEditada) => {
+    const handleSalvarProdutoEditado = async (entidadeEditada) => {
         if (entidadeEditada.tipo === "produto") {
 
-            editarProduto(entidadeEditada.id, entidadeEditada);
+            await editarProduto(entidadeEditada.id, entidadeEditada);
 
             const novaListaProdutos = listaProdutos.map(produto =>
                 produto.id === entidadeEditada.id ? entidadeEditada : produto
@@ -68,6 +68,23 @@ const HomeFornecedor = (props) => {
             
             console.log(entidadeEditada.imagens)
             setListaProdutos(novaListaProdutos);
+
+            const ofertasRelacionadas = listaOfertas.filter(oferta => oferta.produtoRelacionado.id === entidadeEditada.id);
+
+            for (const oferta of ofertasRelacionadas) {
+                const novaOferta = {
+                    ...oferta,
+                    produtoRelacionado: entidadeEditada
+                };
+                await editarOferta(novaOferta.id, novaOferta);
+    
+                const novaListaOfertas = listaOfertas.map(ofertaItem =>
+                    ofertaItem.id === novaOferta.id ? novaOferta : ofertaItem
+                );
+    
+                setListaOfertas(novaListaOfertas);
+            }
+
 
         } else if (entidadeEditada.tipo === "oferta") {
 

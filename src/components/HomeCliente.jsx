@@ -138,7 +138,7 @@ const HomeCliente = (props) => {
                                                     <Card.Text style={{ color: 'white' }}><strong>Preço Especial:</strong> {oferta.precoEspecial}</Card.Text>
                                                     <Card.Text style={{ color: 'white' }}><strong>Tempo Restante:</strong> <Countdown date={new Date(oferta.dataTermino)} /></Card.Text>
                                                     <Card.Text style={{ color: 'white' }}><strong>Data de Finalização:</strong> {formatarData(oferta.dataTermino)}</Card.Text>
-                                                    <Card.Text style={{ color: 'white' }}><strong>Vendidos:</strong> {oferta.quantidadeVendida || 0}/{oferta.produtoRelacionado.quantidadeEstoque}</Card.Text>
+                                                    <Card.Text style={{ color: 'white' }}><strong>Vendidos:</strong> {oferta.quantidadeVendas || 0}/{oferta.produtoRelacionado.quantidadeEstoque}</Card.Text>
                                                 </div>
                                                 <Button
                                                     variant="warning"
@@ -244,7 +244,7 @@ const HomeCliente = (props) => {
                                                         <Card.Text style={{ color: 'white' }}><strong>Preço Especial:</strong> {oferta.precoEspecial}</Card.Text>
                                                         <Card.Text style={{ color: 'white' }}><strong>Tempo Restante:</strong> <Countdown date={new Date(oferta.dataTermino)} /></Card.Text>
                                                         <Card.Text style={{ color: 'white' }}><strong>Data de Finalização:</strong> {formatarData(oferta.dataTermino)}</Card.Text>
-                                                        <Card.Text style={{ color: 'white' }}><strong>Vendidos:</strong> {oferta.quantidadeVendida || 0}/{oferta.produtoRelacionado.quantidadeEstoque}</Card.Text>
+                                                        <Card.Text style={{ color: 'white' }}><strong>Vendidos:</strong> {oferta.quantidadeVendas || 0}/{oferta.produtoRelacionado.quantidadeEstoque}</Card.Text>
                                                     </div>
                                                     <Button
                                                         variant="warning"

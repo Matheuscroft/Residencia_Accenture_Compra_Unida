@@ -8,7 +8,11 @@ const MeusPedidos = (props) => {
     useEffect(() => {
         const fetchPedidos = async () => {
             const pedidos = await getPedidos();
-            setListaPedidos(pedidos);
+            const pedidosOrdenados = pedidos.sort((a, b) => new Date(b.dataDePedido) - new Date(a.dataDePedido));
+            setListaPedidos(pedidosOrdenados);
+            console.log(pedidosOrdenados
+                
+            )
         };
         fetchPedidos();
     }, []);
