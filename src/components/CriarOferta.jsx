@@ -41,30 +41,38 @@ const CriarOferta = (props) => {
 
     const handleSubmit = async (event) => {
         event.preventDefault();
-
+    
+        const hoje = new Date().toISOString().split("T")[0];
+    
+        if (oferta.dataInicio < hoje) {
+            alert("A data de início não pode ser anterior à data atual.");
+            return;
+        }
+    
         if (oferta.produtoRelacionado === "default") {
             alert("Selecione um produto");
             return;
         }
-
+    
         if (oferta.dataTermino && oferta.dataInicio && oferta.dataTermino < oferta.dataInicio) {
             alert("A data de término não pode ser inferior à data de início.");
             return;
         }
-
+    
         const produtoSelecionado = produtos.find(produto => produto.id === oferta.produtoRelacionado);
         if (!produtoSelecionado) {
             alert("Produto não encontrado");
             return;
         }
-
+    
         const ofertaComProdutoEQntVendas = {
             ...oferta,
             produtoRelacionado: produtoSelecionado,
             quantidadeVendas: 0,
-            dataTermino: oferta.dataTermino 
+            dataTermino: oferta.dataTermino,
+            dataCriacao: new Date()
         };
-
+    
         const id = await addOferta(ofertaComProdutoEQntVendas);
         if (id) {
             alert(`${oferta.nomeOferta} cadastrada com sucesso com ID: ${id}`);
@@ -73,6 +81,7 @@ const CriarOferta = (props) => {
             alert("Erro ao cadastrar oferta");
         }
     };
+    
 
     return (
         <Container>
@@ -112,12 +121,12 @@ const CriarOferta = (props) => {
 
                                 <Form.Group controlId="dataInicio" className="mb-3">
                                     <Form.Label className="text-light">Data de início da oferta</Form.Label>
-                                    <Form.Control type="date" name="dataInicio" value={oferta.dataInicio || ""} onChange={handleChange} placeholder="Data de início da oferta" required />
+                                    <Form.Control type="date" name="dataInicio" value={oferta.dataInicio || ""} onChange={handleChange} placeholder="Data de início da oferta" required min={new Date().toISOString().split("T")[0]}/>
                                 </Form.Group>
 
                                 <Form.Group controlId="dataTermino" className="mb-3">
                                     <Form.Label className="text-light">Data de término da oferta</Form.Label>
-                                    <Form.Control type="date" name="dataTermino" value={oferta.dataTermino || ""} onChange={handleChange} placeholder="Data de término da oferta" required disabled={!oferta.dataInicio} />
+                                    <Form.Control type="date" name="dataTermino" value={oferta.dataTermino || ""} onChange={handleChange} placeholder="Data de término da oferta" required disabled={!oferta.dataInicio} min={new Date().toISOString().split("T")[0]}/>
                                 </Form.Group>
 
                                 <Button type="submit" className="w-100 mt-3" style={{ backgroundColor: '#FFCD46', borderColor: '#FFCD46', color: 'black' }}>Cadastrar</Button>

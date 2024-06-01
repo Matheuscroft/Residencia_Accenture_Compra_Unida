@@ -17,6 +17,10 @@ const HomeCliente = (props) => {
         };
 
         fetchOfertas();
+
+        console.log("ofertas")
+        console.log(ofertas)
+
     }, []);
 
     const categorias = ofertas.reduce((acc, oferta) => {
@@ -71,14 +75,14 @@ const HomeCliente = (props) => {
 
     const getCardStyle = (oferta) => {
         const vendidos = oferta.quantidadeVendas || 0;
-        const estoque = oferta.produtoRelacionado.quantidadeEstoque;
-        return vendidos > estoque * 0.5 ? '#28a745' : '#1c3bc5';
+        const minimo = oferta.quantidadeMinima;
+        return vendidos >= minimo ? '#28a745' : '#1c3bc5';
     };
 
     const getCardText = (oferta) => {
         const vendidos = oferta.quantidadeVendas || 0;
-        const estoque = oferta.produtoRelacionado.quantidadeEstoque;
-        return vendidos > estoque * 0.5 ? 'Desconto concedido!' : '';
+        const minimo = oferta.quantidadeMinima;
+        return vendidos >= minimo ? 'Desconto concedido!' : '';
     };
 
     const getMaxHeight = (categoria) => {
@@ -150,7 +154,7 @@ const HomeCliente = (props) => {
                                                     <Card.Text style={{ color: 'white' }}><strong>Tempo Restante:</strong> <Countdown date={new Date(oferta.dataTermino)} /></Card.Text>
                                                     <Card.Text style={{ color: 'white' }}><strong>Data de Finalização:</strong> {formatarData(oferta.dataTermino)}</Card.Text>
                                                     <Card.Text style={{ color: 'white' }}>
-                                                        <strong>Vendidos:</strong> {oferta.quantidadeVendas || 0}/{oferta.produtoRelacionado.quantidadeEstoque}
+                                                        <strong>Vendidos:</strong> {oferta.quantidadeVendas || 0}/{oferta.quantidadeMinima}
                                                         {getCardText(oferta) && <span style={{ marginLeft: '10px', color: 'white' }}>{getCardText(oferta)}</span>}
                                                     </Card.Text>
                                                 </div>

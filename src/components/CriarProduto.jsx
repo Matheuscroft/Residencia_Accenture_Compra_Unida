@@ -39,13 +39,14 @@ const CriarProduto = (props) => {
             return;
         }
 
-        const produtoComPreco = {
+        const produtoComPrecoEData = {
             ...produto,
-            preco: produto.preco
+            preco: produto.preco,
+            dataCriacao: new Date()
         };
 
         const imagemUrls = await Promise.all(imagens.map(file => uploadImagem(file)));
-        const produtoComImagens = { ...produtoComPreco, imagens: imagemUrls };
+        const produtoComImagens = { ...produtoComPrecoEData, imagens: imagemUrls };
 
         const id = await addProduto(produtoComImagens);
         if (id) {

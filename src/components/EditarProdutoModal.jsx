@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Modal, Button, Form } from 'react-bootstrap';
 import { getProdutos, uploadImagem } from "../auth/firebaseService";
 
-const EditarProdutoModal = ({ entidade, show, onHide, onEdit }) => {
+const EditarProdutoModal = ({ entidade, show, onHide, onSave }) => {
     const [entidadeEditada, setEntidadeEditada] = useState({ ...entidade });
     const [arquivosSelecionados, setArquivosSelecionados] = useState([]);
     const [produtos, setProdutos] = useState([]);
@@ -35,14 +35,11 @@ const EditarProdutoModal = ({ entidade, show, onHide, onEdit }) => {
     const handleFileChange = (event) => {
         const files = Array.from(event.target.files);
         setArquivosSelecionados(files);
-        console.log("entrei no filechange: "+ event)
     };
 
     const handleChange = (event) => {
         const { name, value } = event.target;
 
-        console.log("name: "+ name)
-        console.log("value: "+ value)
         if (name === "dataInicio" && entidadeEditada.dataTermino && value > entidadeEditada.dataTermino) {
             setEntidadeEditada({ ...entidadeEditada, [name]: value, dataTermino: "" });
             return
@@ -95,7 +92,7 @@ const EditarProdutoModal = ({ entidade, show, onHide, onEdit }) => {
             return;
         }
 
-        onEdit(entidadeAtualizada);
+        onSave(entidadeAtualizada);
     };
 
     return (
@@ -208,6 +205,7 @@ const EditarProdutoModal = ({ entidade, show, onHide, onEdit }) => {
                                 name="quantidadeEstoque"
                                 value={entidadeEditada.quantidadeEstoque}
                                 onChange={handleChange}
+                                min="0"
                             />
                         </Form.Group>
                     )}
@@ -245,6 +243,7 @@ const EditarProdutoModal = ({ entidade, show, onHide, onEdit }) => {
                                     name="dataInicio"
                                     value={entidadeEditada.dataInicio || ""}
                                     onChange={handleChange}
+                                    min={new Date().toISOString().split("T")[0]}
                                 />
                             </Form.Group>
                             <Form.Group controlId="formDataTermino">
