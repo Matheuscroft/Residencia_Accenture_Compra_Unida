@@ -165,6 +165,7 @@ const HomeCliente = (props) => {
                                                         handleCarrinho(oferta);
                                                     }}
                                                     style={{ marginTop: '20px', width: '100%' }}
+                                                    disabled={oferta.produtoRelacionado.quantidadeEstoque === 0}
                                                 >
                                                     Adicionar ao Carrinho
                                                 </Button>
@@ -277,6 +278,7 @@ const HomeCliente = (props) => {
                                                                 handleCarrinho(oferta);
                                                             }}
                                                             style={{ marginTop: '20px', width: '100%' }}
+                                                            disabled={oferta.produtoRelacionado.quantidadeEstoque === 0}
                                                         >
                                                             Adicionar ao Carrinho
                                                         </Button>
