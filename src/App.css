@@ -70,13 +70,17 @@ body {
 }
 
 .offer-card {
-    transition: all 0.3s ease;
-    cursor: pointer;
+  width: 350px; 
+  height: 450px; 
+  transition: all 0.3s ease;
+  cursor: pointer;
+  opacity: 1; 
+  border-radius: 15px;
 }
 
 .offer-card:hover {
-    transform: scale(1.05);
-    z-index: 2;
+  z-index: 2;
+  opacity: 0.8; /* Altere a opacidade para 1 ao passar o mouse */
 }
 
 .offer-card .card-body div {
@@ -86,6 +90,6 @@ body {
 }
 
 .offer-card:hover .card-body div {
-    white-space: normal;
+    white-space: white-space-trim;
     overflow: visible;
 }
