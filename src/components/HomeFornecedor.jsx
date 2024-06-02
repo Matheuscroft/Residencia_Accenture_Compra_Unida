@@ -166,6 +166,15 @@ const HomeFornecedor = (props) => {
                             Ver Pedidos
                         </Button>
                     </Col>
+                    <Col className="d-flex justify-content-center">
+                        <Button
+                            variant="warning"
+                            onClick={() => props.handlePage("paineis")}
+                            style={{ marginTop: '20px', width: '100%' }}
+                        >
+                            Painel de Informações
+                        </Button>
+                    </Col>
                 </Row>
                 <Row className="mb-4">
                     <Col>

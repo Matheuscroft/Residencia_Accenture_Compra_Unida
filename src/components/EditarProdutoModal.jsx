@@ -38,14 +38,22 @@ const EditarProdutoModal = ({ entidade, show, onHide, onSave }) => {
     };
 
     const handleChange = (event) => {
-        const { name, value } = event.target;
+        let { name, value } = event.target;
+
+        
+
+        // Verifica se o campo é quantidadeEstoque e faz a conversão para número
+        if (name === "quantidadeEstoque") {
+            value = parseInt(value, 10); // Converte para inteiro decimal
+            setEntidadeEditada({ ...entidadeEditada, [name]: value });
+        }
 
         if (name === "dataInicio" && entidadeEditada.dataTermino && value > entidadeEditada.dataTermino) {
             setEntidadeEditada({ ...entidadeEditada, [name]: value, dataTermino: "" });
             return
         } else {
             setEntidadeEditada({ ...entidadeEditada, [name]: value });
-            
+
         }
 
         if (name === "produtoRelacionado") {
@@ -53,7 +61,7 @@ const EditarProdutoModal = ({ entidade, show, onHide, onSave }) => {
             setEntidadeEditada({ ...entidadeEditada, produtoRelacionado: produto });
             return
         }
-        
+
         setEntidadeEditada({ ...entidadeEditada, [name]: value });
     };
 
@@ -67,17 +75,17 @@ const EditarProdutoModal = ({ entidade, show, onHide, onSave }) => {
             if (arquivosSelecionados && arquivosSelecionados.length > 0) {
 
                 const imagemUrls = await Promise.all(arquivosSelecionados.map(file => uploadImagem(file)));
-        
+
                 entidadeAtualizada = {
                     ...entidadeAtualizada,
                     imagens: imagemUrls
                 };
 
             } else {
-                
+
                 entidadeAtualizada = {
                     ...entidadeAtualizada,
-                    imagens: entidade.imagens
+                    imagens: entidade.imagens,
                 };
             }
         }
@@ -166,10 +174,10 @@ const EditarProdutoModal = ({ entidade, show, onHide, onSave }) => {
                                     {produtos.map(produto => (
                                         <option key={produto.id} value={produto.id} selected={entidadeEditada.produtoRelacionado && entidadeEditada.produtoRelacionado.id === produto.id}>{produto.nomeProduto}</option>
                                     ))}
-                                    
+
                                 </Form.Control>
                             </Form.Group>
-                            
+
                         </>
                     )}
 
