@@ -6,12 +6,17 @@ const EditarProdutoModal = ({ entidade, show, onHide, onSave }) => {
     const [entidadeEditada, setEntidadeEditada] = useState({ ...entidade });
     const [arquivosSelecionados, setArquivosSelecionados] = useState([]);
     const [produtos, setProdutos] = useState([]);
+    const [quantidadeEstoqueProdutoRelacionado, setQuantidadeEstoqueProdutoRelacionado] = useState(0);
 
 
     useEffect(() => {
         if (entidade) {
             setEntidadeEditada({ ...entidade });
             setArquivosSelecionados([]);
+        }
+
+        if (entidade && entidade.tipo === "oferta") {
+            setQuantidadeEstoqueProdutoRelacionado(entidade.produtoRelacionado.quantidadeEstoque);
         }
 
         const fetchProdutos = async () => {
@@ -38,13 +43,11 @@ const EditarProdutoModal = ({ entidade, show, onHide, onSave }) => {
     };
 
     const handleChange = (event) => {
+
         let { name, value } = event.target;
 
-        
-
-        // Verifica se o campo é quantidadeEstoque e faz a conversão para número
         if (name === "quantidadeEstoque") {
-            value = parseInt(value, 10); // Converte para inteiro decimal
+            value = parseInt(value, 10); 
             setEntidadeEditada({ ...entidadeEditada, [name]: value });
         }
 
@@ -59,10 +62,18 @@ const EditarProdutoModal = ({ entidade, show, onHide, onSave }) => {
         if (name === "produtoRelacionado") {
             const produto = produtos.find(p => p.id === value);
             setEntidadeEditada({ ...entidadeEditada, produtoRelacionado: produto });
+            /*setQuantidadeEstoqueProdutoRelacionado(produto ? produto.quantidadeEstoque : 0);*/
             return
-        }
 
-        setEntidadeEditada({ ...entidadeEditada, [name]: value });
+        } else if (name === "quantidadeMinima") {
+
+            const newValue = value < 0 ? 0 : value; // Garante que o valor mínimo não seja negativo
+            setEntidadeEditada({ ...entidadeEditada, [name]: newValue });
+
+        } else {
+
+            setEntidadeEditada({ ...entidadeEditada, [name]: value });
+        }
     };
 
     const handleSubmit = async (event) => {
@@ -173,7 +184,7 @@ const EditarProdutoModal = ({ entidade, show, onHide, onSave }) => {
                                     <option value="default">Selecione um produto</option>
                                     {produtos.map(produto => (
                                         <option key={produto.id} value={produto.id} selected={entidadeEditada.produtoRelacionado && entidadeEditada.produtoRelacionado.id === produto.id}>{produto.nomeProduto}</option>
-                                    ))}
+                    ))}          
 
                                 </Form.Control>
                             </Form.Group>
@@ -204,7 +215,6 @@ const EditarProdutoModal = ({ entidade, show, onHide, onSave }) => {
                             />
                         </Form.Group>
                     )}
-
                     {entidade && entidade.tipo === "produto" && (
                         <Form.Group controlId="formQuantidadeEstoque">
                             <Form.Label>Quantidade em estoque</Form.Label>
@@ -220,12 +230,15 @@ const EditarProdutoModal = ({ entidade, show, onHide, onSave }) => {
 
                     {entidade && entidade.tipo === "oferta" && (
                         <Form.Group controlId="formQuantidadeMinima">
-                            <Form.Label>Quantidade mínima para ativação da oferta</Form.Label>
+                            <Form.Label>Quantidade mínima para ativação da oferta (Estoque: {quantidadeEstoqueProdutoRelacionado})</Form.Label>
                             <Form.Control
                                 type="number"
                                 name="quantidadeMinima"
-                                value={entidadeEditada.quantidadeMinima}
-                                onChange={handleChange}
+                                value= {entidadeEditada.quantidadeMinima} 
+                                onChange={handleChange} 
+                                min="0"
+                                placeholder="Quantidade mínima para a oferta" 
+                                required max={quantidadeEstoqueProdutoRelacionado}
                             />
                         </Form.Group>
                     )}

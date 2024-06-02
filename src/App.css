@@ -74,7 +74,8 @@ body {
   height: 450px; 
   transition: all 0.3s ease;
   cursor: pointer;
-  opacity: 1; /* Adicione esta propriedade para tornar o card mais opaco */
+  opacity: 1; 
+  border-radius: 15px;
 }
 
 .offer-card:hover {

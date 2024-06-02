@@ -21,7 +21,7 @@ const HomeCliente = (props) => {
         console.log("ofertas")
         console.log(ofertas)
 
-    }, []);
+    }, [ofertas]);
 
     const categorias = ofertas.reduce((acc, oferta) => {
         const categoria = oferta.produtoRelacionado.categoria;
@@ -258,7 +258,7 @@ const HomeCliente = (props) => {
                                                             />
                                                         )}
                                                     </div>
-                                                    <Card.Body style={{ backgroundColor: getCardStyle(oferta), display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+                                                    <Card.Body style={{ backgroundColor: getCardStyle(oferta), display: 'flex', flexDirection: 'column', justifyContent: 'space-between',}}>
                                                         <div>
                                                             <Card.Title style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', color: 'white' }} title={oferta.nomeOferta}>{oferta.nomeOferta}</Card.Title>
                                                             <Card.Text style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', color: 'white' }} title={oferta.descricao}>{oferta.descricao}</Card.Text>

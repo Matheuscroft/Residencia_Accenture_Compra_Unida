@@ -5,6 +5,7 @@ import { addOferta, getProdutos } from "../auth/firebaseService";
 const CriarOferta = (props) => {
     const [oferta, setOferta] = useState({});
     const [produtos, setProdutos] = useState([]);
+    const [quantidadeEstoque, setQuantidadeEstoque] = useState(0);
 
     useEffect(() => {
         const fetchProdutos = async () => {
@@ -25,6 +26,14 @@ const CriarOferta = (props) => {
 
         if (name === "dataInicio" && oferta.dataTermino && value > oferta.dataTermino) {
             setOferta({ ...oferta, [name]: value, dataTermino: "" });
+        } else {
+            setOferta({ ...oferta, [name]: value });
+        }
+
+        if (name === "produtoRelacionado") {
+            const produtoSelecionado = produtos.find(produto => produto.id === value);
+            setOferta({ ...oferta, [name]: value });
+            setQuantidadeEstoque(produtoSelecionado ? produtoSelecionado.quantidadeEstoque : 0);
         } else {
             setOferta({ ...oferta, [name]: value });
         }
@@ -115,8 +124,8 @@ const CriarOferta = (props) => {
                                 </Form.Group>
 
                                 <Form.Group controlId="quantidadeMinima" className="mb-3">
-                                    <Form.Label className="text-light">Quantidade mínima para ativação da oferta</Form.Label>
-                                    <Form.Control type="number" name="quantidadeMinima" value={oferta.quantidadeMinima || ""} onChange={handleChange} placeholder="Quantidade mínima para a oferta" required />
+                                    <Form.Label className="text-light">Quantidade mínima para ativação da oferta (Estoque: {quantidadeEstoque})</Form.Label>
+                                    <Form.Control type="number" name="quantidadeMinima" value={oferta.quantidadeMinima || ""} onChange={handleChange} placeholder="Quantidade mínima para a oferta" required max={quantidadeEstoque} />
                                 </Form.Group>
 
                                 <Form.Group controlId="dataInicio" className="mb-3">
