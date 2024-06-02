@@ -89,7 +89,7 @@ const HomeCliente = (props) => {
         <div>
             <Container style={{ marginTop: '20px' }}>
                 <h2 style={{ color: '#FFCD46' }}>Melhores Ofertas</h2>
-                <div style={{ position: 'relative', marginBottom: '40px' }}>
+                <div style={{ position: 'relative', marginBottom: '0px' }}>
                     {melhoresOfertas.length >= 3 && (
                         <Button
                             style={{
@@ -265,17 +265,8 @@ const HomeCliente = (props) => {
                                                                 <strong>Vendidos:</strong> {oferta.quantidadeVendas || 0}/{oferta.produtoRelacionado.quantidadeEstoque}
                                                                 {getCardText(oferta) && <span style={{ marginLeft: '10px', color: 'white' }}>{getCardText(oferta)}</span>}
                                                             </Card.Text>
-                                                        </div>
-                                                        <Button
-                                                            variant="warning"
-                                                            onClick={(e) => {
-                                                                e.stopPropagation();
-                                                                handleCarrinho(oferta);
-                                                            }}
-                                                            style={{ marginTop: '20px', width: '100%' }}
-                                                        >
-                                                            Adicionar ao Carrinho
-                                                        </Button>
+                                                        <Button variant="warning" onClick={(e) => {e.stopPropagation();handleCarrinho(oferta);}} style={{ marginTop: '20px', width: '100%' }}>Adicionar ao Carrinho</Button>
+                                                    </div>
                                                     </Card.Body>
                                                 </Card>
                                             </Col>
