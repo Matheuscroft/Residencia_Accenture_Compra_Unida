@@ -128,10 +128,11 @@ const Carrinho = (props) => {
             const produto = todosProdutos.find(prod => prod.id === oferta.produtoRelacionado.id);
 
             if (produto) {
-                const novaQuantidadeEstoque = produto.quantidadeEstoque - oferta.quantidadeVendas;
+                const novaQuantidadeEstoque = produto.quantidadeEstoque - oferta.quantidadeVendaPedidoAtual;
                 const produtoComEstoqueAtualizado = {
                     ...produto,
-                    quantidadeEstoque: novaQuantidadeEstoque
+                    quantidadeEstoque: novaQuantidadeEstoque,
+                    quantidadeVendas: oferta.quantidadeVendas
                 };
 
                 await editarProduto(oferta.produtoRelacionado.id, produtoComEstoqueAtualizado);

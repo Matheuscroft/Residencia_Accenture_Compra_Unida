@@ -50,11 +50,14 @@ const MeusPedidos = (props) => {
                             <h5>{oferta.produtoRelacionado.nomeProduto}</h5>
                             <p>{oferta.descricao}</p>
                         </Col>
-                        <Col xs={2}>
+                        <Col xs={1}>
                             <p>{oferta.precoEspecial}</p>
                         </Col>
-                        <Col xs={2}>
+                        <Col xs={1}>
                             <p>Qtd: {oferta.quantidadeVendas}</p>
+                        </Col>
+                        <Col xs={2}>
+                            <p>Situação: {oferta.status}</p>
                         </Col>
                     </Row>
                 ))}

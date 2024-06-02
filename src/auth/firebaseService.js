@@ -133,3 +133,4 @@ export const getMessages = async (fornecedorId) => {
 export const sendMessage = async (fornecedorId, text) => {
     await addDoc(collection(db, "messages"), { fornecedorId, text, timestamp: new Date() });
 };
+

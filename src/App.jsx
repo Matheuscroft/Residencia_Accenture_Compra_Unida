@@ -14,6 +14,7 @@ import NavegacaoHeader from './components/NavegacaoHeader';
 import Carrinho from './components/Carrinho';
 import MeusPedidos from './components/MeusPedidos';
 import EsqueciSenha from './components/EsqueciSenha';
+import Paineis from './components/Paineis';
 
 const App = () => {
     const [carrinho, setCarrinho] = useState([]);
@@ -87,7 +88,7 @@ const App = () => {
             );
         case "home-cliente":
             return (
-                <div>   
+                <div>
                     <NavegacaoHeader handlePage={handlePage} paginaAtual={paginaAtual.page} />
                     <HomeCliente addToCart={addToCart} handlePage={handlePage} />
                 </div>
@@ -118,6 +119,13 @@ const App = () => {
                 <div>
                     <NavegacaoHeader handlePage={handlePage} paginaAtual={paginaAtual.page} />
                     <MeusPedidos handlePage={handlePage} />
+                </div>
+            );
+        case "paineis":
+            return (
+                <div>
+                    <NavegacaoHeader handlePage={handlePage} paginaAtual={paginaAtual.page} />
+                    <Paineis handlePage={handlePage} />
                 </div>
             );
         default:

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Modal, Button, Form } from 'react-bootstrap';
 import { getProdutos, uploadImagem } from "../auth/firebaseService";
 
-const EditarProdutoModal = ({ entidade, show, onHide, onEdit }) => {
+const EditarProdutoModal = ({ entidade, show, onHide, onSave }) => {
     const [entidadeEditada, setEntidadeEditada] = useState({ ...entidade });
     const [arquivosSelecionados, setArquivosSelecionados] = useState([]);
     const [produtos, setProdutos] = useState([]);
@@ -35,20 +35,25 @@ const EditarProdutoModal = ({ entidade, show, onHide, onEdit }) => {
     const handleFileChange = (event) => {
         const files = Array.from(event.target.files);
         setArquivosSelecionados(files);
-        console.log("entrei no filechange: "+ event)
     };
 
     const handleChange = (event) => {
-        const { name, value } = event.target;
+        let { name, value } = event.target;
 
-        console.log("name: "+ name)
-        console.log("value: "+ value)
+        
+
+        // Verifica se o campo é quantidadeEstoque e faz a conversão para número
+        if (name === "quantidadeEstoque") {
+            value = parseInt(value, 10); // Converte para inteiro decimal
+            setEntidadeEditada({ ...entidadeEditada, [name]: value });
+        }
+
         if (name === "dataInicio" && entidadeEditada.dataTermino && value > entidadeEditada.dataTermino) {
             setEntidadeEditada({ ...entidadeEditada, [name]: value, dataTermino: "" });
             return
         } else {
             setEntidadeEditada({ ...entidadeEditada, [name]: value });
-            
+
         }
 
         if (name === "produtoRelacionado") {
@@ -56,7 +61,7 @@ const EditarProdutoModal = ({ entidade, show, onHide, onEdit }) => {
             setEntidadeEditada({ ...entidadeEditada, produtoRelacionado: produto });
             return
         }
-        
+
         setEntidadeEditada({ ...entidadeEditada, [name]: value });
     };
 
@@ -70,17 +75,17 @@ const EditarProdutoModal = ({ entidade, show, onHide, onEdit }) => {
             if (arquivosSelecionados && arquivosSelecionados.length > 0) {
 
                 const imagemUrls = await Promise.all(arquivosSelecionados.map(file => uploadImagem(file)));
-        
+
                 entidadeAtualizada = {
                     ...entidadeAtualizada,
                     imagens: imagemUrls
                 };
 
             } else {
-                
+
                 entidadeAtualizada = {
                     ...entidadeAtualizada,
-                    imagens: entidade.imagens
+                    imagens: entidade.imagens,
                 };
             }
         }
@@ -95,7 +100,7 @@ const EditarProdutoModal = ({ entidade, show, onHide, onEdit }) => {
             return;
         }
 
-        onEdit(entidadeAtualizada);
+        onSave(entidadeAtualizada);
     };
 
     return (
@@ -169,10 +174,10 @@ const EditarProdutoModal = ({ entidade, show, onHide, onEdit }) => {
                                     {produtos.map(produto => (
                                         <option key={produto.id} value={produto.id} selected={entidadeEditada.produtoRelacionado && entidadeEditada.produtoRelacionado.id === produto.id}>{produto.nomeProduto}</option>
                                     ))}
-                                    
+
                                 </Form.Control>
                             </Form.Group>
-                            
+
                         </>
                     )}
 
@@ -208,6 +213,7 @@ const EditarProdutoModal = ({ entidade, show, onHide, onEdit }) => {
                                 name="quantidadeEstoque"
                                 value={entidadeEditada.quantidadeEstoque}
                                 onChange={handleChange}
+                                min="0"
                             />
                         </Form.Group>
                     )}
@@ -245,6 +251,7 @@ const EditarProdutoModal = ({ entidade, show, onHide, onEdit }) => {
                                     name="dataInicio"
                                     value={entidadeEditada.dataInicio || ""}
                                     onChange={handleChange}
+                                    min={new Date().toISOString().split("T")[0]}
                                 />
                             </Form.Group>
                             <Form.Group controlId="formDataTermino">

@@ -10,6 +10,11 @@ const CriarProduto = (props) => {
         const name = event.target.name;
         let value = event.target.value;
     
+        if (name === "quantidadeEstoque") {
+            value = parseInt(value, 10);
+            
+        }
+
         if (name === "quantidadeEstoque" && value < 0) {
             value = 0;
         }
@@ -39,13 +44,15 @@ const CriarProduto = (props) => {
             return;
         }
 
-        const produtoComPreco = {
+        const produtoComPrecoEData = {
             ...produto,
-            preco: produto.preco
+            preco: produto.preco,
+            dataCriacao: new Date(),
+            quantidadeVendas: 0
         };
 
         const imagemUrls = await Promise.all(imagens.map(file => uploadImagem(file)));
-        const produtoComImagens = { ...produtoComPreco, imagens: imagemUrls };
+        const produtoComImagens = { ...produtoComPrecoEData, imagens: imagemUrls };
 
         const id = await addProduto(produtoComImagens);
         if (id) {
@@ -92,7 +99,7 @@ const CriarProduto = (props) => {
 
                                 <Form.Group controlId="quantidadeEstoque" className="mb-3">
                                     <Form.Label className="text-light">Quantidade em estoque</Form.Label>
-                                    <Form.Control type="number" name="quantidadeEstoque" value={produto.quantidadeEstoque || ""} onChange={handleChange} placeholder="Quantidade em estoque do produto" required />
+                                    <Form.Control type="number" name="quantidadeEstoque" value={produto.quantidadeEstoque || ''} onChange={handleChange} placeholder="Quantidade em estoque do produto" required />
                                 </Form.Group>
 
                                 <Form.Group controlId="imagens" className="mb-3">

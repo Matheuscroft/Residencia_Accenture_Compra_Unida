@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import EditarProdutoModal from './EditarProdutoModal';
 import { Container, Row, Col, Button, Card, Alert } from 'react-bootstrap';
-import { getProdutos, getOfertas, deletarProduto, deletarOferta, editarProduto, editarOferta } from "../auth/firebaseService";
+import { getProdutos, getOfertas, deletarProduto, deletarOferta, editarProduto, editarOferta, deletarImagem } from "../auth/firebaseService";
 
 const HomeFornecedor = (props) => {
     const [listaProdutos, setListaProdutos] = useState([]);
@@ -14,23 +14,42 @@ const HomeFornecedor = (props) => {
     useEffect(() => {
         const fetchProdutos = async () => {
             const produtos = await getProdutos();
-            setListaProdutos(produtos);
+            const produtosComData = produtos.map(produto => {
+                if (produto.dataCriacao && produto.dataCriacao.seconds) {
+                    produto.dataCriacao = new Date(produto.dataCriacao.seconds * 1000);
+                } else {
+                    produto.dataCriacao = new Date(produto.dataCriacao);
+                }
+                return produto;
+            });
+            const produtosOrdenados = produtosComData.sort((a, b) => new Date(b.dataCriacao) - new Date(a.dataCriacao));
+            setListaProdutos(produtosOrdenados);
         };
-
+    
         const fetchOfertas = async () => {
             const ofertas = await getOfertas();
-            setListaOfertas(ofertas);
+            const ofertasComData = ofertas.map(oferta => {
+                if (oferta.dataCriacao && oferta.dataCriacao.seconds) {
+                    oferta.dataCriacao = new Date(oferta.dataCriacao.seconds * 1000);
+                } else {
+                    oferta.dataCriacao = new Date(oferta.dataCriacao);
+                }
+                return oferta;
+            });
+            const ofertasOrdenadas = ofertas.sort((a, b) => new Date(b.dataCriacao) - new Date(a.dataCriacao));
+            setListaOfertas(ofertasOrdenadas);
         };
-
+    
         fetchProdutos();
         fetchOfertas();
     }, []);
+    
 
     const excluirItem = async (elementoID, tipo) => {
         if (tipo === 'produto') {
             const produto = listaProdutos.find(elemento => elemento.id === elementoID);
             if (produto && Array.isArray(produto.imagens)) {
-                // await Promise.all(produto.imagens.map(imagemUrl => deletarImagem(imagemUrl)));
+                 await Promise.all(produto.imagens.map(imagemUrl => deletarImagem(imagemUrl)));
             }
             await deletarProduto(elementoID);
             const novaListaProdutos = listaProdutos.filter(elemento => elemento.id !== elementoID);
@@ -145,6 +164,15 @@ const HomeFornecedor = (props) => {
                             style={{ marginTop: '20px', width: '100%' }}
                         >
                             Ver Pedidos
+                        </Button>
+                    </Col>
+                    <Col className="d-flex justify-content-center">
+                        <Button
+                            variant="warning"
+                            onClick={() => props.handlePage("paineis")}
+                            style={{ marginTop: '20px', width: '100%' }}
+                        >
+                            Painel de Informações
                         </Button>
                     </Col>
                 </Row>
