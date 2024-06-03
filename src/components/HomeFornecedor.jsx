@@ -118,7 +118,8 @@ const HomeFornecedor = (props) => {
                     <p>{truncateText(produto.descricao, 50)}</p>
                     <p>{produto.preco}</p>
                 </div>
-                <div className="ms-auto">
+                <div className="ms-auto" style={{minWidth: "fit-content"}}>
+                
                     <Button variant="warning" size="sm" onClick={() => handleEditEntidade({ ...produto, tipo: "produto" })} className="ms-2">Editar</Button>
                     <Button variant="danger" size="sm" onClick={() => excluirItem(produto.id, 'produto')} className="ms-2">X</Button>
                 </div>
@@ -139,7 +140,7 @@ const HomeFornecedor = (props) => {
                         <p>{produtoRelacionado ? truncateText(produtoRelacionado.descricao, 50) : ''}</p>
                         <p>{produtoRelacionado ? produtoRelacionado.preco : ''}</p>
                     </div>
-                    <div className="ms-auto">
+                    <div className="ms-auto" style={{minWidth: "fit-content"}}>
                         <Button variant="warning" size="sm" onClick={() => handleEditEntidade({ ...oferta, tipo: "oferta" })} className="ms-2">Editar</Button>
                         <Button variant="danger" size="sm" onClick={() => excluirItem(oferta.id, 'oferta')} className="ms-2">X</Button>
                     </div>
