@@ -85,11 +85,24 @@ body {
 
 .offer-card .card-body div {
     white-space: nowrap;
-    overflow: hidden;
+    overflow: visible;
     text-overflow: ellipsis;
 }
 
 .offer-card:hover .card-body div {
     white-space: white-space-trim;
     overflow: visible;
+}
+
+.imageOffer {
+  width: 100%; /* Garante que a imagem ocupe toda a largura disponível */
+  height: 150px;
+  object-fit: contain; /* Redimensiona a imagem mantendo a proporção e cobrindo o contêiner */
+}
+
+.fixedButton {
+  position: absolute;
+  top: 0; /* Posiciona o botão no topo */
+  right: 0; /* Posiciona o botão à direita */
+  z-index: 999; /* Garante que os botões fiquem acima do conteúdo */
 }

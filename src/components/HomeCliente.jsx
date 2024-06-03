@@ -91,7 +91,7 @@ const HomeCliente = (props) => {
 
     return (
         <div>
-            <Container style={{ marginTop: '20px' }}>
+            <Container style={{ marginTop: '-5px' }}>
                 <h2 style={{ color: '#FFCD46' }}>Melhores Ofertas</h2>
                 <div style={{ position: 'relative', marginBottom: '0px' }}>
                     {melhoresOfertas.length >= 3 && (
@@ -101,7 +101,7 @@ const HomeCliente = (props) => {
                                 left: '-50px',
                                 top: '50%',
                                 transform: 'translateY(-50%)',
-                                zIndex: 1,
+                                zIndex: 999,
                                 backgroundColor: '#FFCD46',
                                 borderColor: '#FFCD46'
                             }}
@@ -139,9 +139,10 @@ const HomeCliente = (props) => {
                                             <div style={{ backgroundColor: 'white' }}>
                                                 {oferta.produtoRelacionado.imagens && oferta.produtoRelacionado.imagens.length > 0 && (
                                                     <Card.Img
+                                                        className="imageOffer"
                                                         variant="top"
                                                         src={oferta.produtoRelacionado.imagens[0]}
-                                                        style={{ height: '200px', objectFit: 'fill', cursor: 'pointer' }}
+                                                        alt= "Imagem do produto"
                                                     />
                                                 )}
                                             </div>
@@ -191,7 +192,7 @@ const HomeCliente = (props) => {
                                 right: '-50px',
                                 top: '50%',
                                 transform: 'translateY(-50%)',
-                                zIndex: 1,
+                                zIndex: 999,
                                 backgroundColor: '#FFCD46',
                                 borderColor: '#FFCD46'
                             }}
@@ -203,7 +204,7 @@ const HomeCliente = (props) => {
                 </div>
 
                 {categoriasPadrao.map((categoria) => (
-                    <div key={categoria} style={{ marginBottom: '40px' }}>
+                    <div key={categoria} style={{ marginBottom: '50px', zIndex:999 }}>
                         <h3 style={{ color: '#FFCD46' }}>{categoriasFormatadas[categoria]}</h3>
                         <div style={{ position: 'relative' }}>
                             {categorias[categoria] && categorias[categoria].length >= 3 && (
@@ -213,7 +214,7 @@ const HomeCliente = (props) => {
                                         left: '-50px',
                                         top: '50%',
                                         transform: 'translateY(-50%)',
-                                        zIndex: 1,
+                                        zIndex: 999,
                                         backgroundColor: '#FFCD46',
                                         borderColor: '#FFCD46'
                                     }}
@@ -252,9 +253,10 @@ const HomeCliente = (props) => {
                                                     <div style={{ backgroundColor: 'white' }}>
                                                         {oferta.produtoRelacionado.imagens && oferta.produtoRelacionado.imagens.length > 0 && (
                                                             <Card.Img
+                                                                className="imageOffer"
                                                                 variant="top"
                                                                 src={oferta.produtoRelacionado.imagens[0]}
-                                                                style={{ height: '150px', objectFit: 'contain', cursor: 'pointer' }}
+                                                                alt="Imagem da oferta"
                                                             />
                                                         )}
                                                     </div>
@@ -277,7 +279,7 @@ const HomeCliente = (props) => {
                                                                 e.stopPropagation();
                                                                 handleCarrinho(oferta);
                                                             }}
-                                                            style={{ marginTop: '20px', width: '100%' }}
+                                                            style={{ marginTop: '-30px', width: '100%' }}
                                                             disabled={oferta.produtoRelacionado.quantidadeEstoque === 0}
                                                         >
                                                             Adicionar ao Carrinho
@@ -304,7 +306,7 @@ const HomeCliente = (props) => {
                                         right: '-50px',
                                         top: '50%',
                                         transform: 'translateY(-50%)',
-                                        zIndex: 1,
+                                        zIndex: 999,
                                         backgroundColor: '#FFCD46',
                                         borderColor: '#FFCD46'
                                     }}
