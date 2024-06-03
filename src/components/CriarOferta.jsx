@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Form, Button, Container, Row, Col, Card } from "react-bootstrap";
 import { addOferta, getProdutos } from "../auth/firebaseService";
+import {todayWithoutTimezone} from "./Utils.js";
 
 const CriarOferta = (props) => {
     const [oferta, setOferta] = useState({});
@@ -58,7 +59,7 @@ const CriarOferta = (props) => {
     
         const hoje = new Date().toISOString().split("T")[0];
     
-        if (oferta.dataInicio < hoje) {
+        if (oferta.dataInicio <= hoje) {
             alert("A data de início não pode ser anterior à data atual.");
             return;
         }
@@ -135,12 +136,12 @@ const CriarOferta = (props) => {
 
                                 <Form.Group controlId="dataInicio" className="mb-3">
                                     <Form.Label className="text-light">Data de início da oferta</Form.Label>
-                                    <Form.Control type="date" name="dataInicio" value={oferta.dataInicio || ""} onChange={handleChange} placeholder="Data de início da oferta" required min={new Date().toISOString().split("T")[0]}/>
+                                    <Form.Control type="date" name="dataInicio" value={oferta.dataInicio || ""} onChange={handleChange} placeholder="Data de início da oferta" required min={todayWithoutTimezone}/>
                                 </Form.Group>
 
                                 <Form.Group controlId="dataTermino" className="mb-3">
                                     <Form.Label className="text-light">Data de término da oferta</Form.Label>
-                                    <Form.Control type="date" name="dataTermino" value={oferta.dataTermino || ""} onChange={handleChange} placeholder="Data de término da oferta" required disabled={!oferta.dataInicio} min={new Date().toISOString().split("T")[0]}/>
+                                    <Form.Control type="date" name="dataTermino" value={oferta.dataTermino || ""} onChange={handleChange} placeholder="Data de término da oferta" required disabled={!oferta.dataInicio} min={new Date(new Date().toDateString()).toISOString().split("T")[0]}/>
                                 </Form.Group>
 
                                 <Button type="submit" className="w-100 mt-3" style={{ backgroundColor: '#FFCD46', borderColor: '#FFCD46', color: 'black' }}>Cadastrar</Button>
