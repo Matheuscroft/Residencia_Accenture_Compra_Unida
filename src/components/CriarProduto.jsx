@@ -48,8 +48,12 @@ const CriarProduto = (props) => {
             ...produto,
             preco: produto.preco,
             dataCriacao: new Date(),
-            quantidadeVendas: 0
+            quantidadeVendas: 0,
+            userId: props.userId
         };
+
+        console.log("props.userId")
+        console.log(props.userId)
 
         const imagemUrls = await Promise.all(imagens.map(file => uploadImagem(file)));
         const produtoComImagens = { ...produtoComPrecoEData, imagens: imagemUrls };
@@ -57,7 +61,7 @@ const CriarProduto = (props) => {
         const id = await addProduto(produtoComImagens);
         if (id) {
             alert(`${produto.nomeProduto} cadastrado com sucesso com ID: ${id}`);
-            props.handlePage("home-fornecedor");
+            props.handlePage("home-fornecedor", { userId: props.userId });
         } else {
             alert("Erro ao cadastrar produto");
         }
