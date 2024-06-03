@@ -37,6 +37,11 @@ const CriarOferta = (props) => {
         } else {
             setOferta({ ...oferta, [name]: value });
         }
+
+        if (name === "quantidadeMinima") {
+            value = parseInt(value, 10);
+            
+        }
     };
 
     const handlePriceChange = (event) => {

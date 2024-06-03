@@ -115,98 +115,191 @@ const Paineis = (props) => {
 
     const renderGrafico = () => {
         let dados;
-
-        // Check data type and process data accordingly based on componenteAtual
+        console.log("componenteAtual ", componenteAtual);
         switch (componenteAtual) {
             case 'produtos':
-                
-                if (listaProdutos.length > 0 && listaProdutos[0] && typeof listaProdutos[0][metricaAtual] === 'number') {
-                    // Numerical data: use the metricaAtual directly and filter out undefined values
-                    dados = listaProdutos
-                        .filter(produto => produto[metricaAtual] !== undefined)
-                        .map(produto => {
-                            const data = {
-                                nome: produto.nomeProduto,
-                                valor: produto[metricaAtual]
-                            };
-                            console.log("produto.nomeProduto ", produto.nomeProduto);
-                            console.log("produto[metricaAtual] ", produto[metricaAtual]);
-                            return data;
-                        });
-                    console.log("dados");
-                    console.log(dados);
-                } else {
-                    // Categorical data: count occurrences of each category
-                    const categorias = {};
-                    listaProdutos.forEach(produto => {
-                        const categoria = produto[metricaAtual];
-                        categorias[categoria] = categorias[categoria] ? categorias[categoria] + 1 : 1;
-                    });
 
-                    // Convert object to array of {nome, valor} pairs
-                    dados = Object.keys(categorias).map(categoria => ({
-                        nome: categoria,
-                        valor: categorias[categoria]
-                    }));
+                if (listaProdutos.length > 0 && listaProdutos[0]) {
+                    if (metricaAtual === 'preco') {
+                        dados = listaProdutos
+                            .filter(produto => produto.preco !== undefined)
+                            .map(produto => {
+                                const precoFloat = parseFloat(produto.preco.replace('R$', '').replace(',', '.'));
+                                const data = {
+                                    nome: produto.nomeProduto,
+                                    valor: precoFloat
+                                };
+
+                                console.log("produto.nomeProduto ", produto.nomeProduto);
+                                console.log("produto.preco ", precoFloat);
+                                return data;
+                            });
+                        console.log("dados");
+                        console.log(dados);
+                    } else if (listaProdutos.length > 0 && typeof listaProdutos[0][metricaAtual] === 'number') {
+
+                        dados = listaProdutos
+                            .filter(produto => produto[metricaAtual] !== undefined)
+                            .map(produto => {
+                                const data = {
+                                    nome: produto.nomeProduto,
+                                    valor: produto[metricaAtual]
+                                };
+                                console.log("produto.nomeProduto ", produto.nomeProduto);
+                                console.log("produto[metricaAtual] ", produto[metricaAtual]);
+                                return data;
+                            });
+                        console.log("dados");
+                        console.log(dados);
+                    } else {
+
+                        const categorias = {};
+                        listaProdutos.forEach(produto => {
+                            const categoria = produto[metricaAtual];
+                            categorias[categoria] = categorias[categoria] ? categorias[categoria] + 1 : 1;
+                        });
+
+
+                        dados = Object.keys(categorias).map(categoria => ({
+                            nome: categoria,
+                            valor: categorias[categoria]
+                        }));
+                    }
                 }
                 break;
             case 'ofertas':
-                // Check if the metricaAtual exists in the first item of listaOfertas
-                if (typeof listaOfertas[0][metricaAtual] === 'number') {
-                    // Numerical data: use the metricaAtual directly and filter out undefined values
-                    dados = listaOfertas
-                        .filter(oferta => oferta[metricaAtual] !== undefined)
-                        .map(oferta => ({
-                            nome: oferta.descricao,
-                            valor: oferta[metricaAtual]
-                        }));
-                } else {
-                    // Categorical data: count occurrences of each category
-                    const categorias = {};
-                    listaOfertas.forEach(oferta => {
-                        const categoria = oferta[metricaAtual];
-                        categorias[categoria] = categorias[categoria] ? categorias[categoria] + 1 : 1;
-                    });
+                console.log("case ofertas ");
 
-                    // Convert object to array of {nome, valor} pairs
-                    dados = Object.keys(categorias).map(categoria => ({
-                        nome: categoria,
-                        valor: categorias[categoria]
-                    }));
+                if (listaOfertas.length > 0 && listaOfertas[0]) {
+                    
+                    if (metricaAtual === 'preco') {
+                        dados = listaOfertas
+                            .filter(oferta => oferta.precoEspecial !== undefined)
+                            .map(oferta => {
+                                const precoFloat = parseFloat(oferta.precoEspecial.replace('R$', '').replace(',', '.'));
+                                const data = {
+                                    nome: oferta.nomeOferta,
+                                    valor: precoFloat
+                                };
+
+                                console.log("oferta.nomeOferta ", oferta.nomeOferta);
+                                console.log("oferta.precoEspecial ", precoFloat);
+                                return data;
+                            });
+                        console.log("dados de oferta");
+                        console.log(dados);
+                    } else if (listaOfertas.length > 0 && typeof listaOfertas[0].produtoRelacionado[metricaAtual] === 'number') {
+
+                        dados = listaOfertas
+                            .filter(oferta => oferta.produtoRelacionado[metricaAtual] !== undefined)
+                            .map(oferta => {
+                                const data = {
+                                    nome: oferta.nomeOferta,
+                                    valor: oferta.produtoRelacionado[metricaAtual]
+                                };
+                                console.log("oferta.nomeOferta ", oferta.nomeOferta);
+                                console.log("oferta[metricaAtual] ", oferta[metricaAtual]);
+                                return data;
+                            });
+                        console.log("dados NUMBER");
+                        console.log(dados);
+                    } else if (typeof listaOfertas[0][metricaAtual] === 'number') {
+
+                        dados = listaOfertas
+                            .filter(oferta => oferta[metricaAtual] !== undefined)
+                            .map(oferta => {
+                                const data = {
+                                    nome: oferta.nomeOferta,
+                                    valor: oferta[metricaAtual]
+                                };
+                                console.log("oferta.nomeOferta ", oferta.nomeOferta);
+                                console.log("oferta[metricaAtual] ", oferta[metricaAtual]);
+                                return data;
+                            });
+                        console.log("dados NUMBER oferta");
+                        console.log(dados);
+                    } else if (metricaAtual === "categoria") {
+                        console.log("CAIU NO ELSE ");
+                        console.log(listaOfertas[0]);
+                        const categorias = {};
+                        listaOfertas.forEach(oferta => {
+                            if (oferta.produtoRelacionado && oferta.produtoRelacionado.categoria) {
+                                const categoria = oferta.produtoRelacionado.categoria;
+                                categorias[categoria] = categorias[categoria] ? categorias[categoria] + 1 : 1;
+                            }
+                        });
+
+                        dados = Object.keys(categorias).map(categoria => ({
+                            nome: categoria,
+                            valor: categorias[categoria]
+                        }));
+                    } else {
+                        console.log("CAIU NO ELSE ");
+                        console.log(listaOfertas[0]);
+                        const situacao = {};
+                        listaOfertas.forEach(oferta => {
+                            if (oferta && oferta.status) {
+                                const categoria = oferta.status;
+                                situacao[categoria] = situacao[categoria] ? situacao[categoria] + 1 : 1;
+                            }
+                        });
+
+                        dados = Object.keys(situacao).map(status => ({
+                            nome: status,
+                            valor: situacao[status]
+                        }));
+
+                        console.log("dados else ");
+                        console.log(dados);
+                    }
                 }
                 break;
-            case 'pedidos':
-                // Check if the metricaAtual exists in the first item of listaPedidos
-                if (typeof listaPedidos[0][metricaAtual] === 'number') {
-                    // Numerical data: use the metricaAtual directly and filter out undefined values
-                    dados = listaPedidos
-                        .filter(pedido => pedido[metricaAtual] !== undefined)
-                        .map(pedido => ({
-                            nome: pedido.id,
-                            valor: pedido[metricaAtual]
-                        }));
-                } else {
-                    // Categorical data: count occurrences of each category
-                    const categorias = {};
-                    listaPedidos.forEach(pedido => {
-                        const categoria = pedido[metricaAtual];
-                        categorias[categoria] = categorias[categoria] ? categorias[categoria] + 1 : 1;
-                    });
 
-                    // Convert object to array of {nome, valor} pairs
-                    dados = Object.keys(categorias).map(categoria => ({
-                        nome: categoria,
-                        valor: categorias[categoria]
-                    }));
+
+            case 'pedidos':
+
+                if (listaPedidos.length > 0 && listaPedidos[0]) {
+                    
+                    if (metricaAtual === 'valorPedido') {
+
+                        dados = listaPedidos
+                            .filter(pedido => pedido[metricaAtual] !== undefined)
+                            .map(pedido => {
+                                const data = {
+                                    nome: pedido.id,
+                                    valor: pedido[metricaAtual]
+                                };
+                                
+                                return data;
+                            });
+                       
+                    } else {
+                        const categorias = {};
+
+                        listaPedidos.forEach(pedido => {
+                            
+                            if (pedido.ofertaRelacionada && Array.isArray(pedido.ofertaRelacionada)) {
+                                pedido.ofertaRelacionada.forEach(oferta => {
+                                    
+                                    if (oferta.produtoRelacionado && oferta.produtoRelacionado.categoria) {
+                                        const categoria = oferta.produtoRelacionado.categoria;
+                                        categorias[categoria] = categorias[categoria] ? categorias[categoria] + 1 : 1;
+                                    }
+                                });
+                            }
+                        });
+
+                        dados = Object.keys(categorias).map(categoria => ({
+                            nome: categoria,
+                            valor: categorias[categoria]
+                        }));
+                    }
                 }
                 break;
             default:
-                dados = []; // Default to an empty array if componenteAtual is not recognized
+                dados = [];
                 break;
         }
-
-        console.log("dados");
-        console.log(dados);
 
         switch (tipoGrafico) {
             case 'bar':
@@ -260,10 +353,10 @@ const Paineis = (props) => {
         <Container>
             <h1 className="text-center">Painel de Informações</h1>
             <Row>
-            <Col xs={12} md={5}>
+                <Col xs={12} md={5}>
                     <ButtonGroup aria-label="Basic example" className="mb-3">
                         <Button variant="warning" onClick={() => props.handlePage("home-fornecedor")} >Voltar</Button>
-                       
+
                     </ButtonGroup>
 
                 </Col>
@@ -275,17 +368,41 @@ const Paineis = (props) => {
                     </ButtonGroup>
 
                 </Col>
-                
+
             </Row>
             <Row>
                 <Col xs={12} md={8}>
                     <ButtonGroup aria-label="Basic example" className="mb-3">
                         <Button variant="info" onClick={() => setMetricaAtual('informacoes')}>Informações</Button>
-                        <Button variant="info" onClick={() => setMetricaAtual('quantidadeVendas')}>Vendas</Button>
-                        <Button variant="info" onClick={() => setMetricaAtual('quantidadeEstoque')}>Estoque</Button>
                         <Button variant="info" onClick={() => setMetricaAtual('categoria')}>Categoria</Button>
-
+                        {componenteAtual !== 'pedidos' && (
+                            <>
+                                <Button variant="info" onClick={() => setMetricaAtual('quantidadeVendas')}>Vendas</Button>
+                                <Button variant="info" onClick={() => setMetricaAtual('quantidadeEstoque')}>Estoque</Button>
+                                <Button variant="info" onClick={() => setMetricaAtual('preco')}>{componenteAtual === 'ofertas' ? 'Preço Especial' : 'Preço'}</Button>
+                            </>
+                        )}
+                        
+                        
+                        {componenteAtual === 'ofertas' && (
+                            <>
+                                <Button variant="info" onClick={() => setMetricaAtual('quantidadeMinima')}>
+                                    Quantidade mínima
+                                </Button>
+                                <Button variant="info" onClick={() => setMetricaAtual('status')}>
+                                    Status
+                                </Button>
+                            </>
+                        )}
+                        {componenteAtual === 'pedidos' && (
+                           
+                                <Button variant="info" onClick={() => setMetricaAtual('valorPedido')}>
+                                    Valor do Pedido
+                                </Button>
+                                
+                        )}
                     </ButtonGroup>
+
                     {componenteAtual === 'produtos' && (
                         <>
                             {metricaAtual === 'informacoes' && listaProdutosCard}
@@ -299,7 +416,7 @@ const Paineis = (props) => {
                     {componenteAtual === 'ofertas' && (
                         <>
                             {metricaAtual === 'informacoes' && listaOfertasCard}
-                            {metricaAtual === 'vendas' && (
+                            {metricaAtual !== 'informacoes' && (
                                 <ResponsiveContainer width="100%" height={400}>
                                     {renderGrafico()}
                                 </ResponsiveContainer>
@@ -309,7 +426,7 @@ const Paineis = (props) => {
                     {componenteAtual === 'pedidos' && (
                         <>
                             {metricaAtual === 'informacoes' && listaPedidosCard}
-                            {metricaAtual === 'vendas' && (
+                            {metricaAtual !== 'informacoes' && (
                                 <ResponsiveContainer width="100%" height={400}>
                                     {renderGrafico()}
                                 </ResponsiveContainer>
@@ -328,7 +445,7 @@ const Paineis = (props) => {
                     </div>
                 </Col>
             </Row>
-        </Container>
+        </Container >
     );
 };
 

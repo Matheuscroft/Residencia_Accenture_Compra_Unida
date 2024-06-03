@@ -101,6 +101,18 @@ export const getPedidos = async () => {
     return querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
 };
 
+export const editarPedido = async (pedidoId, novoPedido) => {
+    try {
+        const pedidoAtual = doc(db, "pedidos", pedidoId);
+    
+        await updateDoc(pedidoAtual, novoPedido);
+        
+        console.log("Pedido atualizado com sucesso!");
+    } catch (e) {
+        console.error("Erro ao atualizar pedido: ", e);
+    }
+};
+
 export const addCarrinho = async (ofertas) => {
     try {
         const docRef = await addDoc(collection(db, "carrinho"), {ofertas});

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import EditarProdutoModal from './EditarProdutoModal';
 import { Container, Row, Col, Button, Card, Alert } from 'react-bootstrap';
-import { getProdutos, getOfertas, deletarProduto, deletarOferta, editarProduto, editarOferta, deletarImagem } from "../auth/firebaseService";
+import { getProdutos, getOfertas, deletarProduto, deletarOferta, editarProduto, editarOferta, deletarImagem, editarPedido, getPedidos } from "../auth/firebaseService";
 
 const HomeFornecedor = (props) => {
     const [listaProdutos, setListaProdutos] = useState([]);
@@ -67,37 +67,54 @@ const HomeFornecedor = (props) => {
     };
 
     const handleSalvarProdutoEditado = async (entidadeEditada) => {
+
         if (entidadeEditada.tipo === "produto") {
+
             await editarProduto(entidadeEditada.id, entidadeEditada);
+
             const novaListaProdutos = listaProdutos.map(produto =>
                 produto.id === entidadeEditada.id ? entidadeEditada : produto
             );
+
             setListaProdutos(novaListaProdutos);
 
             const ofertasRelacionadas = listaOfertas.filter(oferta => oferta.produtoRelacionado.id === entidadeEditada.id);
+
             for (const oferta of ofertasRelacionadas) {
+                
                 const novaOferta = {
                     ...oferta,
                     produtoRelacionado: entidadeEditada
                 };
+
                 await editarOferta(novaOferta.id, novaOferta);
+
                 const novaListaOfertas = listaOfertas.map(ofertaItem =>
                     ofertaItem.id === novaOferta.id ? novaOferta : ofertaItem
                 );
+
                 setListaOfertas(novaListaOfertas);
             }
             setAlertMessage('Produto cadastrado com sucesso!');
+
         } else if (entidadeEditada.tipo === "oferta") {
+
             await editarOferta(entidadeEditada.id, entidadeEditada);
+
             const novaListaOfertas = listaOfertas.map(oferta =>
                 oferta.id === entidadeEditada.id ? entidadeEditada : oferta
             );
-            setListaOfertas(novaListaOfertas);
+
+            setListaOfertas(novaListaOfertas)
+            
             setAlertMessage('Oferta cadastrada com sucesso!');
         }
+
+        
+
         setShowEditarModal(false);
         setShowAlert(true);
-        setTimeout(() => setShowAlert(false), 3000); // Oculta o alerta após 3 segundos
+        setTimeout(() => setShowAlert(false), 3000);
     };
 
     const truncateText = (text, maxLength) => {

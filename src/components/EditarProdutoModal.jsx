@@ -111,6 +111,8 @@ const EditarProdutoModal = ({ entidade, show, onHide, onSave }) => {
             return;
         }
 
+        
+
         onSave(entidadeAtualizada);
     };
 

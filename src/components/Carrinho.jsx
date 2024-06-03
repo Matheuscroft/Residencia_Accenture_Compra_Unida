@@ -34,7 +34,7 @@ const Carrinho = (props) => {
                     props.oferta.forEach(novaOferta => {
                         const ofertaExistente = ofertasAtualizadas.find(oferta => oferta.id === novaOferta.id);
                         if (ofertaExistente) {
-                            // Atualiza a quantidade se for diferente
+                            
                             if (ofertaExistente.quantidadeCarrinho !== novaOferta.quantidadeCarrinho) {
                                 ofertaExistente.quantidadeCarrinho = novaOferta.quantidadeCarrinho;
                             }
@@ -109,8 +109,8 @@ const Carrinho = (props) => {
     };
 
     const handleSubmit = async () => {
-        if (ofertas.length === 0) { // Verifica se o carrinho está vazio
-            setShowAlert(true); // Mostra o alerta
+        if (ofertas.length === 0) { 
+            setShowAlert(true);
             return;
         }
 
@@ -145,10 +145,10 @@ const Carrinho = (props) => {
         const novoPedido = {
             ofertaRelacionada: ofertasAtualizadas.map(item => {
                 const { quantidadeVendaPedidoAtual, ...rest } = item;
-                return { ...rest, quantidadeVendas: quantidadeVendaPedidoAtual };  // Usa a quantidade do pedido atual
+                return { ...rest, quantidadeVendas: quantidadeVendaPedidoAtual };
             }),
             dataDePedido: new Date(),
-            valorPedido: ofertasAtualizadas.reduce((total, item) => total + (parseFloat(item.precoEspecial.replace('R$', '').replace(',', '.')) * item.quantidadeVendaPedidoAtual), 0).toFixed(2)
+            valorPedido: ofertasAtualizadas.reduce((total, item) => total + (parseFloat(item.precoEspecial.replace('R$', '').replace(',', '.')) * item.quantidadeVendaPedidoAtual), 0)
         };
 
         setPedidos([...pedidos, novoPedido]);
