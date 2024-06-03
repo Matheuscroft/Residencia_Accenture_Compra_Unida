@@ -22,15 +22,7 @@ const Login = (props) => {
         if (!email) newErrors.email = "Este campo é obrigatório";
         if (!senha) newErrors.senha = "Este campo é obrigatório";
 
-        /*if (Object.keys(newErrors).length > 0) {
-            setErrors(newErrors);
-        } else {
-            if (userType === "fornecedor") {
-                props.handlePage("home-fornecedor");
-            } else {
-                props.handlePage("home-cliente");
-            }
-        }*/
+        
 
         if (Object.keys(newErrors).length > 0) {
             setErrors(newErrors);
@@ -43,7 +35,7 @@ const Login = (props) => {
                     props.handlePage("home-cliente");
                 }
             } else {
-                console.log("Erro ao fazer login");
+                alert("Senha inválida. Verifique a senha digitada.");
             }
         }
     };
