@@ -36,7 +36,7 @@ const HomeFornecedor = (props) => {
                 }
                 return oferta;
             });
-            const ofertasOrdenadas = ofertas.sort((a, b) => new Date(b.dataCriacao) - new Date(a.dataCriacao));
+            const ofertasOrdenadas = ofertasComData.sort((a, b) => new Date(b.dataCriacao) - new Date(a.dataCriacao));
             setListaOfertas(ofertasOrdenadas);
         };
     
