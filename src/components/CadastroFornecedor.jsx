@@ -31,27 +31,30 @@ const CadastroFornecedor = (props) => {
     const handleSubmit = async (event) => {
         event.preventDefault();
         const newErrors = {};
-
+    
         ['cnpj_mei', 'endereco', 'telefone', 'email', 'senha', 'confirma_senha'].forEach(field => {
             if (!dadosFornecedor[field]) {
                 newErrors[field] = 'Este campo é obrigatório';
             }
         });
-
+    
         if (Object.keys(newErrors).length > 0) {
             setErrors(newErrors);
         } else {
-
-            await register(dadosFornecedor.email, dadosFornecedor.confirma_senha, "fornecedor");
-
-            alert(`${dadosFornecedor.nome} cadastrado com sucesso!`);
-            props.handlePage("login");
+            if (dadosFornecedor.senha.length < 6) {
+                newErrors['senha'] = 'A senha deve ter no mínimo 6 caracteres';
+                setErrors(newErrors);
+            } else {
+                await register(dadosFornecedor.email, dadosFornecedor.confirma_senha, "fornecedor");
+                alert(`${dadosFornecedor.nome} cadastrado com sucesso!`);
+                props.handlePage("login");
+            }
         }
     };
 
     return (
         <Container>
-            <Row className="justify-content-md-center" style={{ marginTop: '100px' }}>
+            <Row className="justify-content-md-center" style={{ marginTop: '50px' }}>
                 <Col xs={12} md={6}>
                     <Card className="text-light" style={{ backgroundColor: '#1c3bc5', borderRadius: '15px', borderColor: '#d4edda' }}>
                         <Card.Body>

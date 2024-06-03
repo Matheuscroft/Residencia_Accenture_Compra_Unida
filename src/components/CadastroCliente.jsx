@@ -40,11 +40,16 @@ const CadastroCliente = (props) => {
         if (Object.keys(novosErros).length > 0) {
             setErrors(novosErros);
         } else {
-            alert(`${dadosCliente.nome} cadastrado com sucesso!`);
+            if (dadosCliente.senha.length < 6) {
+                novosErros['senha'] = 'A senha deve ter no mínimo 6 caracteres';
+                setErrors(novosErros);
+            } else {
+                alert(`${dadosCliente.nome} cadastrado com sucesso!`);
 
-            await register(dadosCliente.email, dadosCliente.confirma_senha, "cliente");
+                await register(dadosCliente.email, dadosCliente.confirma_senha, "cliente");
 
-            props.handlePage("login");
+                props.handlePage("login");
+            }
         }
     };
 
