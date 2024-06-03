@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Form, Button, Container, Row, Col, Card, Alert } from "react-bootstrap";
+import { register } from '../auth/firebaseAuth';
 
 const CadastroCliente = (props) => {
     
@@ -26,20 +27,23 @@ const CadastroCliente = (props) => {
         return value;
     };
 
-    const handleSubmit = (event) => {
+    const handleSubmit = async (event) => {
         event.preventDefault();
-        const newErrors = {};
+        const novosErros = {};
 
         ['cpf', 'endereco', 'telefone', 'email', 'senha', 'confirma_senha'].forEach(field => {
             if (!dadosCliente[field]) {
-                newErrors[field] = 'Este campo é obrigatório';
+                novosErros[field] = 'Este campo é obrigatório';
             }
         });
 
-        if (Object.keys(newErrors).length > 0) {
-            setErrors(newErrors);
+        if (Object.keys(novosErros).length > 0) {
+            setErrors(novosErros);
         } else {
             alert(`${dadosCliente.nome} cadastrado com sucesso!`);
+
+            await register(dadosCliente.email, dadosCliente.confirma_senha, "cliente");
+
             props.handlePage("login");
         }
     };

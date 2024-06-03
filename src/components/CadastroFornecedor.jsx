@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Form, Button, Container, Row, Col, Card, Alert } from "react-bootstrap";
+import { register } from '../auth/firebaseAuth';
 
 const CadastroFornecedor = (props) => {
     const [dadosFornecedor, setDadosFornecedor] = useState({});
@@ -27,7 +28,7 @@ const CadastroFornecedor = (props) => {
         return value;
     };
 
-    const handleSubmit = (event) => {
+    const handleSubmit = async (event) => {
         event.preventDefault();
         const newErrors = {};
 
@@ -40,6 +41,9 @@ const CadastroFornecedor = (props) => {
         if (Object.keys(newErrors).length > 0) {
             setErrors(newErrors);
         } else {
+
+            await register(dadosFornecedor.email, dadosFornecedor.confirma_senha, "fornecedor");
+
             alert(`${dadosFornecedor.nome} cadastrado com sucesso!`);
             props.handlePage("login");
         }

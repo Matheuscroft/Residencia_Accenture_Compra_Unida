@@ -1,6 +1,6 @@
 import { collection, addDoc, getDocs, deleteDoc, doc, updateDoc, query, where } from "firebase/firestore";
 import { getStorage, ref, uploadBytes, getDownloadURL, deleteObject } from "firebase/storage";
-import db from "./firebase";
+import {db} from "./firebase";
 
 const storage = getStorage();
 

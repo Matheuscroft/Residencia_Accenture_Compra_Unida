@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Form, Button, Container, Row, Col, Card, Alert } from "react-bootstrap";
+import { login } from '../auth/firebaseAuth';
 
 const Login = (props) => {
     const [email, setEmail] = useState("");
@@ -14,20 +15,35 @@ const Login = (props) => {
         if (name === "userType") setUserType(value); 
     };
 
-    const handleSubmit = (event) => {
+    const handleSubmit = async (event) => {
         event.preventDefault();
         const newErrors = {};
 
         if (!email) newErrors.email = "Este campo é obrigatório";
         if (!senha) newErrors.senha = "Este campo é obrigatório";
 
-        if (Object.keys(newErrors).length > 0) {
+        /*if (Object.keys(newErrors).length > 0) {
             setErrors(newErrors);
         } else {
             if (userType === "fornecedor") {
                 props.handlePage("home-fornecedor");
             } else {
                 props.handlePage("home-cliente");
+            }
+        }*/
+
+        if (Object.keys(newErrors).length > 0) {
+            setErrors(newErrors);
+        } else {
+            const userType = await login(email, senha);
+            if (userType) {
+                if (userType === "fornecedor") {
+                    props.handlePage("home-fornecedor");
+                } else {
+                    props.handlePage("home-cliente");
+                }
+            } else {
+                console.log("Erro ao fazer login");
             }
         }
     };
