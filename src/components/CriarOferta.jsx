@@ -9,11 +9,13 @@ const CriarOferta = (props) => {
     const [quantidadeEstoque, setQuantidadeEstoque] = useState(0);
 
     useEffect(() => {
+
         const fetchProdutos = async () => {
             const produtos = await getProdutos();
-            setProdutos(produtos);
+            
+            const produtosFiltrados = produtos.filter(produto => produto.userId === props.userId);
+            setProdutos(produtosFiltrados);
         };
-
         fetchProdutos();
     }, []);
 
@@ -23,7 +25,7 @@ const CriarOferta = (props) => {
 
     const handleChange = (event) => {
         const name = event.target.name;
-        const value = event.target.value;
+        let value = event.target.value;
 
         if (name === "dataInicio" && oferta.dataTermino && value > oferta.dataTermino) {
             setOferta({ ...oferta, [name]: value, dataTermino: "" });
@@ -85,13 +87,14 @@ const CriarOferta = (props) => {
             produtoRelacionado: produtoSelecionado,
             quantidadeVendas: 0,
             dataTermino: oferta.dataTermino,
-            dataCriacao: new Date()
+            dataCriacao: new Date(),
+            userId: props.userId
         };
     
         const id = await addOferta(ofertaComProdutoEQntVendas);
         if (id) {
             alert(`${oferta.nomeOferta} cadastrada com sucesso com ID: ${id}`);
-            props.handlePage("home-fornecedor");
+            props.handlePage("home-fornecedor", { userId: props.userId });
         } else {
             alert("Erro ao cadastrar oferta");
         }

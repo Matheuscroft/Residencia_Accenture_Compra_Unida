@@ -9,8 +9,8 @@ const Paineis = (props) => {
     const [listaProdutos, setListaProdutos] = useState([]);
     const [listaOfertas, setListaOfertas] = useState([]);
     const [componenteAtual, setComponenteAtual] = useState('produtos');
-    const [tipoGrafico, setTipoGrafico] = useState('bar'); // 'bar', 'line', 'pie', 'area'
-    const [metricaAtual, setMetricaAtual] = useState('quantidadeEstoque'); // 'vendas', 'estoque', etc.
+    const [tipoGrafico, setTipoGrafico] = useState('bar'); 
+    const [metricaAtual, setMetricaAtual] = useState('quantidadeEstoque'); 
 
 
     useEffect(() => {

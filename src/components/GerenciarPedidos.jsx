@@ -8,8 +8,17 @@ const GerenciarPedidos = (props) => {
     useEffect(() => {
         const fetchPedidos = async () => {
             const pedidos = await getPedidos();
-        
-            const pedidosComData = pedidos.map(pedido => {
+            const userId = props.userId;
+
+            const pedidosFiltrados = pedidos.filter(pedido => {
+
+                if (pedido.userId !== userId) return false;
+
+                pedido.ofertas = pedido.ofertas.filter(oferta => oferta.userId === userId);
+                return pedido.ofertas.length > 0;
+            });
+
+            const pedidosComData = pedidosFiltrados.map(pedido => {
                 if (pedido.dataDePedido && pedido.dataDePedido.seconds) {
                     pedido.dataDePedido = new Date(pedido.dataDePedido.seconds * 1000);
                 } else {
@@ -17,13 +26,14 @@ const GerenciarPedidos = (props) => {
                 }
                 return pedido;
             });
-        
-            const pedidosOrdenados = pedidosComData.sort((a, b) => new Date(b.dataDePedido) - new Date(a.dataDePedido));
+
+            const pedidosOrdenados = pedidosComData.sort((a, b) => b.dataDePedido - a.dataDePedido);
             setListaPedidos(pedidosOrdenados);
         };
-        
+
         fetchPedidos();
-    }, []);
+    }, [/*props.userId*/]);
+
 
     const handleProdutoClick = (produto) => {
         props.handlePage("produto", produto);
@@ -67,19 +77,21 @@ const GerenciarPedidos = (props) => {
 
     return (
         <Container>
-            <h1 className="text-center">Meus Pedidos</h1>
+            <Row>
+                <Col xs={12} md={2}>
+                <Button variant="warning" onClick={() => props.handlePage("home-fornecedor", { userId: props.userId })} className="w-100">Voltar</Button>
+                </Col>
+                <Col xs={12} md={10}>
+                <h1 className="text-center">Gerenciar Pedidos</h1>
+                </Col>
+            </Row>
+            
             <Row>
                 <Col xs={12} md={8}>
                     {listaPedidosLI}
                 </Col>
                 <Col xs={12} md={4}>
-                    <Card>
-                        <Card.Body>
-                            <h5>Resumo</h5>
-                            <p>Total de Pedidos: {listaPedidos.length}</p>
-                            <Button variant="warning" onClick={() => props.handlePage("home-cliente")} className="w-100">Continuar Comprando</Button>
-                        </Card.Body>
-                    </Card>
+                    
                 </Col>
             </Row>
         </Container>

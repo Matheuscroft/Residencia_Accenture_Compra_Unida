@@ -35,12 +35,16 @@ const Login = (props) => {
         if (Object.keys(newErrors).length > 0) {
             setErrors(newErrors);
         } else {
-            const userType = await login(email, senha);
+            const {userType, userId} = await login(email, senha);
             if (userType) {
                 if (userType === "fornecedor") {
-                    props.handlePage("home-fornecedor");
+                    console.log("usertype")
+                    console.log(userType)
+                    console.log("userId")
+                    console.log(userId)
+                    props.handlePage("home-fornecedor", { userId });
                 } else {
-                    props.handlePage("home-cliente");
+                    props.handlePage("home-cliente", { userId });
                 }
             } else {
                 console.log("Erro ao fazer login");
@@ -68,13 +72,7 @@ const Login = (props) => {
                                     {errors.senha && <Alert variant="danger">{errors.senha}</Alert>}
                                 </Form.Group>
 
-                                <Form.Group controlId="userType" className="mb-3">
-                                    <Form.Label className="text-light">Tipo de Usuário</Form.Label>
-                                    <Form.Control as="select" name="userType" value={userType} onChange={handleChange} required>
-                                        <option value="cliente">Cliente</option>
-                                        <option value="fornecedor">Fornecedor</option>
-                                    </Form.Control>
-                                </Form.Group>
+                                
 
                                 <Button type="submit" className="w-100 mt-3" style={{ backgroundColor: '#FFCD46', borderColor: '#FFCD46', color: 'black' }}>Entrar</Button>
                             </Form>

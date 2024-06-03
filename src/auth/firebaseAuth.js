@@ -18,24 +18,23 @@ export const register = async (email, password, userType) => {
 };
 
 export const login = async (email, password) => {
-    try {
+  try {
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
-  
-      
+
       const userDoc = await getDoc(doc(db, 'usuarios', user.uid));
       if (userDoc.exists()) {
-        const userType = userDoc.data().userType;
-        console.log('Usuário logado com sucesso!');
-        return userType;
+          const userType = userDoc.data().userType;
+          console.log('Usuário logado com sucesso!');
+          return { userType, userId: user.uid };
       } else {
-        throw new Error('User not found in Firestore');
+          throw new Error('User not found in Firestore');
       }
-    } catch (error) {
+  } catch (error) {
       console.error('Erro ao logar usuário: ', error);
-      return null;
-    }
-  };
+      return { userType: null, userId: null };
+  }
+};
 
 export const logout = async () => {
   try {

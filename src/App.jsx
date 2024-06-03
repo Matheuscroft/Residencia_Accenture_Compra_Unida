@@ -15,6 +15,7 @@ import Carrinho from './components/Carrinho';
 import MeusPedidos from './components/MeusPedidos';
 import EsqueciSenha from './components/EsqueciSenha';
 import Paineis from './components/Paineis';
+import GerenciarPedidos from './components/GerenciarPedidos';
 
 const App = () => {
     const [carrinho, setCarrinho] = useState([]);
@@ -47,7 +48,7 @@ const App = () => {
             return (
                 <div>
                     <NavegacaoHeader handlePage={handlePage} paginaAtual={paginaAtual.page} />
-                    <HomeFornecedor handlePage={handlePage} />
+                    <HomeFornecedor handlePage={handlePage} userId={paginaAtual.data.userId}/>
                 </div>
             );
         case "cadastro-cliente":
@@ -76,14 +77,14 @@ const App = () => {
             return (
                 <div>
                     <NavegacaoHeader handlePage={handlePage} paginaAtual={paginaAtual.page} />
-                    <CriarOferta handlePage={handlePage} />
+                    <CriarOferta handlePage={handlePage} userId={paginaAtual.data.userId}/>
                 </div>
             );
         case "criar-produto":
             return (
                 <div>
                     <NavegacaoHeader handlePage={handlePage} paginaAtual={paginaAtual.page} />
-                    <CriarProduto handlePage={handlePage} />
+                    <CriarProduto handlePage={handlePage} userId={paginaAtual.data.userId}/>
                 </div>
             );
         case "home-cliente":
@@ -118,14 +119,14 @@ const App = () => {
             return (
                 <div>
                     <NavegacaoHeader handlePage={handlePage} paginaAtual={paginaAtual.page} />
-                    <MeusPedidos handlePage={handlePage} />
+                    <GerenciarPedidos handlePage={handlePage} userId={paginaAtual.data.userId}/>
                 </div>
             );
         case "paineis":
             return (
                 <div>
                     <NavegacaoHeader handlePage={handlePage} paginaAtual={paginaAtual.page} />
-                    <Paineis handlePage={handlePage} />
+                    <Paineis handlePage={handlePage} userId={paginaAtual.data.userId}/>
                 </div>
             );
         default:

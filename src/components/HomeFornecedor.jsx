@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import EditarProdutoModal from './EditarProdutoModal';
 import { Container, Row, Col, Button, Card, Alert } from 'react-bootstrap';
-import { getProdutos, getOfertas, deletarProduto, deletarOferta, editarProduto, editarOferta, deletarImagem, editarPedido, getPedidos } from "../auth/firebaseService";
+import { getProdutos, getOfertas, deletarProduto, deletarOferta, editarProduto, editarOferta, deletarImagem } from "../auth/firebaseService";
 
 const HomeFornecedor = (props) => {
     const [listaProdutos, setListaProdutos] = useState([]);
@@ -22,7 +22,11 @@ const HomeFornecedor = (props) => {
                 }
                 return produto;
             });
-            const produtosOrdenados = produtosComData.sort((a, b) => new Date(b.dataCriacao) - new Date(a.dataCriacao));
+    
+            console.log("props.userId")
+            console.log(props.userId)
+            const produtosFiltrados = produtosComData.filter(produto => produto.userId === props.userId);
+            const produtosOrdenados = produtosFiltrados.sort((a, b) => new Date(b.dataCriacao) - new Date(a.dataCriacao));
             setListaProdutos(produtosOrdenados);
         };
     
@@ -36,13 +40,15 @@ const HomeFornecedor = (props) => {
                 }
                 return oferta;
             });
-            const ofertasOrdenadas = ofertasComData.sort((a, b) => new Date(b.dataCriacao) - new Date(a.dataCriacao));
+    
+            const ofertasFiltradas = ofertasComData.filter(oferta => oferta.userId === props.userId);
+            const ofertasOrdenadas = ofertasFiltradas.sort((a, b) => new Date(b.dataCriacao) - new Date(a.dataCriacao));
             setListaOfertas(ofertasOrdenadas);
         };
     
         fetchProdutos();
         fetchOfertas();
-    }, []);
+    }, [/*props.userId*/]);
     
 
     const excluirItem = async (elementoID, tipo) => {
@@ -178,7 +184,7 @@ const HomeFornecedor = (props) => {
                     <Col className="d-flex justify-content-center">
                         <Button
                             variant="warning"
-                            onClick={() => props.handlePage("gerenciar-pedidos")}
+                            onClick={() => props.handlePage("gerenciar-pedidos", { userId: props.userId })}
                             style={{ marginTop: '20px', width: '100%' }}
                         >
                             Ver Pedidos
@@ -187,7 +193,7 @@ const HomeFornecedor = (props) => {
                     <Col className="d-flex justify-content-center">
                         <Button
                             variant="warning"
-                            onClick={() => props.handlePage("paineis")}
+                            onClick={() => props.handlePage("paineis", { userId: props.userId })}
                             style={{ marginTop: '20px', width: '100%' }}
                         >
                             Painel de Informações
@@ -201,7 +207,7 @@ const HomeFornecedor = (props) => {
                                 <Button
                                     className='botao-cadastrar'
                                     style={{ backgroundColor: '#FFCD46', borderColor: '#FFCD46', color: 'black', width: '50%' }}
-                                    onClick={() => props.handlePage("criar-produto")}
+                                    onClick={() => props.handlePage("criar-produto", { userId: props.userId })}
                                 >
                                     ADICIONAR PRODUTO
                                 </Button>
@@ -218,7 +224,7 @@ const HomeFornecedor = (props) => {
                                 <Button
                                     className='botao-cadastrar'
                                     style={{ backgroundColor: '#FFCD46', borderColor: '#FFCD46', color: 'black', width: '50%' }}
-                                    onClick={() => props.handlePage("criar-oferta")}
+                                    onClick={() => props.handlePage("criar-oferta", { userId: props.userId })}
                                 >
                                     ADICIONAR OFERTA
                                 </Button>
