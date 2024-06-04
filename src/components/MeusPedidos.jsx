@@ -10,14 +10,11 @@ const MeusPedidos = (props) => {
         const fetchPedidos = async () => {
             const pedidos = await getPedidos();
         
-            //const produtosFiltrados = produtos.filter(produto => produto.userId === userId);
-            console.log("pedidos")
-            console.log(pedidos)
             const produtosOrdenados = ordenarPorDataString(pedidos, 'dataDePedido');
             setListaPedidos(produtosOrdenados);
         
             
-            //setListaPedidos(pedidosOrdenados);
+            
         };
         
         fetchPedidos();
@@ -25,6 +22,19 @@ const MeusPedidos = (props) => {
 
     const handleProdutoClick = (produto) => {
         props.handlePage("produto", produto);
+    };
+
+    const definirCorSituacao = (status) => {
+        switch (status) {
+            case 'pendente':
+                return 'warning';
+            case 'Concluído':
+                return 'success';
+            case 'Cancelado':
+                return 'danger';
+            default:
+                return 'secondary';
+        }
     };
 
     const listaPedidosLI = listaPedidos.map((pedido) => (
@@ -44,18 +54,24 @@ const MeusPedidos = (props) => {
                                 <img src={oferta.produtoRelacionado.imagens[0]} alt={oferta.produtoRelacionado.nomeProduto} style={{ width: '100%' }} />
                             )}
                         </Col>
-                        <Col xs={4}>
+                        <Col xs={2}>
                             <h5>{oferta.produtoRelacionado.nomeProduto}</h5>
                             <p>{oferta.descricao}</p>
                         </Col>
-                        <Col xs={1}>
+                        <Col xs={2}>
                             <p>{oferta.precoEspecial}</p>
                         </Col>
-                        <Col xs={1}>
+                        <Col xs={2}>
                             <p>Qtd: {oferta.quantidadeVendas}</p>
                         </Col>
                         <Col xs={2}>
-                            <p>Situação: {oferta.status}</p>
+                            <Card bg={definirCorSituacao(oferta.status)} class="card" style={{ width: '150px' }} text="white" className="text-center">
+                                <Card.Body>
+                                    <Card.Text>
+                                        Situação: {oferta.status}
+                                    </Card.Text>
+                                </Card.Body>
+                            </Card>
                         </Col>
                     </Row>
                 ))}
