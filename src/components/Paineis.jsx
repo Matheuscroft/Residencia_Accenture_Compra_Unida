@@ -3,17 +3,19 @@ import { Container, Row, Col, Card, Button, ButtonGroup } from 'react-bootstrap'
 import { getPedidos, getProdutos, getOfertas } from '../auth/firebaseService';
 import { format } from 'date-fns';
 import { BarChart, Bar, LineChart, Line, PieChart, Pie, AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import { sortObjectProperties, sortArrayObjectsProperties } from './Utils'
 
 const Paineis = (props) => {
     const [listaPedidos, setListaPedidos] = useState([]);
     const [listaProdutos, setListaProdutos] = useState([]);
     const [listaOfertas, setListaOfertas] = useState([]);
     const [componenteAtual, setComponenteAtual] = useState('produtos');
-    const [tipoGrafico, setTipoGrafico] = useState('bar'); 
-    const [metricaAtual, setMetricaAtual] = useState('quantidadeEstoque'); 
+    const [tipoGrafico, setTipoGrafico] = useState('bar');
+    const [metricaAtual, setMetricaAtual] = useState('quantidadeEstoque');
 
 
     useEffect(() => {
+        const userId = props.userId
         const fetchProdutos = async () => {
             const produtos = await getProdutos();
             const produtosComData = produtos.map(produto => {
@@ -24,8 +26,13 @@ const Paineis = (props) => {
                 }
                 return produto;
             });
-            const produtosOrdenados = produtosComData.sort((a, b) => new Date(b.dataCriacao) - new Date(a.dataCriacao));
-            setListaProdutos(produtosOrdenados);
+
+            const produtosFiltrados = produtosComData.filter(produto => produto.userId === userId);
+
+            const produtosOrdenados = produtosFiltrados.sort((a, b) => new Date(b.dataCriacao) - new Date(a.dataCriacao));
+
+            const produtosComPropsOrdenadas = sortArrayObjectsProperties(produtosOrdenados);
+            setListaProdutos(produtosComPropsOrdenadas);
         };
 
         const fetchOfertas = async () => {
@@ -38,15 +45,30 @@ const Paineis = (props) => {
                 }
                 return oferta;
             });
-            const ofertasOrdenadas = ofertas.sort((a, b) => new Date(b.dataCriacao) - new Date(a.dataCriacao));
-            setListaOfertas(ofertasOrdenadas);
+
+            const ofertasFiltradas = ofertasComData.filter(oferta => oferta.userId === userId);
+
+            const ofertasOrdenadas = ofertasFiltradas.sort((a, b) => new Date(b.dataCriacao) - new Date(a.dataCriacao));
+
+            const ofertasComPropsOrdenadas = sortArrayObjectsProperties(ofertasOrdenadas);
+            setListaOfertas(ofertasComPropsOrdenadas);
         };
 
         fetchProdutos();
         fetchOfertas();
         const fetchPedidos = async () => {
             const pedidos = await getPedidos();
-            setListaPedidos(pedidos);
+
+            // Filtra pedidos com ofertas relacionadas ao userId do usuário logado
+            const pedidosFiltrados = pedidos.filter(pedido => {
+                const ofertasFiltradas = pedido.ofertaRelacionada.filter(oferta => oferta.userId === userId);
+                if (ofertasFiltradas.length === 0) return false;
+                pedido.ofertaRelacionada = ofertasFiltradas;
+                return true;
+            });
+
+            const pedidosComPropsOrdenadas = sortArrayObjectsProperties(pedidosFiltrados);
+            setListaPedidos(pedidosComPropsOrdenadas);
         };
         fetchPedidos();
     }, []);
@@ -171,7 +193,7 @@ const Paineis = (props) => {
                 console.log("case ofertas ");
 
                 if (listaOfertas.length > 0 && listaOfertas[0]) {
-                    
+
                     if (metricaAtual === 'preco') {
                         dados = listaOfertas
                             .filter(oferta => oferta.precoEspecial !== undefined)
@@ -259,7 +281,7 @@ const Paineis = (props) => {
             case 'pedidos':
 
                 if (listaPedidos.length > 0 && listaPedidos[0]) {
-                    
+
                     if (metricaAtual === 'valorPedido') {
 
                         dados = listaPedidos
@@ -269,18 +291,18 @@ const Paineis = (props) => {
                                     nome: pedido.id,
                                     valor: pedido[metricaAtual]
                                 };
-                                
+
                                 return data;
                             });
-                       
+
                     } else {
                         const categorias = {};
 
                         listaPedidos.forEach(pedido => {
-                            
+
                             if (pedido.ofertaRelacionada && Array.isArray(pedido.ofertaRelacionada)) {
                                 pedido.ofertaRelacionada.forEach(oferta => {
-                                    
+
                                     if (oferta.produtoRelacionado && oferta.produtoRelacionado.categoria) {
                                         const categoria = oferta.produtoRelacionado.categoria;
                                         categorias[categoria] = categorias[categoria] ? categorias[categoria] + 1 : 1;
@@ -355,7 +377,7 @@ const Paineis = (props) => {
             <Row>
                 <Col xs={12} md={5}>
                     <ButtonGroup aria-label="Basic example" className="mb-3">
-                        <Button variant="warning" onClick={() => props.handlePage("home-fornecedor")} >Voltar</Button>
+                        <Button variant="warning" onClick={() => props.handlePage("home-fornecedor", { userId: props.userId })} >Voltar</Button>
 
                     </ButtonGroup>
 
@@ -382,8 +404,8 @@ const Paineis = (props) => {
                                 <Button variant="info" onClick={() => setMetricaAtual('preco')}>{componenteAtual === 'ofertas' ? 'Preço Especial' : 'Preço'}</Button>
                             </>
                         )}
-                        
-                        
+
+
                         {componenteAtual === 'ofertas' && (
                             <>
                                 <Button variant="info" onClick={() => setMetricaAtual('quantidadeMinima')}>
@@ -395,11 +417,11 @@ const Paineis = (props) => {
                             </>
                         )}
                         {componenteAtual === 'pedidos' && (
-                           
-                                <Button variant="info" onClick={() => setMetricaAtual('valorPedido')}>
-                                    Valor do Pedido
-                                </Button>
-                                
+
+                            <Button variant="info" onClick={() => setMetricaAtual('valorPedido')}>
+                                Valor do Pedido
+                            </Button>
+
                         )}
                     </ButtonGroup>
 

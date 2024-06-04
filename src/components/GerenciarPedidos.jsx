@@ -10,13 +10,28 @@ const GerenciarPedidos = (props) => {
             const pedidos = await getPedidos();
             const userId = props.userId;
 
+            console.log("to no fetch do ger pedidos")
+
+            console.log("pedidos")
+            console.log(pedidos)
+
             const pedidosFiltrados = pedidos.filter(pedido => {
 
-                if (pedido.userId !== userId) return false;
 
-                pedido.ofertas = pedido.ofertas.filter(oferta => oferta.userId === userId);
-                return pedido.ofertas.length > 0;
+
+                // Verifica se alguma oferta dentro de ofertaRelacionada tem o userId correspondente
+                const ofertasFiltradas = pedido.ofertaRelacionada.filter(oferta => oferta.userId === userId);
+
+                // Se nenhuma oferta dentro de ofertaRelacionada tem o userId correspondente, retorna false
+                if (ofertasFiltradas.length === 0) return false;
+
+                // Atualiza ofertaRelacionada com as ofertas filtradas
+                pedido.ofertaRelacionada = ofertasFiltradas;
+                return true;
             });
+
+            console.log("pedidosFiltrados")
+            console.log(pedidosFiltrados)
 
             const pedidosComData = pedidosFiltrados.map(pedido => {
                 if (pedido.dataDePedido && pedido.dataDePedido.seconds) {
@@ -79,19 +94,19 @@ const GerenciarPedidos = (props) => {
         <Container>
             <Row>
                 <Col xs={12} md={2}>
-                <Button variant="warning" onClick={() => props.handlePage("home-fornecedor", { userId: props.userId })} className="w-100">Voltar</Button>
+                    <Button variant="warning" onClick={() => props.handlePage("home-fornecedor", { userId: props.userId })} className="w-100">Voltar</Button>
                 </Col>
                 <Col xs={12} md={10}>
-                <h1 className="text-center">Gerenciar Pedidos</h1>
+                    <h1 className="text-center">Gerenciar Pedidos</h1>
                 </Col>
             </Row>
-            
+
             <Row>
                 <Col xs={12} md={8}>
                     {listaPedidosLI}
                 </Col>
                 <Col xs={12} md={4}>
-                    
+
                 </Col>
             </Row>
         </Container>
