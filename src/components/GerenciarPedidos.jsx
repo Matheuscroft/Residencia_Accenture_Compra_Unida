@@ -19,14 +19,14 @@ const GerenciarPedidos = (props) => {
 
 
 
-                // Verifica se alguma oferta dentro de ofertaRelacionada tem o userId correspondente
-                const ofertasFiltradas = pedido.ofertaRelacionada.filter(oferta => oferta.userId === userId);
+                // Verifica se alguma oferta dentro de ofertasRelacionadas tem o userId correspondente
+                const ofertasFiltradas = pedido.ofertasRelacionadas.filter(oferta => oferta.userId === userId);
 
-                // Se nenhuma oferta dentro de ofertaRelacionada tem o userId correspondente, retorna false
+                // Se nenhuma oferta dentro de ofertasRelacionadas tem o userId correspondente, retorna false
                 if (ofertasFiltradas.length === 0) return false;
 
-                // Atualiza ofertaRelacionada com as ofertas filtradas
-                pedido.ofertaRelacionada = ofertasFiltradas;
+                // Atualiza ofertasRelacionadas com as ofertas filtradas
+                pedido.ofertasRelacionadas = ofertasFiltradas;
                 return true;
             });
 
@@ -64,7 +64,7 @@ const GerenciarPedidos = (props) => {
                 </div>
             </Card.Header>
             <Card.Body>
-                {pedido.ofertaRelacionada.map((oferta, index) => (
+                {pedido.ofertasRelacionadas.map((oferta, index) => (
                     <Row key={index} className="mb-3 align-items-center" onClick={() => handleProdutoClick(oferta.produtoRelacionado)} style={{ cursor: 'pointer' }}>
                         <Col xs={2}>
                             {oferta.produtoRelacionado.imagens && oferta.produtoRelacionado.imagens.length > 0 && (

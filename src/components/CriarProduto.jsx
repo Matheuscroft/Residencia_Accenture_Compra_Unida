@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Form, Button, Container, Row, Col, Card } from "react-bootstrap";
 import { addProduto, uploadImagem } from "../auth/firebaseService";
+import {formatarDataString} from "./Utils"
 
 const CriarProduto = (props) => {
     const [produto, setProduto] = useState({});
@@ -44,10 +45,10 @@ const CriarProduto = (props) => {
             return;
         }
 
-        const produtoComPrecoEData = {
+        const produtoAtualizado = {
             ...produto,
             preco: produto.preco,
-            dataCriacao: new Date(),
+            dataCriacao: formatarDataString(new Date()),
             quantidadeVendas: 0,
             userId: props.userId
         };
@@ -56,7 +57,7 @@ const CriarProduto = (props) => {
         console.log(props.userId)
 
         const imagemUrls = await Promise.all(imagens.map(file => uploadImagem(file)));
-        const produtoComImagens = { ...produtoComPrecoEData, imagens: imagemUrls };
+        const produtoComImagens = { ...produtoAtualizado, imagens: imagemUrls };
 
         const id = await addProduto(produtoComImagens);
         if (id) {
@@ -89,10 +90,10 @@ const CriarProduto = (props) => {
                                     <Form.Label className="text-light">Categoria</Form.Label>
                                     <Form.Control as="select" name="categoria" value={produto.categoria || "default"} onChange={handleChange} required>
                                         <option value="default">Selecione uma categoria</option>
-                                        <option value="alimentacao">Alimentação</option>
-                                        <option value="vestuario">Vestuário</option>
-                                        <option value="racao">Ração</option>
-                                        <option value="bebidas">Bebidas</option>
+                                        <option value="Alimentação">Alimentação</option>
+                                        <option value="Vestuário">Vestuário</option>
+                                        <option value="Ração">Ração</option>
+                                        <option value="Bebidas">Bebidas</option>
                                     </Form.Control>
                                 </Form.Group>
 

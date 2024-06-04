@@ -39,7 +39,7 @@ const MeusPedidos = (props) => {
                 </div>
             </Card.Header>
             <Card.Body>
-                {pedido.ofertaRelacionada.map((oferta, index) => (
+                {pedido.ofertasRelacionadas.map((oferta, index) => (
                     <Row key={index} className="mb-3 align-items-center" onClick={() => handleProdutoClick(oferta.produtoRelacionado)} style={{ cursor: 'pointer' }}>
                         <Col xs={2}>
                             {oferta.produtoRelacionado.imagens && oferta.produtoRelacionado.imagens.length > 0 && (

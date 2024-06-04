@@ -74,8 +74,10 @@ const HomeFornecedor = (props) => {
 
     const handleSalvarProdutoEditado = async (entidadeEditada) => {
 
+  
         if (entidadeEditada.tipo === "produto") {
 
+          
             await editarProduto(entidadeEditada.id, entidadeEditada);
 
             const novaListaProdutos = listaProdutos.map(produto =>
@@ -110,6 +112,9 @@ const HomeFornecedor = (props) => {
             const novaListaOfertas = listaOfertas.map(oferta =>
                 oferta.id === entidadeEditada.id ? entidadeEditada : oferta
             );
+
+            console.log("novaListaOfertas")
+            console.log(novaListaOfertas)
 
             setListaOfertas(novaListaOfertas)
             

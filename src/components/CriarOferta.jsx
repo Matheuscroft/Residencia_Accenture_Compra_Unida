@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Form, Button, Container, Row, Col, Card } from "react-bootstrap";
 import { addOferta, getProdutos } from "../auth/firebaseService";
-import {todayWithoutTimezone} from "./Utils.js";
+import {todayWithoutTimezone, formatarDataString} from "./Utils.js";
 
 const CriarOferta = (props) => {
     const [oferta, setOferta] = useState({});
@@ -87,7 +87,7 @@ const CriarOferta = (props) => {
             produtoRelacionado: produtoSelecionado,
             quantidadeVendas: 0,
             dataTermino: oferta.dataTermino,
-            dataCriacao: new Date(),
+            dataCriacao: formatarDataString(new Date()),
             userId: props.userId
         };
     

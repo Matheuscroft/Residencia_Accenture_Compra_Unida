@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Modal, Button, Form } from 'react-bootstrap';
 import { getProdutos, uploadImagem } from "../auth/firebaseService";
+import {formatarDataString} from "./Utils"
 
 const EditarProdutoModal = ({ entidade, show, onHide, onSave }) => {
     const [entidadeEditada, setEntidadeEditada] = useState({ ...entidade });
@@ -98,8 +99,11 @@ const EditarProdutoModal = ({ entidade, show, onHide, onSave }) => {
                     ...entidadeAtualizada,
                     imagens: entidade.imagens,
                 };
+
+                
             }
         }
+       
 
         if (entidade.tipo === "oferta" && entidadeEditada.dataTermino && entidadeEditada.dataInicio > entidadeEditada.dataTermino) {
             alert("A data de término deve ser maior que a data de início!");

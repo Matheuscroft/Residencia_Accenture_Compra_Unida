@@ -3,7 +3,7 @@ import { Container, Row, Col, Card, Button, ButtonGroup } from 'react-bootstrap'
 import { getPedidos, getProdutos, getOfertas } from '../auth/firebaseService';
 import { format } from 'date-fns';
 import { BarChart, Bar, LineChart, Line, PieChart, Pie, AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
-import { sortObjectProperties, sortArrayObjectsProperties } from './Utils'
+import { ordenarPropriedadesObjeto, ordenarArrayPropriedadesObjeto, ordernarPorDataString } from './Utils'
 
 const Paineis = (props) => {
     const [listaPedidos, setListaPedidos] = useState([]);
@@ -16,41 +16,22 @@ const Paineis = (props) => {
 
     useEffect(() => {
         const userId = props.userId
+
         const fetchProdutos = async () => {
             const produtos = await getProdutos();
-            const produtosComData = produtos.map(produto => {
-                if (produto.dataCriacao && produto.dataCriacao.seconds) {
-                    produto.dataCriacao = new Date(produto.dataCriacao.seconds * 1000);
-                } else {
-                    produto.dataCriacao = new Date(produto.dataCriacao);
-                }
-                return produto;
-            });
-
-            const produtosFiltrados = produtosComData.filter(produto => produto.userId === userId);
-
-            const produtosOrdenados = produtosFiltrados.sort((a, b) => new Date(b.dataCriacao) - new Date(a.dataCriacao));
-
-            const produtosComPropsOrdenadas = sortArrayObjectsProperties(produtosOrdenados);
+            const produtosFiltrados = produtos.filter(produto => produto.userId === userId);
+            const produtosOrdenados = ordernarPorDataString(produtosFiltrados, 'dataCriacao');
+            const produtosComPropsOrdenadas = ordenarArrayPropriedadesObjeto(produtosOrdenados);
             setListaProdutos(produtosComPropsOrdenadas);
         };
 
         const fetchOfertas = async () => {
             const ofertas = await getOfertas();
-            const ofertasComData = ofertas.map(oferta => {
-                if (oferta.dataCriacao && oferta.dataCriacao.seconds) {
-                    oferta.dataCriacao = new Date(oferta.dataCriacao.seconds * 1000);
-                } else {
-                    oferta.dataCriacao = new Date(oferta.dataCriacao);
-                }
-                return oferta;
-            });
+            const ofertasFiltradas = ofertas.filter(oferta => oferta.userId === userId);
 
-            const ofertasFiltradas = ofertasComData.filter(oferta => oferta.userId === userId);
+            const ofertasOrdenadas = ordernarPorDataString(ofertasFiltradas, 'dataCriacao');
 
-            const ofertasOrdenadas = ofertasFiltradas.sort((a, b) => new Date(b.dataCriacao) - new Date(a.dataCriacao));
-
-            const ofertasComPropsOrdenadas = sortArrayObjectsProperties(ofertasOrdenadas);
+            const ofertasComPropsOrdenadas = ordenarArrayPropriedadesObjeto(ofertasOrdenadas);
             setListaOfertas(ofertasComPropsOrdenadas);
         };
 
@@ -60,15 +41,15 @@ const Paineis = (props) => {
             const pedidos = await getPedidos();
 
             // Filtra pedidos com ofertas relacionadas ao userId do usuário logado
-            const pedidosFiltrados = pedidos.filter(pedido => {
-                const ofertasFiltradas = pedido.ofertaRelacionada.filter(oferta => oferta.userId === userId);
+           /* const pedidosFiltrados = pedidos.filter(pedido => {
+                const ofertasFiltradas = pedido.ofertasRelacionadas.filter(oferta => oferta.userId === userId);
                 if (ofertasFiltradas.length === 0) return false;
-                pedido.ofertaRelacionada = ofertasFiltradas;
+                pedido.ofertasRelacionadas = ofertasFiltradas;
                 return true;
             });
 
-            const pedidosComPropsOrdenadas = sortArrayObjectsProperties(pedidosFiltrados);
-            setListaPedidos(pedidosComPropsOrdenadas);
+            const pedidosComPropsOrdenadas = ordenarArrayPropriedadesObjeto(pedidosFiltrados);
+            setListaPedidos(pedidosComPropsOrdenadas);*/
         };
         fetchPedidos();
     }, []);
@@ -85,7 +66,7 @@ const Paineis = (props) => {
             <p>Data de Pedido: {formatarData(pedido.dataDePedido)}</p>
             <p>Valor do Pedido: R$ {pedido.valorPedido}</p>
             <ul>
-                {pedido.ofertaRelacionada.map((oferta, index) => (
+                {pedido.ofertasRelacionadas.map((oferta, index) => (
                     <li key={index} style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "10px" }}>
                         {oferta.produtoRelacionado.imagens && oferta.produtoRelacionado.imagens.length > 0 && (
                             <img src={oferta.produtoRelacionado.imagens[0]} alt={oferta.produtoRelacionado.nomeProduto} style={{ width: "100px", height: "100px", marginRight: "10px" }} />
@@ -300,8 +281,8 @@ const Paineis = (props) => {
 
                         listaPedidos.forEach(pedido => {
 
-                            if (pedido.ofertaRelacionada && Array.isArray(pedido.ofertaRelacionada)) {
-                                pedido.ofertaRelacionada.forEach(oferta => {
+                            if (pedido.ofertasRelacionadas && Array.isArray(pedido.ofertasRelacionadas)) {
+                                pedido.ofertasRelacionadas.forEach(oferta => {
 
                                     if (oferta.produtoRelacionado && oferta.produtoRelacionado.categoria) {
                                         const categoria = oferta.produtoRelacionado.categoria;

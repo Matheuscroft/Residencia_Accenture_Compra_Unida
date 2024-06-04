@@ -143,7 +143,7 @@ const Carrinho = (props) => {
         }
 
         const novoPedido = {
-            ofertaRelacionada: ofertasAtualizadas.map(item => {
+            ofertasRelacionadas: ofertasAtualizadas.map(item => {
                 const { quantidadeVendaPedidoAtual, ...rest } = item;
                 return { ...rest, quantidadeVendas: quantidadeVendaPedidoAtual };
             }),
@@ -155,7 +155,7 @@ const Carrinho = (props) => {
 
         const id = await addPedido(novoPedido);
         if (id) {
-            alert(`${novoPedido.ofertaRelacionada[0].nomeOferta} cadastrado com sucesso com ID: ${id}`);
+            alert(`${novoPedido.ofertasRelacionadas[0].nomeOferta} cadastrado com sucesso com ID: ${id}`);
             props.handlePage("meus-pedidos");
         } else {
             alert("Erro ao cadastrar pedido");
