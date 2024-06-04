@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useMemo } from 'react';
 import { Container, Row, Col, Card, Button, Form, Alert } from 'react-bootstrap';
 import { addPedido, updateCarrinho, getCarrinho, addCarrinho, editarOferta, getProdutos, editarProduto } from '../auth/firebaseService';
+import {formatarDataString} from './Utils'
 
 const Carrinho = (props) => {
     const [pedidos, setPedidos] = useState([]);
@@ -147,9 +148,12 @@ const Carrinho = (props) => {
                 const { quantidadeVendaPedidoAtual, ...rest } = item;
                 return { ...rest, quantidadeVendas: quantidadeVendaPedidoAtual };
             }),
-            dataDePedido: new Date(),
+            dataDePedido: formatarDataString(new Date()),
             valorPedido: ofertasAtualizadas.reduce((total, item) => total + (parseFloat(item.precoEspecial.replace('R$', '').replace(',', '.')) * item.quantidadeVendaPedidoAtual), 0)
         };
+
+        console.log("novoPedido")
+        console.log(novoPedido)
 
         setPedidos([...pedidos, novoPedido]);
 

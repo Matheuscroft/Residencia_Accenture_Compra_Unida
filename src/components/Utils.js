@@ -42,6 +42,6 @@ const converterStringParaDate = (dateString) => {
   return new Date(ano, mes - 1, dia, horas, minutos, segundos);
 };
 
-export const ordernarPorDataString = (arr, dateKey) => {
+export const ordenarPorDataString = (arr, dateKey) => {
   return arr.sort((a, b) => converterStringParaDate(b[dateKey]) - converterStringParaDate(a[dateKey]));
 };

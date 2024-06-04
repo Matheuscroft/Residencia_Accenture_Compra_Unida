@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Container, Row, Col, Card, Button } from 'react-bootstrap';
 import { getPedidos } from '../auth/firebaseService';
+import { ordenarPorDataString } from './Utils';
 
 const MeusPedidos = (props) => {
     const [listaPedidos, setListaPedidos] = useState([]);
@@ -9,17 +10,14 @@ const MeusPedidos = (props) => {
         const fetchPedidos = async () => {
             const pedidos = await getPedidos();
         
-            const pedidosComData = pedidos.map(pedido => {
-                if (pedido.dataDePedido && pedido.dataDePedido.seconds) {
-                    pedido.dataDePedido = new Date(pedido.dataDePedido.seconds * 1000);
-                } else {
-                    pedido.dataDePedido = new Date(pedido.dataDePedido);
-                }
-                return pedido;
-            });
+            //const produtosFiltrados = produtos.filter(produto => produto.userId === userId);
+            console.log("pedidos")
+            console.log(pedidos)
+            const produtosOrdenados = ordenarPorDataString(pedidos, 'dataDePedido');
+            setListaPedidos(produtosOrdenados);
         
-            const pedidosOrdenados = pedidosComData.sort((a, b) => new Date(b.dataDePedido) - new Date(a.dataDePedido));
-            setListaPedidos(pedidosOrdenados);
+            
+            //setListaPedidos(pedidosOrdenados);
         };
         
         fetchPedidos();
@@ -34,7 +32,7 @@ const MeusPedidos = (props) => {
             <Card.Header>
                 <div>
                     <h4>Pedido: {pedido.id}</h4>
-                    <p>Data do Pedido: {pedido.dataDePedido.toLocaleDateString('pt-BR')}</p>
+                    <p>Data do Pedido: {pedido.dataDePedido}</p>
                     <p>Valor do Pedido: R$ {pedido.valorPedido}</p>
                 </div>
             </Card.Header>

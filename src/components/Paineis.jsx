@@ -3,7 +3,7 @@ import { Container, Row, Col, Card, Button, ButtonGroup } from 'react-bootstrap'
 import { getPedidos, getProdutos, getOfertas } from '../auth/firebaseService';
 import { format } from 'date-fns';
 import { BarChart, Bar, LineChart, Line, PieChart, Pie, AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
-import { ordenarPropriedadesObjeto, ordenarArrayPropriedadesObjeto, ordernarPorDataString } from './Utils'
+import { ordenarPropriedadesObjeto, ordenarArrayPropriedadesObjeto, ordenarPorDataString } from './Utils'
 
 const Paineis = (props) => {
     const [listaPedidos, setListaPedidos] = useState([]);
@@ -20,7 +20,7 @@ const Paineis = (props) => {
         const fetchProdutos = async () => {
             const produtos = await getProdutos();
             const produtosFiltrados = produtos.filter(produto => produto.userId === userId);
-            const produtosOrdenados = ordernarPorDataString(produtosFiltrados, 'dataCriacao');
+            const produtosOrdenados = ordenarPorDataString(produtosFiltrados, 'dataCriacao');
             const produtosComPropsOrdenadas = ordenarArrayPropriedadesObjeto(produtosOrdenados);
             setListaProdutos(produtosComPropsOrdenadas);
         };
@@ -29,7 +29,7 @@ const Paineis = (props) => {
             const ofertas = await getOfertas();
             const ofertasFiltradas = ofertas.filter(oferta => oferta.userId === userId);
 
-            const ofertasOrdenadas = ordernarPorDataString(ofertasFiltradas, 'dataCriacao');
+            const ofertasOrdenadas = ordenarPorDataString(ofertasFiltradas, 'dataCriacao');
 
             const ofertasComPropsOrdenadas = ordenarArrayPropriedadesObjeto(ofertasOrdenadas);
             setListaOfertas(ofertasComPropsOrdenadas);

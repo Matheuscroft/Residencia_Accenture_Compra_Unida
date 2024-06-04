@@ -17,8 +17,6 @@ const GerenciarPedidos = (props) => {
 
             const pedidosFiltrados = pedidos.filter(pedido => {
 
-
-
                 // Verifica se alguma oferta dentro de ofertasRelacionadas tem o userId correspondente
                 const ofertasFiltradas = pedido.ofertasRelacionadas.filter(oferta => oferta.userId === userId);
 

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import EditarProdutoModal from './EditarProdutoModal';
 import { Container, Row, Col, Button, Card, Alert } from 'react-bootstrap';
 import { getProdutos, getOfertas, deletarProduto, deletarOferta, editarProduto, editarOferta, deletarImagem } from "../auth/firebaseService";
+import {ordenarPorDataString} from "./Utils"
 
 const HomeFornecedor = (props) => {
     const [listaProdutos, setListaProdutos] = useState([]);
@@ -12,37 +13,19 @@ const HomeFornecedor = (props) => {
     const [alertMessage, setAlertMessage] = useState('');
 
     useEffect(() => {
+        const userId = props.userId;
+
         const fetchProdutos = async () => {
             const produtos = await getProdutos();
-            const produtosComData = produtos.map(produto => {
-                if (produto.dataCriacao && produto.dataCriacao.seconds) {
-                    produto.dataCriacao = new Date(produto.dataCriacao.seconds * 1000);
-                } else {
-                    produto.dataCriacao = new Date(produto.dataCriacao);
-                }
-                return produto;
-            });
-    
-            console.log("props.userId")
-            console.log(props.userId)
-            const produtosFiltrados = produtosComData.filter(produto => produto.userId === props.userId);
-            const produtosOrdenados = produtosFiltrados.sort((a, b) => new Date(b.dataCriacao) - new Date(a.dataCriacao));
+            const produtosFiltrados = produtos.filter(produto => produto.userId === userId);
+            const produtosOrdenados = ordenarPorDataString(produtosFiltrados, 'dataCriacao');
             setListaProdutos(produtosOrdenados);
         };
     
         const fetchOfertas = async () => {
             const ofertas = await getOfertas();
-            const ofertasComData = ofertas.map(oferta => {
-                if (oferta.dataCriacao && oferta.dataCriacao.seconds) {
-                    oferta.dataCriacao = new Date(oferta.dataCriacao.seconds * 1000);
-                } else {
-                    oferta.dataCriacao = new Date(oferta.dataCriacao);
-                }
-                return oferta;
-            });
-    
-            const ofertasFiltradas = ofertasComData.filter(oferta => oferta.userId === props.userId);
-            const ofertasOrdenadas = ofertasFiltradas.sort((a, b) => new Date(b.dataCriacao) - new Date(a.dataCriacao));
+            const ofertasFiltradas = ofertas.filter(oferta => oferta.userId === userId);
+            const ofertasOrdenadas = ordenarPorDataString(ofertasFiltradas, 'dataCriacao');
             setListaOfertas(ofertasOrdenadas);
         };
     
@@ -77,6 +60,8 @@ const HomeFornecedor = (props) => {
   
         if (entidadeEditada.tipo === "produto") {
 
+            console.log("entrou em produto")
+            console.log(entidadeEditada)
           
             await editarProduto(entidadeEditada.id, entidadeEditada);
 

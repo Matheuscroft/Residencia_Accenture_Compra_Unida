@@ -97,7 +97,7 @@ const EditarProdutoModal = ({ entidade, show, onHide, onSave }) => {
 
                 entidadeAtualizada = {
                     ...entidadeAtualizada,
-                    imagens: entidade.imagens,
+                    imagens: entidade.imagens
                 };
 
                 
@@ -116,7 +116,8 @@ const EditarProdutoModal = ({ entidade, show, onHide, onSave }) => {
         }
 
         
-
+        console.log("ates do onsave")
+        console.log(entidadeAtualizada)
         onSave(entidadeAtualizada);
     };
 
