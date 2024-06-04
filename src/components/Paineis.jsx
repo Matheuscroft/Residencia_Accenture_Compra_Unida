@@ -39,18 +39,32 @@ const Paineis = (props) => {
         fetchOfertas();
         const fetchPedidos = async () => {
             const pedidos = await getPedidos();
-
+        
             // Filtra pedidos com ofertas relacionadas ao userId do usuário logado
-            const pedidosFiltrados = pedidos.filter(pedido => {
+            const pedidosFiltrados = pedidos.map(pedido => {
                 const ofertasFiltradas = pedido.ofertasRelacionadas.filter(oferta => oferta.userId === userId);
-                if (ofertasFiltradas.length === 0) return false;
-                pedido.ofertasRelacionadas = ofertasFiltradas;
-                return true;
-            });
-
+        
+                if (ofertasFiltradas.length === 0) return null;
+        
+                // Calcula o valor total do pedido multiplicando quantidadeVendas pelo precoEspecial de cada oferta
+                const valorPedido = ofertasFiltradas.reduce((total, oferta) => {
+                    const quantidadeVendas = oferta.quantidadeVendas || 0;
+                    const precoEspecial = parseFloat(oferta.precoEspecial.replace('R$', '').replace(',', '.'));
+                    return total + (quantidadeVendas * precoEspecial);
+                }, 0);
+        
+                return {
+                    ...pedido,
+                    ofertasRelacionadas: ofertasFiltradas,
+                    valorPedido: valorPedido // Inclui o valor calculado na propriedade valorPedido
+                };
+            }).filter(pedido => pedido !== null);
+        
             const pedidosComPropsOrdenadas = ordenarArrayPropriedadesObjeto(pedidosFiltrados);
             setListaPedidos(pedidosComPropsOrdenadas);
         };
+        
+        
         fetchPedidos();
     }, []);
 

@@ -119,7 +119,7 @@ const Carrinho = (props) => {
             const quantidadeVendaPedidoAtual = item.quantidadeCarrinho;
             item.quantidadeVendas = (item.quantidadeVendas || 0) + quantidadeVendaPedidoAtual;
             item.quantidadeCarrinho = 0;
-            item.status = 'pendente';
+            item.status = 'Pendente';
             return { ...item, quantidadeVendaPedidoAtual };
         });
 
@@ -144,12 +144,12 @@ const Carrinho = (props) => {
         }
 
         const novoPedido = {
-            ofertasRelacionadas: ofertasAtualizadas.map(item => {
-                const { quantidadeVendaPedidoAtual, ...rest } = item;
+            ofertasRelacionadas: ofertasAtualizadas.map(oferta => {
+                const { quantidadeVendaPedidoAtual, ...rest } = oferta;
                 return { ...rest, quantidadeVendas: quantidadeVendaPedidoAtual };
             }),
             dataDePedido: formatarDataString(new Date()),
-            valorPedido: ofertasAtualizadas.reduce((total, item) => total + (parseFloat(item.precoEspecial.replace('R$', '').replace(',', '.')) * item.quantidadeVendaPedidoAtual), 0)
+            valorPedido: ofertasAtualizadas.reduce((total, oferta) => total + (parseFloat(oferta.precoEspecial.replace('R$', '').replace(',', '.')) * oferta.quantidadeVendaPedidoAtual), 0)
         };
 
         console.log("novoPedido")

@@ -33,6 +33,11 @@ const CriarOferta = (props) => {
             setOferta({ ...oferta, [name]: value });
         }
 
+        if (name === "quantidadeMinima") {
+            value = parseInt(value, 10);
+
+        }
+
         if (name === "produtoRelacionado") {
             const produtoSelecionado = produtos.find(produto => produto.id === value);
             setOferta({ ...oferta, [name]: value });
@@ -41,10 +46,7 @@ const CriarOferta = (props) => {
             setOferta({ ...oferta, [name]: value });
         }
 
-        if (name === "quantidadeMinima") {
-            value = parseInt(value, 10);
-
-        }
+        
     };
 
     const handlePriceChange = (event) => {
