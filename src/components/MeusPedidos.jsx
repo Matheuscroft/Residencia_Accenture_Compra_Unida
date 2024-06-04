@@ -27,6 +27,19 @@ const MeusPedidos = (props) => {
         props.handlePage("produto", produto);
     };
 
+    const definirCorSituacao = (status) => {
+        switch (status) {
+            case 'Pendente':
+                return 'warning';
+            case 'Concluído':
+                return 'success';
+            case 'Cancelado':
+                return 'danger';
+            default:
+                return 'secondary';
+        }
+    };
+
     const listaPedidosLI = listaPedidos.map((pedido) => (
         <Card key={pedido.id} className="mb-4">
             <Card.Header>
@@ -48,14 +61,20 @@ const MeusPedidos = (props) => {
                             <h5>{oferta.produtoRelacionado.nomeProduto}</h5>
                             <p>{oferta.descricao}</p>
                         </Col>
-                        <Col xs={1}>
+                        <Col xs={2}>
                             <p>{oferta.precoEspecial}</p>
                         </Col>
-                        <Col xs={1}>
+                        <Col xs={2}>
                             <p>Qtd: {oferta.quantidadeVendas}</p>
                         </Col>
                         <Col xs={2}>
-                            <p>Situação: {oferta.status}</p>
+                            <Card bg={definirCorSituacao(oferta.status)} text="white" className="text-center">
+                                <Card.Body>
+                                    <Card.Text>
+                                        Situação: {oferta.status}
+                                    </Card.Text>
+                                </Card.Body>
+                            </Card>
                         </Col>
                     </Row>
                 ))}

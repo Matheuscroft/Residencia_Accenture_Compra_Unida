@@ -29,7 +29,8 @@ const GerenciarPedidos = (props) => {
                 return true;
             });
 
-
+            console.log("pedidosFiltrados")
+            console.log(pedidosFiltrados)
 
             const pedidosOrdenados = ordenarPorDataString(pedidosFiltrados, 'dataDePedido');
             setListaPedidos(pedidosOrdenados);
@@ -45,7 +46,7 @@ const GerenciarPedidos = (props) => {
 
     const definirCorSituacao = (status) => {
         switch (status) {
-            case 'pendente':
+            case 'Pendente':
                 return 'warning';
             case 'Concluído':
                 return 'success';
@@ -56,37 +57,53 @@ const GerenciarPedidos = (props) => {
         }
     };
 
-    
-const atualizarStatusOferta = async (pedidoId, ofertaId, novoStatus) => {
-    
-    await editarOferta(ofertaId, { status: novoStatus });
 
-    const novaListaPedidos = listaPedidos.map(pedido => {
-        if (pedido.id === pedidoId) {
-            return {
-                ...pedido,
-                ofertasRelacionadas: pedido.ofertasRelacionadas.map(oferta => {
+    const atualizarStatusOferta = async (ofertaId, novoStatus) => {
+        // Atualizar o status da oferta no Firebase
+        await editarOferta(ofertaId, { status: novoStatus });
+    
+        // Buscar os pedidos originais do Firebase
+        const pedidosOriginais = await getPedidos();
+    
+        // Filtrar pedidos que contêm a oferta atualizada
+        const pedidosParaAtualizar = pedidosOriginais.filter(pedido =>
+            pedido.ofertasRelacionadas.some(oferta => oferta.id === ofertaId)
+        );
+    
+        // Atualizar esses pedidos no Firebase
+        const atualizarPedidosPromises = pedidosParaAtualizar.map(async (pedido) => {
+            const ofertasAtualizadas = pedido.ofertasRelacionadas.map(oferta => {
+                if (oferta.id === ofertaId) {
+                    return { ...oferta, status: novoStatus };
+                }
+                return oferta;
+            });
+    
+            await editarPedido(pedido.id, { ...pedido, ofertasRelacionadas: ofertasAtualizadas });
+        });
+    
+        await Promise.all(atualizarPedidosPromises);
+    
+        // Atualizar o estado local
+        const novaListaPedidos = listaPedidos.map(pedido => {
+            if (pedido.ofertasRelacionadas.some(oferta => oferta.id === ofertaId)) {
+                const ofertasRelacionadasAtualizadas = pedido.ofertasRelacionadas.map(oferta => {
                     if (oferta.id === ofertaId) {
                         return { ...oferta, status: novoStatus };
                     }
                     return oferta;
-                })
-            };
-        }
-        
-        return pedido;
-    });
+                });
+                return { ...pedido, ofertasRelacionadas: ofertasRelacionadasAtualizadas };
+            }
+            return pedido;
+        });
+    
+        setListaPedidos(novaListaPedidos);
+    };
+    
+    
+    
 
-    const pedidoAtualizado = novaListaPedidos.find(pedido => pedido.id === pedidoId);
-    console.log("pedidoAtualizado")
-    console.log(pedidoAtualizado)
-
-    await editarPedido(pedidoId, pedidoAtualizado);
-
-
-    // Atualizando o estado local
-    setListaPedidos(novaListaPedidos);
-};
 
 
 
@@ -129,28 +146,27 @@ const atualizarStatusOferta = async (pedidoId, ofertaId, novoStatus) => {
                             </Card>
                         </Col>
                         <Col xs={2}>
-                            {!oferta.finalizado && (
+                            {oferta.status === 'Pendente' && (
                                 <ButtonGroup vertical>
                                     <Button
                                         variant="success"
                                         className="mb-2"
-                                        onClick={() => atualizarStatusOferta(pedido.id, oferta.id, 'Concluído')}
+                                        onClick={() => atualizarStatusOferta(oferta.id, 'Concluído')}
                                     >
                                         Finalizar
                                     </Button>
                                     <Button
                                         variant="danger"
-                                        onClick={() => atualizarStatusOferta(pedido.id, oferta.id, 'Cancelado')}
+                                        onClick={() => atualizarStatusOferta(oferta.id, 'Cancelado')}
                                     >
                                         Cancelar
                                     </Button>
                                 </ButtonGroup>
                             )}
                         </Col>
-
-
                     </Row>
                 ))}
+
             </Card.Body>
         </Card>
     ));

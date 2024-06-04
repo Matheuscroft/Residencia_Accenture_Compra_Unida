@@ -13,13 +13,16 @@ const HomeCliente = (props) => {
         const fetchOfertas = async () => {
             const ofertas = await getOfertas();
 
+
+            console.log("ofertas")
+            console.log(ofertas)
+
             setOfertas(ofertas);
         };
 
         fetchOfertas();
 
-        console.log("ofertas")
-        console.log(ofertas)
+
 
     }, []);
 

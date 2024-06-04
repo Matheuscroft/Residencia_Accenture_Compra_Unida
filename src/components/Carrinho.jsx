@@ -115,12 +115,14 @@ const Carrinho = (props) => {
             return;
         }
 
-        const ofertasAtualizadas = ofertas.map(item => {
-            const quantidadeVendaPedidoAtual = item.quantidadeCarrinho;
-            item.quantidadeVendas = (item.quantidadeVendas || 0) + quantidadeVendaPedidoAtual;
-            item.quantidadeCarrinho = 0;
-            item.status = 'Pendente';
-            return { ...item, quantidadeVendaPedidoAtual };
+        const ofertasAtualizadas = ofertas.map(oferta => {
+            const quantidadeVendaPedidoAtual = oferta.quantidadeCarrinho;
+            if (oferta.status !== 'Concluído') {
+                oferta.status = 'Pendente';
+            }
+            oferta.quantidadeVendas = (oferta.quantidadeVendas || 0) + quantidadeVendaPedidoAtual;
+            oferta.quantidadeCarrinho = 0;
+            return { ...oferta, quantidadeVendaPedidoAtual };
         });
 
         const todosProdutos = await getProdutos();

@@ -11,6 +11,9 @@ const NavegacaoHeader = ({ handlePage, paginaAtual }) => {
                     <Button variant="link" onClick={() => handlePage('carrinho')}>
                         <img src={carrinhoIcon} alt="Carrinho" width="30" height="30" />
                     </Button>
+                    <Button style={{ backgroundColor: '#FFCD46', borderColor: '#FFCD46', color: 'black' }} onClick={() => handlePage('meus-pedidos')}>
+                        Meus Pedidos
+                    </Button>
                 </>
             );
         } else if (paginaAtual === 'landing') {

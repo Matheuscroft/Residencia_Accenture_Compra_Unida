@@ -9,7 +9,7 @@ import CadastroFornecedor from './components/CadastroFornecedor';
 import HomeFornecedor from './components/HomeFornecedor';
 import CriarProduto from './components/CriarProduto';
 import HomeCliente from './components/HomeCliente';
-import Produto from './components/Produto';
+import Oferta from './components/Oferta';
 import NavegacaoHeader from './components/NavegacaoHeader';
 import Carrinho from './components/Carrinho';
 import MeusPedidos from './components/MeusPedidos';
@@ -98,7 +98,7 @@ const App = () => {
             return (
                 <div>
                     <NavegacaoHeader handlePage={handlePage} paginaAtual={paginaAtual.page} />
-                    <Produto handlePage={handlePage} produto={paginaAtual.data} />
+                    <Oferta handlePage={handlePage} produto={paginaAtual.data} />
                 </div>
             );
         case "carrinho":
