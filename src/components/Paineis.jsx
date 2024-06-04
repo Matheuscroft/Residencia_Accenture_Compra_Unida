@@ -41,7 +41,7 @@ const Paineis = (props) => {
             const pedidos = await getPedidos();
 
             // Filtra pedidos com ofertas relacionadas ao userId do usuário logado
-           /* const pedidosFiltrados = pedidos.filter(pedido => {
+            const pedidosFiltrados = pedidos.filter(pedido => {
                 const ofertasFiltradas = pedido.ofertasRelacionadas.filter(oferta => oferta.userId === userId);
                 if (ofertasFiltradas.length === 0) return false;
                 pedido.ofertasRelacionadas = ofertasFiltradas;
@@ -49,39 +49,12 @@ const Paineis = (props) => {
             });
 
             const pedidosComPropsOrdenadas = ordenarArrayPropriedadesObjeto(pedidosFiltrados);
-            setListaPedidos(pedidosComPropsOrdenadas);*/
+            setListaPedidos(pedidosComPropsOrdenadas);
         };
         fetchPedidos();
     }, []);
 
-    const formatarData = (timestamp) => {
-        const milissegundos = timestamp.seconds * 1000 + Math.round(timestamp.nanoseconds / 1000000);
-        const data = new Date(milissegundos);
-        return format(data, 'dd/MM/yyyy');
-    };
 
-    const listaPedidosLI = listaPedidos.map((pedido) => (
-        <li key={pedido.id} style={{ marginBottom: "20px" }}>
-            <h4>Pedido ID: {pedido.id}</h4>
-            <p>Data de Pedido: {formatarData(pedido.dataDePedido)}</p>
-            <p>Valor do Pedido: R$ {pedido.valorPedido}</p>
-            <ul>
-                {pedido.ofertasRelacionadas.map((oferta, index) => (
-                    <li key={index} style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "10px" }}>
-                        {oferta.produtoRelacionado.imagens && oferta.produtoRelacionado.imagens.length > 0 && (
-                            <img src={oferta.produtoRelacionado.imagens[0]} alt={oferta.produtoRelacionado.nomeProduto} style={{ width: "100px", height: "100px", marginRight: "10px" }} />
-                        )}
-                        <div>
-                            <p>{oferta.produtoRelacionado.nomeProduto}</p>
-                            <p><strong>Descrição:</strong> {oferta.descricao}</p>
-                            <p><strong>Preço Especial:</strong> {oferta.precoEspecial}</p>
-                            <p><strong>Quantidade mínima:</strong> {oferta.quantidadeMinima}</p>
-                        </div>
-                    </li>
-                ))}
-            </ul>
-        </li>
-    ));
 
     const listaPedidosCard = listaPedidos.map((pedido, index) => (
         <Card key={index} style={{ marginBottom: "20px" }}>
@@ -130,30 +103,24 @@ const Paineis = (props) => {
                                 const precoFloat = parseFloat(produto.preco.replace('R$', '').replace(',', '.'));
                                 const data = {
                                     nome: produto.nomeProduto,
-                                    valor: precoFloat
+                                    Valor: precoFloat
                                 };
-
-                                console.log("produto.nomeProduto ", produto.nomeProduto);
-                                console.log("produto.preco ", precoFloat);
+                            
                                 return data;
                             });
-                        console.log("dados");
-                        console.log(dados);
-                    } else if (listaProdutos.length > 0 && typeof listaProdutos[0][metricaAtual] === 'number') {
+                    } else if (metricaAtual === "quantidadeVendas" || metricaAtual === "quantidadeEstoque") {
 
                         dados = listaProdutos
                             .filter(produto => produto[metricaAtual] !== undefined)
                             .map(produto => {
                                 const data = {
                                     nome: produto.nomeProduto,
-                                    valor: produto[metricaAtual]
+                                    Quantidade: produto[metricaAtual]
                                 };
-                                console.log("produto.nomeProduto ", produto.nomeProduto);
-                                console.log("produto[metricaAtual] ", produto[metricaAtual]);
+                                
                                 return data;
                             });
-                        console.log("dados");
-                        console.log(dados);
+                        
                     } else {
 
                         const categorias = {};
@@ -165,7 +132,7 @@ const Paineis = (props) => {
 
                         dados = Object.keys(categorias).map(categoria => ({
                             nome: categoria,
-                            valor: categorias[categoria]
+                            Quantidade: categorias[categoria]
                         }));
                     }
                 }
@@ -182,48 +149,38 @@ const Paineis = (props) => {
                                 const precoFloat = parseFloat(oferta.precoEspecial.replace('R$', '').replace(',', '.'));
                                 const data = {
                                     nome: oferta.nomeOferta,
-                                    valor: precoFloat
+                                    Valor: precoFloat
                                 };
 
-                                console.log("oferta.nomeOferta ", oferta.nomeOferta);
-                                console.log("oferta.precoEspecial ", precoFloat);
                                 return data;
                             });
-                        console.log("dados de oferta");
-                        console.log(dados);
-                    } else if (listaOfertas.length > 0 && typeof listaOfertas[0].produtoRelacionado[metricaAtual] === 'number') {
+                    } else if (metricaAtual === "quantidadeVendas" || metricaAtual === "quantidadeEstoque") {
 
                         dados = listaOfertas
                             .filter(oferta => oferta.produtoRelacionado[metricaAtual] !== undefined)
                             .map(oferta => {
                                 const data = {
                                     nome: oferta.nomeOferta,
-                                    valor: oferta.produtoRelacionado[metricaAtual]
+                                    Quantidade: oferta.produtoRelacionado[metricaAtual]
                                 };
-                                console.log("oferta.nomeOferta ", oferta.nomeOferta);
-                                console.log("oferta[metricaAtual] ", oferta[metricaAtual]);
                                 return data;
                             });
-                        console.log("dados NUMBER");
-                        console.log(dados);
-                    } else if (typeof listaOfertas[0][metricaAtual] === 'number') {
+
+                    } else if (metricaAtual === "quantidadeMinima") {
 
                         dados = listaOfertas
                             .filter(oferta => oferta[metricaAtual] !== undefined)
                             .map(oferta => {
                                 const data = {
                                     nome: oferta.nomeOferta,
-                                    valor: oferta[metricaAtual]
+                                    Quantidade: oferta[metricaAtual]
                                 };
-                                console.log("oferta.nomeOferta ", oferta.nomeOferta);
-                                console.log("oferta[metricaAtual] ", oferta[metricaAtual]);
+                                
                                 return data;
                             });
-                        console.log("dados NUMBER oferta");
-                        console.log(dados);
+                        
                     } else if (metricaAtual === "categoria") {
-                        console.log("CAIU NO ELSE ");
-                        console.log(listaOfertas[0]);
+                        
                         const categorias = {};
                         listaOfertas.forEach(oferta => {
                             if (oferta.produtoRelacionado && oferta.produtoRelacionado.categoria) {
@@ -234,11 +191,10 @@ const Paineis = (props) => {
 
                         dados = Object.keys(categorias).map(categoria => ({
                             nome: categoria,
-                            valor: categorias[categoria]
+                            Quantidade: categorias[categoria]
                         }));
                     } else {
-                        console.log("CAIU NO ELSE ");
-                        console.log(listaOfertas[0]);
+                        
                         const situacao = {};
                         listaOfertas.forEach(oferta => {
                             if (oferta && oferta.status) {
@@ -249,11 +205,10 @@ const Paineis = (props) => {
 
                         dados = Object.keys(situacao).map(status => ({
                             nome: status,
-                            valor: situacao[status]
+                            Quantidade: situacao[status]
                         }));
 
-                        console.log("dados else ");
-                        console.log(dados);
+                        
                     }
                 }
                 break;
@@ -270,7 +225,7 @@ const Paineis = (props) => {
                             .map(pedido => {
                                 const data = {
                                     nome: pedido.id,
-                                    valor: pedido[metricaAtual]
+                                    Valor: pedido[metricaAtual]
                                 };
 
                                 return data;
@@ -294,7 +249,7 @@ const Paineis = (props) => {
 
                         dados = Object.keys(categorias).map(categoria => ({
                             nome: categoria,
-                            valor: categorias[categoria]
+                            Quantidade: categorias[categoria]
                         }));
                     }
                 }
@@ -313,7 +268,7 @@ const Paineis = (props) => {
                         <YAxis />
                         <Tooltip />
                         <Legend />
-                        <Bar dataKey="valor" fill="#8884d8" />
+                        <Bar dataKey={metricaAtual === "preco" || metricaAtual === "valorPedido"  ? "Valor" : "Quantidade"} fill="#8884d8" />
                     </BarChart>
                 );
             case 'line':
@@ -324,13 +279,13 @@ const Paineis = (props) => {
                         <YAxis />
                         <Tooltip />
                         <Legend />
-                        <Line type="monotone" dataKey="valor" stroke="#8884d8" />
+                        <Line type="monotone" dataKey={metricaAtual === "preco" || metricaAtual === "valorPedido"  ? "Valor" : "Quantidade"} stroke="#8884d8" />
                     </LineChart>
                 );
             case 'pie':
                 return (
                     <PieChart>
-                        <Pie data={dados} dataKey="valor" nameKey="nome" cx="50%" cy="50%" outerRadius={50} fill="#8884d8" />
+                        <Pie data={dados} dataKey={metricaAtual === "preco" || metricaAtual === "valorPedido"  ? "Valor" : "Quantidade"} nameKey="nome" cx="50%" cy="50%" outerRadius={50} fill="#8884d8" />
                         <Tooltip />
                         <Legend />
                     </PieChart>
@@ -343,7 +298,7 @@ const Paineis = (props) => {
                         <YAxis />
                         <Tooltip />
                         <Legend />
-                        <Area type="monotone" dataKey="valor" stroke="#8884d8" fill="#8884d8" />
+                        <Area type="monotone" dataKey={metricaAtual === "preco" || metricaAtual === "valorPedido"  ? "Valor" : "Quantidade"} stroke="#8884d8" fill="#8884d8" />
                     </AreaChart>
                 );
             default:

@@ -91,8 +91,8 @@ const GerenciarPedidos = (props) => {
     return (
         <Container>
             <Row>
-                <Col xs={12} md={2}>
-                    <Button variant="warning" onClick={() => props.handlePage("home-fornecedor", { userId: props.userId })} className="w-100">Voltar</Button>
+                <Col xs={12} md={5}>
+                    <Button variant="warning" onClick={() => props.handlePage("home-fornecedor", { userId: props.userId })} >Voltar</Button>
                 </Col>
                 <Col xs={12} md={10}>
                     <h1 className="text-center">Gerenciar Pedidos</h1>

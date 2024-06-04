@@ -150,8 +150,8 @@ const HomeFornecedor = (props) => {
                     )}
                     <div className="flex-grow-1">
                         <h5>{truncateText(oferta.nomeOferta, 20)}</h5>
-                        <p>{produtoRelacionado ? truncateText(produtoRelacionado.descricao, 50) : ''}</p>
-                        <p>{produtoRelacionado ? produtoRelacionado.preco : ''}</p>
+                        <p>{truncateText(oferta.descricao, 50)}</p>
+                        <p>{oferta.precoEspecial}</p>
                     </div>
                     <div className="ms-auto" style={{minWidth: "fit-content"}}>
                         <Button variant="warning" size="sm" onClick={() => handleEditEntidade({ ...oferta, tipo: "oferta" })} className="ms-2">Editar</Button>

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Form, Button, Container, Row, Col, Card } from "react-bootstrap";
 import { addOferta, getProdutos } from "../auth/firebaseService";
-import {todayWithoutTimezone, formatarDataString} from "./Utils.js";
+import { todayWithoutTimezone, formatarDataString } from "./Utils.js";
 
 const CriarOferta = (props) => {
     const [oferta, setOferta] = useState({});
@@ -12,7 +12,7 @@ const CriarOferta = (props) => {
 
         const fetchProdutos = async () => {
             const produtos = await getProdutos();
-            
+
             const produtosFiltrados = produtos.filter(produto => produto.userId === props.userId);
             setProdutos(produtosFiltrados);
         };
@@ -43,7 +43,7 @@ const CriarOferta = (props) => {
 
         if (name === "quantidadeMinima") {
             value = parseInt(value, 10);
-            
+
         }
     };
 
@@ -58,39 +58,54 @@ const CriarOferta = (props) => {
 
     const handleSubmit = async (event) => {
         event.preventDefault();
-    
-        const hoje = new Date().toISOString().split("T")[0];
-    
+
+        const hoje = new Date();
+
+
         if (oferta.dataInicio <= hoje) {
             alert("A data de início não pode ser anterior à data atual.");
             return;
         }
-    
+
         if (oferta.produtoRelacionado === "default") {
             alert("Selecione um produto");
             return;
         }
-    
+
         if (oferta.dataTermino && oferta.dataInicio && oferta.dataTermino < oferta.dataInicio) {
             alert("A data de término não pode ser inferior à data de início.");
             return;
         }
-    
+
         const produtoSelecionado = produtos.find(produto => produto.id === oferta.produtoRelacionado);
         if (!produtoSelecionado) {
             alert("Produto não encontrado");
             return;
         }
-    
+
+        // Função para formatar a data no formato desejado
+        const formatarDataString = (date, horas = "00", minutos = "00", segundos = "00") => {
+            const dia = String(date.getDate()).padStart(2, '0');
+            const mes = String(date.getMonth() + 1).padStart(2, '0');
+            const ano = date.getFullYear();
+            return `${dia}/${mes}/${ano} ${horas}:${minutos}:${segundos}`;
+        };
+
         const ofertaComProdutoEQntVendas = {
             ...oferta,
             produtoRelacionado: produtoSelecionado,
             quantidadeVendas: 0,
-            dataTermino: oferta.dataTermino,
+            dataTermino: oferta.dataTermino ? formatarDataString(new Date(oferta.dataTermino), "23", "59", "00") : null,
+            dataInicio: oferta.dataInicio ? formatarDataString(new Date(oferta.dataInicio), "00", "00", "00") : null,
             dataCriacao: formatarDataString(new Date()),
             userId: props.userId
         };
-    
+
+        console.log("ofertaComProdutoEQntVendas")
+        console.log(ofertaComProdutoEQntVendas)
+
+
+
         const id = await addOferta(ofertaComProdutoEQntVendas);
         if (id) {
             alert(`${oferta.nomeOferta} cadastrada com sucesso com ID: ${id}`);
@@ -99,10 +114,15 @@ const CriarOferta = (props) => {
             alert("Erro ao cadastrar oferta");
         }
     };
-    
+
 
     return (
         <Container>
+            <Row>
+                <Col xs={12} md={5}>
+                    <Button variant="warning" onClick={() => props.handlePage("home-fornecedor", { userId: props.userId })} >Voltar</Button>
+                </Col>
+            </Row>
             <Row className="justify-content-md-center" style={{ marginTop: '100px' }}>
                 <Col xs={12} md={6}>
                     <Card className="text-light" style={{ backgroundColor: '#1c3bc5', borderRadius: '15px', borderColor: '#d4edda' }}>
@@ -139,12 +159,12 @@ const CriarOferta = (props) => {
 
                                 <Form.Group controlId="dataInicio" className="mb-3">
                                     <Form.Label className="text-light">Data de início da oferta</Form.Label>
-                                    <Form.Control type="date" name="dataInicio" value={oferta.dataInicio || ""} onChange={handleChange} placeholder="Data de início da oferta" required min={todayWithoutTimezone}/>
+                                    <Form.Control type="date" name="dataInicio" value={oferta.dataInicio || ""} onChange={handleChange} placeholder="Data de início da oferta" required min={todayWithoutTimezone} />
                                 </Form.Group>
 
                                 <Form.Group controlId="dataTermino" className="mb-3">
                                     <Form.Label className="text-light">Data de término da oferta</Form.Label>
-                                    <Form.Control type="date" name="dataTermino" value={oferta.dataTermino || ""} onChange={handleChange} placeholder="Data de término da oferta" required disabled={!oferta.dataInicio} min={new Date(new Date().toDateString()).toISOString().split("T")[0]}/>
+                                    <Form.Control type="date" name="dataTermino" value={oferta.dataTermino || ""} onChange={handleChange} placeholder="Data de término da oferta" required disabled={!oferta.dataInicio} min={new Date(new Date().toDateString()).toISOString().split("T")[0]} />
                                 </Form.Group>
 
                                 <Button type="submit" className="w-100 mt-3" style={{ backgroundColor: '#FFCD46', borderColor: '#FFCD46', color: 'black' }}>Cadastrar</Button>
@@ -153,7 +173,7 @@ const CriarOferta = (props) => {
                     </Card>
                 </Col>
             </Row>
-            
+
         </Container>
     );
 }
