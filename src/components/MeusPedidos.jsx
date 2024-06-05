@@ -10,14 +10,11 @@ const MeusPedidos = (props) => {
         const fetchPedidos = async () => {
             const pedidos = await getPedidos();
         
-            //const produtosFiltrados = produtos.filter(produto => produto.userId === userId);
-            console.log("pedidos")
-            console.log(pedidos)
             const produtosOrdenados = ordenarPorDataString(pedidos, 'dataDePedido');
             setListaPedidos(produtosOrdenados);
         
             
-            //setListaPedidos(pedidosOrdenados);
+            
         };
         
         fetchPedidos();
@@ -57,7 +54,7 @@ const MeusPedidos = (props) => {
                                 <img src={oferta.produtoRelacionado.imagens[0]} alt={oferta.produtoRelacionado.nomeProduto} style={{ width: '100%' }} />
                             )}
                         </Col>
-                        <Col xs={4}>
+                        <Col xs={2}>
                             <h5>{oferta.produtoRelacionado.nomeProduto}</h5>
                             <p>{oferta.descricao}</p>
                         </Col>

@@ -37,7 +37,7 @@ const GerenciarPedidos = (props) => {
         };
 
         fetchPedidos();
-    }, [/*props.userId*/]);
+    }, [props.userId]);
 
 
     const handleProdutoClick = (produto) => {
@@ -126,18 +126,18 @@ const GerenciarPedidos = (props) => {
                                 <img src={oferta.produtoRelacionado.imagens[0]} alt={oferta.produtoRelacionado.nomeProduto} style={{ width: '100%' }} />
                             )}
                         </Col>
-                        <Col xs={3} onClick={() => handleProdutoClick(oferta.produtoRelacionado)}>
+                        <Col xs={2} onClick={() => handleProdutoClick(oferta.produtoRelacionado)}>
                             <h5>{oferta.produtoRelacionado.nomeProduto}</h5>
                             <p>{oferta.descricao}</p>
                         </Col>
                         <Col xs={2} onClick={() => handleProdutoClick(oferta.produtoRelacionado)}>
                             <p>{oferta.precoEspecial}</p>
                         </Col>
-                        <Col xs={1} onClick={() => handleProdutoClick(oferta.produtoRelacionado)}>
+                        <Col xs={2} onClick={() => handleProdutoClick(oferta.produtoRelacionado)}>
                             <p>Qtd: {oferta.quantidadeVendas}</p>
                         </Col>
                         <Col xs={2}>
-                            <Card bg={definirCorSituacao(oferta.status)} text="white" className="text-center">
+                        <Card bg={definirCorSituacao(oferta.status)} class="card" style={{ width: '150px' }} text="white" className="text-center">
                                 <Card.Body>
                                     <Card.Text>
                                         Situação: {oferta.status}
@@ -194,3 +194,4 @@ const GerenciarPedidos = (props) => {
 };
 
 export default GerenciarPedidos;
+
