@@ -75,7 +75,7 @@ const CriarProduto = (props) => {
                     <Button variant="warning" onClick={() => props.handlePage("home-fornecedor", { userId: props.userId })} >Voltar</Button>
                 </Col>
             </Row>
-            <Row className="justify-content-md-center" style={{ marginTop: '100px' }}>
+            <Row className="justify-content-md-center" style={{ marginTop: '-35px' }}>
                 <Col xs={12} md={6}>
                     <Card className="text-light" style={{ backgroundColor: '#1c3bc5', borderRadius: '15px', borderColor: '#d4edda' }}>
                         <Card.Body>
