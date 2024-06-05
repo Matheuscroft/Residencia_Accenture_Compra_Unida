@@ -1,0 +1,245 @@
+[33mcommit fe3810df0014ca5350e69df7c38b5c1bbe038bdd[m[33m ([m[1;36mHEAD -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m
+Author: RenanOliveira04 <rlsorenan@gmail.com>
+Date:   Tue Jun 4 17:56:48 2024 -0300
+
+    refactor: Update GerenciarPedidos component layout and handleProdutoClick function
+
+[33mcommit ab16e92d66e2258c21cc0cc5fdcee68981bb9939[m
+Author: Matheus OS <matheus.sdoliveira@gmail.com>
+Date:   Tue Jun 4 04:23:12 2024 -0300
+
+    mudancas de status da oferta dos pedidos
+
+[33mcommit 60098cb62346c5ba12e7a3b341fa4c11eb152554[m
+Author: Matheus OS <matheus.sdoliveira@gmail.com>
+Date:   Tue Jun 4 02:02:08 2024 -0300
+
+    melhorias no grafico e correcoes de data e listagens
+
+[33mcommit 8518d5d63ee825506a2909ae8e29f8c5125b3b68[m
+Author: Matheus OS <matheus.sdoliveira@gmail.com>
+Date:   Tue Jun 4 00:43:05 2024 -0300
+
+    correcoes datas
+
+[33mcommit ff05f1071b715eb85199a690895135b1689c548e[m
+Author: Matheus OS <matheus.sdoliveira@gmail.com>
+Date:   Mon Jun 3 22:57:27 2024 -0300
+
+    datas de criacao corrigidas e no formato string e conversores
+
+[33mcommit eba4e64002872626226ca382a4848ed6d3e901cf[m
+Author: Matheus OS <matheus.sdoliveira@gmail.com>
+Date:   Mon Jun 3 21:35:28 2024 -0300
+
+    correcoes gerenciar pedidos e paineis
+
+[33mcommit ada5548f861b6bf97f7f1886af5e113b6bcc5d9b[m
+Author: RenanOliveira04 <rlsorenan@gmail.com>
+Date:   Mon Jun 3 18:34:58 2024 -0300
+
+    fix: mensagens de erro caso senha não seja compativel
+
+[33mcommit dbeeb7a3d731c0e7bd447c64d9c1ecb7eb784541[m
+Merge: 3fe81d3 1f57910
+Author: RenanOliveira04 <rlsorenan@gmail.com>
+Date:   Mon Jun 3 18:24:30 2024 -0300
+
+    Merge branch 'main' of https://github.com/Matheuscroft/Residencia_Accenture_Compra_Unida
+
+[33mcommit 3fe81d3f3977c954c982b91eddb6b2eea14e2eb8[m
+Author: RenanOliveira04 <rlsorenan@gmail.com>
+Date:   Mon Jun 3 18:24:24 2024 -0300
+
+    fix: mensagem de erro
+
+[33mcommit 1f57910be5ad8624bd21042021fdb282f7204633[m
+Author: Matheus OS <matheus.sdoliveira@gmail.com>
+Date:   Mon Jun 3 18:02:30 2024 -0300
+
+    mudancas na autenticacao e vinculacao de produtos e ofertas
+
+[33mcommit db8a8a6ea1b4240ee73ee8c776ed3b7898343152[m
+Author: Matheus OS <matheus.sdoliveira@gmail.com>
+Date:   Mon Jun 3 04:04:50 2024 -0300
+
+    inicio da autenticacao
+
+[33mcommit b54a5f10294302dcf049a93e096f97237208766d[m
+Merge: 13f8604 e8ea864
+Author: Matheus OS <matheus.sdoliveira@gmail.com>
+Date:   Mon Jun 3 02:46:01 2024 -0300
+
+    Merge branch 'main' of https://github.com/Matheuscroft/Matheuscroft-Residencia_Accenture_Compra_Unida
+
+[33mcommit 13f8604cf63190f93474c3de0bc1b1cebe7b780a[m
+Author: Matheus OS <matheus.sdoliveira@gmail.com>
+Date:   Mon Jun 3 02:45:52 2024 -0300
+
+    correcoes paineis
+
+[33mcommit e8ea864d7f9eb46a488deb9d03b079c22f1e6e3d[m
+Author: RenanOliveira04 <rlsorenan@gmail.com>
+Date:   Sun Jun 2 22:20:03 2024 -0300
+
+    fix: design de criar oferta e criar produto
+
+[33mcommit 3764154b2ff8ee73f28575d22cb10dc9f3ee5e88[m
+Author: RenanOliveira04 <rlsorenan@gmail.com>
+Date:   Sun Jun 2 22:10:14 2024 -0300
+
+    fix: Erro data atual consertado
+
+[33mcommit 3807ed5269c8d2d8c3886deea99cd9973918e172[m
+Merge: 5a2e628 ee7c31d
+Author: Matheus OS <matheus.sdoliveira@gmail.com>
+Date:   Sun Jun 2 21:26:31 2024 -0300
+
+    Merge branch 'main' of https://github.com/Matheuscroft/Matheuscroft-Residencia_Accenture_Compra_Unida
+
+[33mcommit 5a2e62896f2a93aae514b99fe343edb1c41990fd[m
+Author: Matheus OS <matheus.sdoliveira@gmail.com>
+Date:   Sun Jun 2 21:23:35 2024 -0300
+
+    correcao dos maps
+
+[33mcommit ee7c31d4e58d8c38263a152c8837b3f2d6b45775[m
+Merge: 68603a2 28e7dc2
+Author: RenanOliveira04 <rlsorenan@gmail.com>
+Date:   Sun Jun 2 21:04:34 2024 -0300
+
+    Merge branch 'main' of https://github.com/Matheuscroft/Residencia_Accenture_Compra_Unida
+
+[33mcommit 68603a2e577188f54e2a6a214c02075d7b66fc21[m
+Author: RenanOliveira04 <rlsorenan@gmail.com>
+Date:   Sun Jun 2 21:04:28 2024 -0300
+
+    Alterações Design
+
+[33mcommit 28e7dc2dfbce2170eabcd183721f699504a98390[m
+Merge: 87c8793 a6a2a23
+Author: Matheus OS <matheus.sdoliveira@gmail.com>
+Date:   Sun Jun 2 20:52:54 2024 -0300
+
+    Merge branch 'main' of https://github.com/Matheuscroft/Matheuscroft-Residencia_Accenture_Compra_Unida
+
+[33mcommit 87c8793aa459f393e8018e93dea1235788c976e7[m
+Author: Matheus OS <matheus.sdoliveira@gmail.com>
+Date:   Sun Jun 2 20:52:31 2024 -0300
+
+    mudanca temporaria no app do banco
+
+[33mcommit a6a2a2322822f380d67b2db1a398d3bc1cfcdd2b[m
+Author: RenanOliveira04 <rlsorenan@gmail.com>
+Date:   Sun Jun 2 17:18:45 2024 -0300
+
+    Adição de nova logica, impedindo numeros negativos ou que ultrapassem o estoque
+
+[33mcommit e59ba836953112b326c794c0023b0c6f2d007758[m
+Merge: d5ece95 171a32b
+Author: RenanOliveira04 <rlsorenan@gmail.com>
+Date:   Sun Jun 2 14:28:05 2024 -0300
+
+    Merge branch 'main' of https://github.com/Matheuscroft/Residencia_Accenture_Compra_Unida
+
+[33mcommit d5ece95b85bf1721b4f540b2fd9f3a2574ee82b0[m
+Author: RenanOliveira04 <rlsorenan@gmail.com>
+Date:   Sun Jun 2 14:26:26 2024 -0300
+
+    Att
+
+[33mcommit 171a32bcf9e6f03abd624d5e6c94a96c8f2bd5a5[m
+Author: Matheus OS <matheus.sdoliveira@gmail.com>
+Date:   Sun Jun 2 04:08:42 2024 -0300
+
+    correcoes e criacao do painel de informacoes
+
+[33mcommit d4430cf5f6a34767c84c7c843d7ed1850854437c[m
+Author: Matheus OS <matheus.sdoliveira@gmail.com>
+Date:   Sun Jun 2 04:07:36 2024 -0300
+
+    correcao estoque zero na oferta e home cliente, botao de carrinho desbloqueado
+
+[33mcommit c9d72a53e1d0c44aef281cd47354dda193911f42[m
+Author: Matheus OS <matheus.sdoliveira@gmail.com>
+Date:   Sat Jun 1 20:42:56 2024 -0300
+
+    correcao estoque zero na oferta e home cliente, botao de carrinho desbloqueado
+
+[33mcommit d36ae9031f2b799d8fefbf9a411cd5235272df22[m
+Author: Matheus OS <matheus.sdoliveira@gmail.com>
+Date:   Sat Jun 1 19:54:55 2024 -0300
+
+    correção do carrinho e estoque
+
+[33mcommit 3642942c8ed1eaeaf4ef8a9162c679d01d191f8d[m
+Author: RenanOliveira04 <rlsorenan@gmail.com>
+Date:   Fri May 31 20:56:50 2024 -0300
+
+    Novo design
+
+[33mcommit c1bc17b243700adab767616b6edfd7de0bc9ca72[m
+Author: RenanOliveira04 <rlsorenan@gmail.com>
+Date:   Fri May 31 17:21:07 2024 -0300
+
+    alteração design
+
+[33mcommit dfe1959048855f5c89dfc563487d898aafc1cc21[m
+Author: RenanOliveira04 <rlsorenan@gmail.com>
+Date:   Fri May 31 14:39:05 2024 -0300
+
+    correção erros
+
+[33mcommit 27b0e762819ee652ad975c00afa661b43a028e2b[m
+Merge: 561efce bd4565f
+Author: RenanOliveira04 <rlsorenan@gmail.com>
+Date:   Fri May 31 12:34:07 2024 -0300
+
+    Merge branch 'main' of https://github.com/Matheuscroft/Residencia_Accenture_Compra_Unida
+
+[33mcommit 561efce42fb5f03fd002047834392ed61927bd66[m
+Author: RenanOliveira04 <rlsorenan@gmail.com>
+Date:   Fri May 31 12:30:49 2024 -0300
+
+    Att Home Cliente
+
+[33mcommit bd4565f43b2f5be816505a24bd9d6661754621ad[m
+Author: Matheus OS <matheus.sdoliveira@gmail.com>
+Date:   Fri May 31 04:16:53 2024 -0300
+
+    ajustes na oferta finalizada com cor verde
+
+[33mcommit 9f4ed802828ee834b0124479e1c4e87ef2f966c2[m
+Merge: 5563264 9d1f1bd
+Author: Matheus OS <matheus.sdoliveira@gmail.com>
+Date:   Fri May 31 03:05:30 2024 -0300
+
+    Merge branch 'main' of https://github.com/Matheuscroft/Matheuscroft-Residencia_Accenture_Compra_Unida
+
+[33mcommit 55632649b7807ca7469d4c07bf8a23f0bcbe5a50[m
+Author: Matheus OS <matheus.sdoliveira@gmail.com>
+Date:   Fri May 31 03:04:58 2024 -0300
+
+    corrigindo problemas no carrinho vazio e data do pedido nos meus pedidos
+
+[33mcommit d6bb1741a6923b3cc12ddc63346971d4ac854d97[m
+Author: Matheus OS <matheus.sdoliveira@gmail.com>
+Date:   Thu May 30 23:05:02 2024 -0300
+
+    algumas correcoes nos produtos e ofertas
+
+[33mcommit 9d1f1bd0c9058b60b832ca7f8af4d933a92e706c[m
+Author: RenanOliveira04 <rlsorenan@gmail.com>
+Date:   Thu May 30 03:27:48 2024 -0300
+
+    Update do design
+
+[33mcommit 57340ce04c2b7312fbe40c7cecb76658f660d953[m
+Author: RenanOliveira04 <rlsorenan@gmail.com>
+Date:   Thu May 30 03:16:48 2024 -0300
+
+    Quantidade vendas corrigida
+
+[33mcommit 0cdc4dea003c34749f705c598d9304a14573bfab[m
+Author: RenanOliveira04 <rlsorenan@gmail.com>
+Date:   Thu May 30 03:14:27 202
