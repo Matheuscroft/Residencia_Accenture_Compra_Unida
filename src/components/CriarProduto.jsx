@@ -4,12 +4,20 @@ import { addProduto, uploadImagem } from "../auth/firebaseService";
 import {formatarDataString} from "./Utils"
 
 const CriarProduto = (props) => {
-    const [produto, setProduto] = useState({});
+    const [produto, setProduto] = useState({ categoria: "default" });
     const [imagens, setImagens] = useState([]);
 
     const handleChange = (event) => {
+
+       
         const name = event.target.name;
         let value = event.target.value;
+        console.log("produto.categoria")
+        console.log(produto.categoria)
+        console.log("name")
+        console.log(name)
+        console.log("value")
+        console.log(value)
     
         if (name === "quantidadeEstoque") {
             value = parseInt(value, 10);
@@ -40,6 +48,10 @@ const CriarProduto = (props) => {
     const handleSubmit = async (event) => {
         event.preventDefault();
 
+
+        console.log("produto.categoria")
+        console.log(produto.categoria)
+
         if (produto.categoria === "default") {
             alert("Selecione uma categoria");
             return;
@@ -66,6 +78,9 @@ const CriarProduto = (props) => {
         } else {
             alert("Erro ao cadastrar produto");
         }
+
+        console.log("produto:")
+        console.log(produtoComImagens)
     };
 
     return (

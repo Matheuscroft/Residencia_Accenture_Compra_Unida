@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Form, Button, Container, Row, Col, Card } from "react-bootstrap";
 import { addOferta, getProdutos } from "../auth/firebaseService";
-import { todayWithoutTimezone, formatarDataString } from "./Utils.js";
+import { formatarDataStringHoras, formatarDataString, todayWithTimezone, parseDateInTimeZone } from "./Utils.js";
 
 const CriarOferta = (props) => {
     const [oferta, setOferta] = useState({});
@@ -26,6 +26,11 @@ const CriarOferta = (props) => {
     const handleChange = (event) => {
         const name = event.target.name;
         let value = event.target.value;
+
+         console.log("name")
+         console.log(name)
+         console.log("value")
+         console.log(value)
 
         if (name === "dataInicio" && oferta.dataTermino && value > oferta.dataTermino) {
             setOferta({ ...oferta, [name]: value, dataTermino: "" });
@@ -74,6 +79,7 @@ const CriarOferta = (props) => {
             return;
         }
 
+
         if (oferta.dataTermino && oferta.dataInicio && oferta.dataTermino < oferta.dataInicio) {
             alert("A data de término não pode ser inferior à data de início.");
             return;
@@ -85,27 +91,23 @@ const CriarOferta = (props) => {
             return;
         }
 
-        // Função para formatar a data no formato desejado
-        const formatarDataString = (date, horas = "00", minutos = "00", segundos = "00") => {
-            const dia = String(date.getDate()).padStart(2, '0');
-            const mes = String(date.getMonth() + 1).padStart(2, '0');
-            const ano = date.getFullYear();
-            return `${dia}/${mes}/${ano} ${horas}:${minutos}:${segundos}`;
-        };
+        
+
+    
+
+        const dataInicioFuso = parseDateInTimeZone(oferta.dataInicio, 'America/Sao_Paulo');
+        const dataTerminoFuso = parseDateInTimeZone(oferta.dataTermino, 'America/Sao_Paulo');
+       
 
         const ofertaComProdutoEQntVendas = {
             ...oferta,
             produtoRelacionado: produtoSelecionado,
             quantidadeVendas: 0,
-            dataTermino: oferta.dataTermino ? formatarDataString(new Date(oferta.dataTermino), "23", "59", "00") : null,
-            dataInicio: oferta.dataInicio ? formatarDataString(new Date(oferta.dataInicio), "00", "00", "00") : null,
+            dataTermino: oferta.dataTermino ? formatarDataStringHoras(dataTerminoFuso, "23", "59", "59") : null,
+            dataInicio: oferta.dataInicio ? formatarDataStringHoras(dataInicioFuso, "00", "00", "00") : null,
             dataCriacao: formatarDataString(new Date()),
             userId: props.userId
         };
-
-        console.log("ofertaComProdutoEQntVendas")
-        console.log(ofertaComProdutoEQntVendas)
-
 
 
         const id = await addOferta(ofertaComProdutoEQntVendas);
@@ -115,6 +117,9 @@ const CriarOferta = (props) => {
         } else {
             alert("Erro ao cadastrar oferta");
         }
+
+        console.log("Oferta criada:")
+        console.log(ofertaComProdutoEQntVendas)
     };
 
 
@@ -161,7 +166,7 @@ const CriarOferta = (props) => {
 
                                 <Form.Group controlId="dataInicio" className="mb-3">
                                     <Form.Label className="text-light">Data de início da oferta</Form.Label>
-                                    <Form.Control type="date" name="dataInicio" value={oferta.dataInicio || ""} onChange={handleChange} placeholder="Data de início da oferta" required min={todayWithoutTimezone} />
+                                    <Form.Control type="date" name="dataInicio" value={oferta.dataInicio || ""} onChange={handleChange} placeholder="Data de início da oferta" required min={/*todayWithoutTimezone*/todayWithTimezone} />
                                 </Form.Group>
 
                                 <Form.Group controlId="dataTermino" className="mb-3">

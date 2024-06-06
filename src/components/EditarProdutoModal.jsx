@@ -1,16 +1,22 @@
 import React, { useState, useEffect } from 'react';
 import { Modal, Button, Form } from 'react-bootstrap';
 import { getProdutos, uploadImagem } from "../auth/firebaseService";
-import {formatarDataString} from "./Utils"
+import { parseDateInTimeZone, formatarDataStringHoras, formataDataStringParaDataInput, parseStringOrDate } from "./Utils"
 
 const EditarProdutoModal = ({ entidade, show, onHide, onSave }) => {
     const [entidadeEditada, setEntidadeEditada] = useState({ ...entidade });
     const [arquivosSelecionados, setArquivosSelecionados] = useState([]);
     const [produtos, setProdutos] = useState([]);
     const [quantidadeEstoqueProdutoRelacionado, setQuantidadeEstoqueProdutoRelacionado] = useState(0);
+    const [dataInicio, setDataInicio] = useState(() => formataDataStringParaDataInput(entidade.dataInicio));
+    const [dataTermino, setDataTermino] = useState(() => formataDataStringParaDataInput(entidade.dataTermino));
 
 
     useEffect(() => {
+        console.log("formato:")
+        console.log(formataDataStringParaDataInput(entidadeEditada.dataInicio))
+        console.log("dataTEermino:")
+        console.log(dataTermino)
         if (entidade) {
             setEntidadeEditada({ ...entidade });
             setArquivosSelecionados([]);
@@ -19,6 +25,9 @@ const EditarProdutoModal = ({ entidade, show, onHide, onSave }) => {
         if (entidade && entidade.tipo === "oferta") {
             setQuantidadeEstoqueProdutoRelacionado(entidade.produtoRelacionado.quantidadeEstoque);
         }
+
+        console.log("Entidade a editar. Tipo: " + entidade.tipo)
+        console.log(entidade)
 
         const fetchProdutos = async () => {
             const produtos = await getProdutos();
@@ -43,12 +52,30 @@ const EditarProdutoModal = ({ entidade, show, onHide, onSave }) => {
         setArquivosSelecionados(files);
     };
 
+
+    const handleDataInicioChange = (e) => {
+        setDataInicio(e.target.value);
+        console.log("dataInicio do handle data Inicio change")
+        console.log(dataInicio)
+    };
+
+    const handleDataTerminoChange = (e) => {
+        setDataTermino(e.target.value);
+        console.log("dataTermino do handle data termino change")
+        console.log(dataTermino)
+    };
+
     const handleChange = (event) => {
 
         let { name, value } = event.target;
 
+        console.log("name")
+        console.log(name)
+        console.log("value")
+        console.log(value)
+
         if (name === "quantidadeEstoque") {
-            value = parseInt(value, 10); 
+            value = parseInt(value, 10);
             setEntidadeEditada({ ...entidadeEditada, [name]: value });
         }
 
@@ -82,6 +109,17 @@ const EditarProdutoModal = ({ entidade, show, onHide, onSave }) => {
 
         let entidadeAtualizada = { ...entidadeEditada };
 
+        console.log("entidadeAtualizada.dataInicio")
+        console.log(entidadeAtualizada.dataInicio)
+        console.log("entidadeAtualizada.dataTermino")
+        console.log(entidadeAtualizada.dataTermino)
+
+        console.log("dataTermino")
+        console.log(dataTermino)
+
+        console.log("dataInicio")
+        console.log(dataInicio)
+
         if (entidade.tipo === "produto") {
 
             if (arquivosSelecionados && arquivosSelecionados.length > 0) {
@@ -100,10 +138,29 @@ const EditarProdutoModal = ({ entidade, show, onHide, onSave }) => {
                     imagens: entidade.imagens
                 };
 
-                
+
             }
+        } else {
+
+            
+            const dataInicioFuso = parseStringOrDate(dataInicio, 'America/Sao_Paulo', 'inicio');
+            const dataTerminoFuso = parseStringOrDate(dataTermino, 'America/Sao_Paulo', 'termino');
+
+            
+            console.log("dataInicioFuso")
+            console.log(dataInicioFuso)
+            console.log("dataTerminoFuso")
+            console.log(dataTerminoFuso)
+
+            entidadeAtualizada = {
+                ...entidadeAtualizada,
+                dataInicio: entidade.dataInicio ? dataInicioFuso : null,
+                dataTermino: entidade.dataTermino ? dataTerminoFuso : null
+                
+            };
+
         }
-       
+
 
         if (entidade.tipo === "oferta" && entidadeEditada.dataTermino && entidadeEditada.dataInicio > entidadeEditada.dataTermino) {
             alert("A data de término deve ser maior que a data de início!");
@@ -115,8 +172,7 @@ const EditarProdutoModal = ({ entidade, show, onHide, onSave }) => {
             return;
         }
 
-        
-        console.log("ates do onsave")
+        console.log("Entidade Editada. Tipo: " + entidadeAtualizada.tipo)
         console.log(entidadeAtualizada)
         onSave(entidadeAtualizada);
     };
@@ -191,7 +247,7 @@ const EditarProdutoModal = ({ entidade, show, onHide, onSave }) => {
                                     <option value="default">Selecione um produto</option>
                                     {produtos.map(produto => (
                                         <option key={produto.id} value={produto.id} selected={entidadeEditada.produtoRelacionado && entidadeEditada.produtoRelacionado.id === produto.id}>{produto.nomeProduto}</option>
-                    ))}          
+                                    ))}
 
                                 </Form.Control>
                             </Form.Group>
@@ -241,10 +297,10 @@ const EditarProdutoModal = ({ entidade, show, onHide, onSave }) => {
                             <Form.Control
                                 type="number"
                                 name="quantidadeMinima"
-                                value= {entidadeEditada.quantidadeMinima} 
-                                onChange={handleChange} 
+                                value={entidadeEditada.quantidadeMinima}
+                                onChange={handleChange}
                                 min="0"
-                                placeholder="Quantidade mínima para a oferta" 
+                                placeholder="Quantidade mínima para a oferta"
                                 required max={quantidadeEstoqueProdutoRelacionado}
                             />
                         </Form.Group>
@@ -269,8 +325,8 @@ const EditarProdutoModal = ({ entidade, show, onHide, onSave }) => {
                                 <Form.Control
                                     type="date"
                                     name="dataInicio"
-                                    value={entidadeEditada.dataInicio || ""}
-                                    onChange={handleChange}
+                                    value={entidadeEditada.dataInicio ? dataInicio : ""}
+                                    onChange={handleDataInicioChange}
                                     min={new Date().toISOString().split("T")[0]}
                                 />
                             </Form.Group>
@@ -279,8 +335,8 @@ const EditarProdutoModal = ({ entidade, show, onHide, onSave }) => {
                                 <Form.Control
                                     type="date"
                                     name="dataTermino"
-                                    value={entidadeEditada.dataTermino || ""}
-                                    onChange={handleChange}
+                                    value={entidadeEditada.dataTermino ? dataTermino : ""}
+                                    onChange={handleDataTerminoChange}
                                     disabled={!entidadeEditada.dataInicio}
                                 />
                             </Form.Group>

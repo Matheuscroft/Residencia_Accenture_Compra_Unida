@@ -12,10 +12,11 @@ const Paineis = (props) => {
     const [componenteAtual, setComponenteAtual] = useState('produtos');
     const [tipoGrafico, setTipoGrafico] = useState('bar');
     const [metricaAtual, setMetricaAtual] = useState('quantidadeEstoque');
+    const userId = props.userId;
 
 
     useEffect(() => {
-        const userId = props.userId
+        
 
         const fetchProdutos = async () => {
             const produtos = await getProdutos();
@@ -38,15 +39,15 @@ const Paineis = (props) => {
         fetchProdutos();
         fetchOfertas();
         const fetchPedidos = async () => {
-            const pedidos = await getPedidos();
+            const pedidos = await getPedidos(userId);
         
-            // Filtra pedidos com ofertas relacionadas ao userId do usuário logado
+            
             const pedidosFiltrados = pedidos.map(pedido => {
                 const ofertasFiltradas = pedido.ofertasRelacionadas.filter(oferta => oferta.userId === userId);
         
                 if (ofertasFiltradas.length === 0) return null;
         
-                // Calcula o valor total do pedido multiplicando quantidadeVendas pelo precoEspecial de cada oferta
+                
                 const valorPedido = ofertasFiltradas.reduce((total, oferta) => {
                     const quantidadeVendas = oferta.quantidadeVendas || 0;
                     const precoEspecial = parseFloat(oferta.precoEspecial.replace('R$', '').replace(',', '.'));
@@ -56,7 +57,7 @@ const Paineis = (props) => {
                 return {
                     ...pedido,
                     ofertasRelacionadas: ofertasFiltradas,
-                    valorPedido: valorPedido // Inclui o valor calculado na propriedade valorPedido
+                    valorPedido: valorPedido
                 };
             }).filter(pedido => pedido !== null);
         
