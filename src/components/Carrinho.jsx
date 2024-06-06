@@ -10,6 +10,7 @@ const Carrinho = (props) => {
     const [showAlert, setShowAlert] = useState(false);
 
     const oferta = useMemo(() => props.oferta || [], [props.oferta]);
+    const userId= props.userId
 
     useEffect(() => {
         const quantidadesIniciais = {};
@@ -18,14 +19,16 @@ const Carrinho = (props) => {
         });
         setQuantidades(quantidadesIniciais);
 
-        console.log("oferta:")
+        console.log("userId carrinho:")
+        console.log(userId)
+        console.log("oferta carrinho:")
         console.log(oferta)
 
     }, [oferta]);
 
     useEffect(() => {
         const carregarCarrinho = async () => {
-            const carrinhoAtual = await getCarrinho();
+            const carrinhoAtual = await getCarrinho(userId);
             let ofertasAtualizadas;
 
             if (props.oferta && props.oferta.length > 0) {
@@ -46,7 +49,7 @@ const Carrinho = (props) => {
 
                     await updateCarrinho(carrinhoAtual.id, ofertasAtualizadas);
                 } else {
-                    const id = await addCarrinho(props.oferta);
+                    const id = await addCarrinho(props.oferta, userId);
                     ofertasAtualizadas = props.oferta;
                 }
 
@@ -92,7 +95,7 @@ const Carrinho = (props) => {
     
         setOfertas(updatedOfertas);
     
-        const carrinho = await getCarrinho();
+        const carrinho = await getCarrinho(userId);
         if (carrinho) {
             await updateCarrinho(carrinho.id, updatedOfertas);
         }
@@ -102,7 +105,7 @@ const Carrinho = (props) => {
         const novaOferta = ofertas.filter(item => item.id !== id);
         setOfertas(novaOferta);
 
-        const carrinho = await getCarrinho();
+        const carrinho = await getCarrinho(userId);
         if (carrinho) {
             const ofertasAtualizadas = carrinho.ofertas.filter(item => item.id !== id);
             await updateCarrinho(carrinho.id, ofertasAtualizadas);
@@ -135,7 +138,8 @@ const Carrinho = (props) => {
                 const produtoComEstoqueAtualizado = {
                     ...produto,
                     quantidadeEstoque: novaQuantidadeEstoque,
-                    quantidadeVendas: oferta.quantidadeVendas
+                    quantidadeVendas: oferta.quantidadeVendas,
+                    idComprador: userId
                 };
 
                 await editarProduto(oferta.produtoRelacionado.id, produtoComEstoqueAtualizado);
@@ -151,7 +155,8 @@ const Carrinho = (props) => {
                 return { ...rest, quantidadeVendas: quantidadeVendaPedidoAtual };
             }),
             dataDePedido: formatarDataString(new Date()),
-            valorPedido: ofertasAtualizadas.reduce((total, oferta) => total + (parseFloat(oferta.precoEspecial.replace('R$', '').replace(',', '.')) * oferta.quantidadeVendaPedidoAtual), 0)
+            valorPedido: ofertasAtualizadas.reduce((total, oferta) => total + (parseFloat(oferta.precoEspecial.replace('R$', '').replace(',', '.')) * oferta.quantidadeVendaPedidoAtual), 0),
+            idComprador: userId
         };
 
         console.log("novoPedido")
@@ -162,12 +167,12 @@ const Carrinho = (props) => {
         const id = await addPedido(novoPedido);
         if (id) {
             alert(`${novoPedido.ofertasRelacionadas[0].nomeOferta} cadastrado com sucesso com ID: ${id}`);
-            props.handlePage("meus-pedidos");
+            props.handlePage("meus-pedidos", { userId: userId });
         } else {
             alert("Erro ao cadastrar pedido");
         }
 
-        const carrinho = await getCarrinho();
+        const carrinho = await getCarrinho(userId);
         if (carrinho) {
             await updateCarrinho(carrinho.id, []);
         }
@@ -195,7 +200,7 @@ const Carrinho = (props) => {
                 <Col xs={12} md={8}>
                     <Card className="mb-4">
                         <Card.Header className="d-flex justify-content-between align-items-center">
-                            <Button variant="link" onClick={() => props.handlePage("home-cliente")} style={{ color: 'black' }}>Continuar comprando</Button>
+                            <Button variant="link" onClick={() => props.handlePage("home-cliente", { userId: props.userId })} style={{ color: 'black' }}>Continuar comprando</Button>
                             <Button variant="warning" onClick={handleSubmit} disabled={ofertas.length === 0}>Finalizar pedido</Button>
                         </Card.Header>
                         <Card.Body>

@@ -30,10 +30,7 @@ const Login = (props) => {
             const {userType, userId} = await login(email, senha);
             if (userType) {
                 if (userType === "fornecedor") {
-                    console.log("usertype")
-                    console.log(userType)
-                    console.log("userId")
-                    console.log(userId)
+                    
                     props.handlePage("home-fornecedor", { userId });
                 } else {
                     props.handlePage("home-cliente", { userId });

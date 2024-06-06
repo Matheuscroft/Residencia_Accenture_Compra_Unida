@@ -16,6 +16,7 @@ import MeusPedidos from './components/MeusPedidos';
 import EsqueciSenha from './components/EsqueciSenha';
 import Paineis from './components/Paineis';
 import GerenciarPedidos from './components/GerenciarPedidos';
+import Contato from './components/Contato';
 
 const App = () => {
     const [carrinho, setCarrinho] = useState([]);
@@ -33,7 +34,7 @@ const App = () => {
         case "login":
             return (
                 <div>
-                    <NavegacaoHeader handlePage={handlePage} paginaAtual={paginaAtual.page} />
+                    <NavegacaoHeader handlePage={handlePage} paginaAtual={paginaAtual.page}/>
                     <Login handlePage={handlePage} />
                 </div>
             );
@@ -47,8 +48,8 @@ const App = () => {
         case "home-fornecedor":
             return (
                 <div>
-                    <NavegacaoHeader handlePage={handlePage} paginaAtual={paginaAtual.page} />
-                    <HomeFornecedor handlePage={handlePage} userId={paginaAtual.data.userId}/>
+                    <NavegacaoHeader handlePage={handlePage} paginaAtual={paginaAtual.page} userId={paginaAtual.data.userId}/>
+                    <HomeFornecedor handlePage={handlePage} userId={paginaAtual.data.userId} />
                 </div>
             );
         case "cadastro-cliente":
@@ -68,7 +69,7 @@ const App = () => {
         case "esqueci-senha":
             return (
                 <div>
-                    <NavegacaoHeader handlePage={handlePage} paginaAtual={paginaAtual.page} />
+                    <NavegacaoHeader handlePage={handlePage} paginaAtual={paginaAtual.page} userId={paginaAtual.data.userId}/>
                     <EsqueciSenha />
                 </div>
             );
@@ -76,57 +77,71 @@ const App = () => {
         case "criar-oferta":
             return (
                 <div>
-                    <NavegacaoHeader handlePage={handlePage} paginaAtual={paginaAtual.page} />
-                    <CriarOferta handlePage={handlePage} userId={paginaAtual.data.userId}/>
+                    <NavegacaoHeader handlePage={handlePage} paginaAtual={paginaAtual.page} userId={paginaAtual.data.userId}/>
+                    <CriarOferta handlePage={handlePage} userId={paginaAtual.data.userId} />
                 </div>
             );
         case "criar-produto":
             return (
                 <div>
-                    <NavegacaoHeader handlePage={handlePage} paginaAtual={paginaAtual.page} />
-                    <CriarProduto handlePage={handlePage} userId={paginaAtual.data.userId}/>
+                    <NavegacaoHeader handlePage={handlePage} paginaAtual={paginaAtual.page} userId={paginaAtual.data.userId}/>
+                    <CriarProduto handlePage={handlePage} userId={paginaAtual.data.userId} />
                 </div>
             );
         case "home-cliente":
             return (
                 <div>
-                    <NavegacaoHeader handlePage={handlePage} paginaAtual={paginaAtual.page} />
-                    <HomeCliente addToCart={addToCart} handlePage={handlePage} />
+                    <NavegacaoHeader handlePage={handlePage} paginaAtual={paginaAtual.page} userId={paginaAtual.data.userId}/>
+                    <HomeCliente addToCart={addToCart} handlePage={handlePage} userId={paginaAtual.data.userId} />
                 </div>
             );
         case "produto":
             return (
                 <div>
-                    <NavegacaoHeader handlePage={handlePage} paginaAtual={paginaAtual.page} />
-                    <Oferta handlePage={handlePage} produto={paginaAtual.data} />
+                    <NavegacaoHeader handlePage={handlePage} paginaAtual={paginaAtual.page} userId={paginaAtual.data.userId}/>
+                    <Oferta handlePage={handlePage} produto={paginaAtual.data.oferta} userId={paginaAtual.data.userId} />
                 </div>
             );
         case "carrinho":
             return (
                 <div>
-                    <NavegacaoHeader handlePage={handlePage} paginaAtual={paginaAtual.page} />
-                    <Carrinho handlePage={handlePage} oferta={paginaAtual.data} />
+                    <NavegacaoHeader handlePage={handlePage} paginaAtual={paginaAtual.page} userId={paginaAtual.data.userId} oferta={paginaAtual.data.oferta}/>
+                    <Carrinho handlePage={handlePage} oferta={paginaAtual.data.oferta} userId={paginaAtual.data.userId} />
                 </div>
             );
         case "meus-pedidos":
             return (
                 <div>
-                    <NavegacaoHeader handlePage={handlePage} paginaAtual={paginaAtual.page} />
-                    <MeusPedidos handlePage={handlePage} />
+                    <NavegacaoHeader handlePage={handlePage} paginaAtual={paginaAtual.page} userId={paginaAtual.data.userId}/>
+                    <MeusPedidos handlePage={handlePage} userId={paginaAtual.data.userId} />
                 </div>
             );
         case "gerenciar-pedidos":
             return (
                 <div>
-                    <NavegacaoHeader handlePage={handlePage} paginaAtual={paginaAtual.page} />
-                    <GerenciarPedidos handlePage={handlePage} userId={paginaAtual.data.userId}/>
+                    <NavegacaoHeader handlePage={handlePage} paginaAtual={paginaAtual.page} userId={paginaAtual.data.userId}/>
+                    <GerenciarPedidos handlePage={handlePage} userId={paginaAtual.data.userId} />
                 </div>
             );
         case "paineis":
             return (
                 <div>
-                    <NavegacaoHeader handlePage={handlePage} paginaAtual={paginaAtual.page} />
-                    <Paineis handlePage={handlePage} userId={paginaAtual.data.userId}/>
+                    <NavegacaoHeader handlePage={handlePage} paginaAtual={paginaAtual.page} userId={paginaAtual.data.userId}/>
+                    <Paineis handlePage={handlePage} userId={paginaAtual.data.userId} />
+                </div>
+            );
+        case "landing-page":
+            return (
+                <div>
+                    <NavegacaoHeader handlePage={handlePage} paginaAtual={paginaAtual.page} userId={paginaAtual.data.userId} />
+                    <LandingPage handlePage={handlePage} />
+                </div>
+            );
+        case "contato":
+            return (
+                <div>
+                    <NavegacaoHeader handlePage={handlePage} paginaAtual={paginaAtual.page} userId={paginaAtual.data.userId}/>
+                    <Contato handlePage={handlePage} userId={paginaAtual.data.userId} />
                 </div>
             );
         default:

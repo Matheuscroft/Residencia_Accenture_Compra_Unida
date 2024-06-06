@@ -9,8 +9,12 @@ import '../App.css';
 const Oferta = (props) => {
     const produto = props.produto;
     const [ofertas, setOfertas] = useState([]);
+    const userId = props.userId
+    console.log("oferta userId")
+        console.log(userId)
 
     useEffect(() => {
+        
         const fetchOfertas = async () => {
             const todasOfertas = await getOfertas();
             const ofertasProduto = todasOfertas.filter(oferta => oferta.produtoRelacionado.id === produto.id).map(oferta => ({
@@ -110,7 +114,7 @@ const Oferta = (props) => {
                                         </div>
                                         <Button
                                             variant="warning"
-                                            onClick={() => props.handlePage("carrinho", ofertas)}
+                                            onClick={() => props.handlePage("carrinho", { userId: userId, oferta: ofertas})}
                                             style={{ marginTop: '20px', width: '100%' }}
                                             disabled={oferta.produtoRelacionado.quantidadeEstoque === 0}
                                         >

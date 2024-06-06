@@ -8,6 +8,10 @@ const HomeCliente = (props) => {
     const [ofertas, setOfertas] = useState([]);
     const containerRefs = useRef({});
     const cardRefs = useRef({});
+    const userId = props.userId;
+
+    console.log("userId")
+    console.log(userId)
 
     useEffect(() => {
         const fetchOfertas = async () => {
@@ -72,8 +76,12 @@ const HomeCliente = (props) => {
             ...oferta,
             quantidadeCarrinho: 1
         };
+        console.log("props.userId")
+        console.log(props.userId)
 
-        props.handlePage("carrinho", [ofertaComQntCarrinho])
+        //props.handlePage("carrinho", [ofertaComQntCarrinho], props.userId);
+        props.handlePage("carrinho", { userId: userId, oferta: [ofertaComQntCarrinho]});
+        
     };
 
     const getCardStyle = (oferta) => {
@@ -136,7 +144,7 @@ const HomeCliente = (props) => {
                                                 cardRefs.current['melhoresOfertas'][index] = el;
                                             }}
                                             className="offer-card"
-                                            onClick={() => props.handlePage("produto", oferta.produtoRelacionado)}
+                                            onClick={() => props.handlePage("produto", { userId: userId, oferta: oferta.produtoRelacionado})}
                                             style={{ backgroundColor: getCardStyle(oferta), borderColor: getCardStyle(oferta) }}
                                         >
                                             <div style={{ backgroundColor: 'white' }}>
@@ -248,7 +256,7 @@ const HomeCliente = (props) => {
                                                         cardRefs.current[categoria][index] = el;
                                                     }}
                                                     className="offer-card"
-                                                    onClick={() => props.handlePage("produto", oferta.produtoRelacionado)}
+                                                    onClick={() => props.handlePage("produto", { userId: userId, oferta: oferta.produtoRelacionado})}
                                                     style={{ backgroundColor: getCardStyle(oferta), borderColor: getCardStyle(oferta) }}
                                                 >
                                                     <div style={{ backgroundColor: 'white' }}>

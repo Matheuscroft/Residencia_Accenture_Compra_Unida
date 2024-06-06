@@ -96,10 +96,13 @@ export const addPedido = async (pedido) => {
     }
 };
 
-export const getPedidos = async () => {
-    const querySnapshot = await getDocs(collection(db, "pedidos"));
+
+export const getPedidos = async (idComprador) => {
+    const pedidosQuery = query(collection(db, "pedidos"), where("idComprador", "==", idComprador));
+    const querySnapshot = await getDocs(pedidosQuery);
     return querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
 };
+
 
 export const editarPedido = async (pedidoId, novoPedido) => {
     try {
@@ -113,9 +116,12 @@ export const editarPedido = async (pedidoId, novoPedido) => {
     }
 };
 
-export const addCarrinho = async (ofertas) => {
+export const addCarrinho = async (ofertas, idComprador) => {
     try {
-        const docRef = await addDoc(collection(db, "carrinho"), {ofertas});
+        const carrinhoComComprador = { ofertas, idComprador };
+        const docRef = await addDoc(collection(db, "carrinho"), carrinhoComComprador);
+        console.log("entrou no add carrinho; carrinho com comprador:")
+        console.log(carrinhoComComprador)
         return docRef.id;
     } catch (e) {
         console.error("Erro ao atualizar carrinho: ", e);
@@ -131,9 +137,23 @@ export const updateCarrinho = async (id, ofertas) => {
     }
 };
 
-export const getCarrinho = async () => {
-    const querySnapshot = await getDocs(collection(db, "carrinho"));
-    return querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }))[0];
+/*export const updateCarrinho = async (id, ofertas, idComprador) => {
+    try {
+        const docRef = doc(db, "carrinho", id);
+        await updateDoc(docRef, { ofertas, idComprador });
+        console.log("Carrinho atualizado:", { ofertas, idComprador });
+    } catch (e) {
+        console.error("Erro ao atualizar carrinho: ", e);
+    }
+};*/
+
+export const getCarrinho = async (idComprador) => {
+    const carrinhoQuery = query(collection(db, "carrinho"), where("idComprador", "==", idComprador));
+    const querySnapshot = await getDocs(carrinhoQuery);
+    if (!querySnapshot.empty) {
+        return querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }))[0];
+    }
+    return null;
 };
 
 export const getMessages = async (fornecedorId) => {

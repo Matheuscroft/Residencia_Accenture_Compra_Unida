@@ -3,15 +3,15 @@ import compraUnidaLogo from '../assets/compra-unida-logo.png';
 import carrinhoIcon from '../assets/Carrinho.png'; 
 import { Navbar, Nav, Button, Container } from 'react-bootstrap';
 
-const NavegacaoHeader = ({ handlePage, paginaAtual }) => {
+const NavegacaoHeader = ({ handlePage, paginaAtual, userId, oferta  }) => {
     const renderContent = () => {
         if (paginaAtual === 'home-cliente' || paginaAtual === 'meus-pedidos' || paginaAtual === 'gerenciar-pedidos' || paginaAtual === 'carrinho') {
             return (
                 <>
-                    <Button variant="link" onClick={() => handlePage('carrinho')}>
+                    <Button variant="link" onClick={() => handlePage('carrinho', oferta, userId )}>
                         <img src={carrinhoIcon} alt="Carrinho" width="30" height="30" />
                     </Button>
-                    <Button style={{ backgroundColor: '#FFCD46', borderColor: '#FFCD46', color: 'black' }} onClick={() => handlePage('meus-pedidos')}>
+                    <Button style={{ backgroundColor: '#FFCD46', borderColor: '#FFCD46', color: 'black' }} onClick={() => handlePage('meus-pedidos', userId )}>
                         Meus Pedidos
                     </Button>
                 </>
@@ -34,7 +34,7 @@ const NavegacaoHeader = ({ handlePage, paginaAtual }) => {
     return (
         <Navbar expand="lg" fixed="top" style={{ backgroundColor: '#1c3bc5' }}>
             <Container>
-                <Navbar.Brand href="google.com">
+                <Navbar.Brand onClick={() => handlePage("landing-page")}>
                     <img
                         src={compraUnidaLogo}
                         alt="Logo Compra Unida"
@@ -46,9 +46,9 @@ const NavegacaoHeader = ({ handlePage, paginaAtual }) => {
                 <Navbar.Toggle aria-controls="basic-navbar-nav" />
                 <Navbar.Collapse id="basic-navbar-nav">
                     <Nav className="me-auto">
-                        <Nav.Link href="google.com" style={{ color: 'white' }}>Home</Nav.Link>
-                        <Nav.Link style={{ color: 'white' }} onClick={() => handlePage("home-cliente")}>Produtos</Nav.Link>
-                        <Nav.Link href="google.com" style={{ color: 'white' }}>Contato</Nav.Link>
+                        <Nav.Link style={{ color: 'white' }} onClick={() => handlePage("landing-page")}>Home</Nav.Link>
+                        <Nav.Link style={{ color: 'white' }} onClick={() => handlePage("home-cliente", userId )}>Produtos</Nav.Link>
+                        <Nav.Link style={{ color: 'white' }} onClick={() => handlePage("contato")}>Contato</Nav.Link>
                     </Nav>
                     {renderContent()}
                 </Navbar.Collapse>

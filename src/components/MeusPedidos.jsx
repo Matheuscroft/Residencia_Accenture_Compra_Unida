@@ -5,18 +5,23 @@ import { ordenarPorDataString } from './Utils';
 
 const MeusPedidos = (props) => {
     const [listaPedidos, setListaPedidos] = useState([]);
+    const userId = props.userId;
+
+
 
     useEffect(() => {
+        console.log("userId do meus pedidos")
+        console.log(userId)
         const fetchPedidos = async () => {
-            const pedidos = await getPedidos();
-        
-            const produtosOrdenados = ordenarPorDataString(pedidos, 'dataDePedido');
-            setListaPedidos(produtosOrdenados);
-        
-            
-            
+            const pedidos = await getPedidos(userId);
+
+            const pedidosOrdenados = ordenarPorDataString(pedidos, 'dataDePedido');
+            setListaPedidos(pedidosOrdenados);
+
+
+
         };
-        
+
         fetchPedidos();
     }, []);
 
@@ -91,7 +96,7 @@ const MeusPedidos = (props) => {
                         <Card.Body>
                             <h5>Resumo</h5>
                             <p>Total de Pedidos: {listaPedidos.length}</p>
-                            <Button variant="warning" onClick={() => props.handlePage("home-cliente")} className="w-100">Continuar Comprando</Button>
+                            <Button variant="warning" onClick={() => props.handlePage("home-cliente", { userId: userId })} className="w-100">Continuar Comprando</Button>
                         </Card.Body>
                     </Card>
                 </Col>
