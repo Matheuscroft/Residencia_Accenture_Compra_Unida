@@ -120,11 +120,18 @@ const Carrinho = (props) => {
 
         const ofertasAtualizadas = ofertas.map(oferta => {
             const quantidadeVendaPedidoAtual = oferta.quantidadeCarrinho;
+            
+            oferta.quantidadeVendas = (oferta.quantidadeVendas || 0) + quantidadeVendaPedidoAtual;
+            oferta.quantidadeCarrinho = 0;
+
+            if (oferta.quantidadeVendas >= oferta.quantidadeMinima) {
+                oferta.status = 'Concluído';
+            }
+
             if (oferta.status !== 'Concluído') {
                 oferta.status = 'Pendente';
             }
-            oferta.quantidadeVendas = (oferta.quantidadeVendas || 0) + quantidadeVendaPedidoAtual;
-            oferta.quantidadeCarrinho = 0;
+
             return { ...oferta, quantidadeVendaPedidoAtual };
         });
 
@@ -138,8 +145,7 @@ const Carrinho = (props) => {
                 const produtoComEstoqueAtualizado = {
                     ...produto,
                     quantidadeEstoque: novaQuantidadeEstoque,
-                    quantidadeVendas: oferta.quantidadeVendas,
-                    idComprador: userId
+                    quantidadeVendas: oferta.quantidadeVendas
                 };
 
                 await editarProduto(oferta.produtoRelacionado.id, produtoComEstoqueAtualizado);

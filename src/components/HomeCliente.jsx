@@ -101,15 +101,19 @@ const HomeCliente = (props) => {
     };
 
     const getCardStyle = (oferta) => {
-        const vendidos = oferta.quantidadeVendas || 0;
+        /*const vendidos = oferta.quantidadeVendas || 0;
         const minimo = oferta.quantidadeMinima;
-        return vendidos >= minimo ? '#28a745' : '#1c3bc5';
+        return vendidos >= minimo ? '#28a745' : '#1c3bc5';*/
+
+        return oferta.status === "Concluído" ? '#28a745' : '#1c3bc5';
     };
 
     const getCardText = (oferta) => {
-        const vendidos = oferta.quantidadeVendas || 0;
+        /*const vendidos = oferta.quantidadeVendas || 0;
         const minimo = oferta.quantidadeMinima;
-        return vendidos >= minimo ? 'Desconto concedido!' : '';
+        return vendidos >= minimo ? 'Desconto concedido!' : '';*/
+
+        return oferta.status === "Concluído" ? 'Desconto concedido!' : '';
     };
 
     const handleOferta = (oferta) => {
