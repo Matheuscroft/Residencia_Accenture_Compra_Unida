@@ -103,6 +103,13 @@ export const getPedidos = async (idComprador) => {
     return querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
 };
 
+export const getTodosPedidos = async () => {
+    const pedidosQuery = query(collection(db, "pedidos"));
+    const querySnapshot = await getDocs(pedidosQuery);
+    return querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+};
+
+
 
 export const editarPedido = async (pedidoId, novoPedido) => {
     try {

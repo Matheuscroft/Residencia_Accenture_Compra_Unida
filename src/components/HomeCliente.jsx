@@ -41,7 +41,7 @@ const HomeCliente = (props) => {
     }, {});
 
 
-    const categoriasPadrao = ["alimentacao", "vestuario", "racao", "bebidas"];
+    const categoriasPadrao = ["Alimentação", "Vestuário", "Ração", "Bebidas"];
     const categoriasFormatadas = {
         alimentacao: "Alimentação",
         vestuario: "Vestuário",
@@ -66,9 +66,21 @@ const HomeCliente = (props) => {
     };
 
     const formatarData = (dataString) => {
-        const data = new Date(dataString);
+        const [date, time] = dataString.split(' ');
+        const [day, month, year] = date.split('/');
+        const [hours, minutes, seconds] = time.split(':');
+        const data = new Date(`${year}-${month}-${day}T${hours}:${minutes}:${seconds}`);
         return data.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit', year: '2-digit' });
     };
+
+    const formatarDataCountdown = (dataString) => {
+        const [date, time] = dataString.split(' ');
+        const [day, month, year] = date.split('/');
+        const [hours, minutes, seconds] = time.split(':');
+        return new Date(`${year}-${month}-${day}T${hours}:${minutes}:${seconds}`);
+        
+    };
+    
 
     const handleCarrinho = (oferta) => {
 
@@ -175,7 +187,8 @@ const HomeCliente = (props) => {
                                                     <Card.Text style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', color: 'white' }} title={oferta.descricao}>{oferta.descricao}</Card.Text>
                                                     <Card.Text style={{ textDecoration: 'line-through', color: 'red' }}><strong>Preço:</strong> {oferta.produtoRelacionado.preco}</Card.Text>
                                                     <Card.Text style={{ color: 'white' }}><strong>Preço Especial:</strong> {oferta.precoEspecial}</Card.Text>
-                                                    <Card.Text style={{ color: 'white' }}><strong>Tempo Restante:</strong> <Countdown date={new Date(oferta.dataTermino)} /></Card.Text>
+                                                    <Card.Text style={{ color: 'white' }}><strong>Tempo Restante:</strong> <Countdown date={formatarDataCountdown((oferta.dataTermino))} /></Card.Text>
+
                                                     <Card.Text style={{ color: 'white' }}><strong>Data de Finalização:</strong> {formatarData(oferta.dataTermino)}</Card.Text>
                                                     <Card.Text style={{ color: 'white' }}>
                                                         <strong>Vendidos:</strong> {oferta.quantidadeVendas || 0}/{oferta.quantidadeMinima}
@@ -228,7 +241,7 @@ const HomeCliente = (props) => {
 
                 {categoriasPadrao.map((categoria) => (
                     <div key={categoria} style={{ marginBottom: '40px' }}>
-                        <h3 style={{ color: '#FFCD46' }}>{categoriasFormatadas[categoria]}</h3>
+                        <h3 style={{ color: '#FFCD46' }}>{categoria}</h3>
                         <div style={{ position: 'relative' }}>
                             {categorias[categoria] && categorias[categoria].length >= 3 && (
                                 <Button
@@ -287,7 +300,7 @@ const HomeCliente = (props) => {
                                                             <Card.Text style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', color: 'white' }} title={oferta.descricao}>{oferta.descricao}</Card.Text>
                                                             <Card.Text style={{ textDecoration: 'line-through', color: 'red' }}><strong>Preço:</strong> {oferta.produtoRelacionado.preco}</Card.Text>
                                                             <Card.Text style={{ color: 'white' }}><strong>Preço Especial:</strong> {oferta.precoEspecial}</Card.Text>
-                                                            <Card.Text style={{ color: 'white' }}><strong>Tempo Restante:</strong> <Countdown date={new Date(oferta.dataTermino)} /></Card.Text>
+                                                            <Card.Text style={{ color: 'white' }}><strong>Tempo Restante:</strong> <Countdown date={formatarDataCountdown((oferta.dataTermino))} /></Card.Text>
                                                             <Card.Text style={{ color: 'white' }}><strong>Data de Finalização:</strong> {formatarData(oferta.dataTermino)}</Card.Text>
                                                             <Card.Text style={{ color: 'white' }}>
                                                                 <strong>Vendidos:</strong> {oferta.quantidadeVendas || 0}/{oferta.quantidadeMinima}

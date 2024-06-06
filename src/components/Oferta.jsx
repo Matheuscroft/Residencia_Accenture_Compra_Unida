@@ -26,9 +26,25 @@ const Oferta = (props) => {
         fetchOfertas();
     }, [produto.id]);
 
-    const formatarData = (dataString) => {
+    /*const formatarData = (dataString) => {
         const data = new Date(dataString);
         return format(data, 'dd/MM/yyyy');
+    };*/
+
+    const formatarData = (dataString) => {
+        const [date, time] = dataString.split(' ');
+        const [day, month, year] = date.split('/');
+        const [hours, minutes, seconds] = time.split(':');
+        const data = new Date(`${year}-${month}-${day}T${hours}:${minutes}:${seconds}`);
+        return data.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit', year: '2-digit' });
+    };
+
+    const formatarDataCountdown = (dataString) => {
+        const [date, time] = dataString.split(' ');
+        const [day, month, year] = date.split('/');
+        const [hours, minutes, seconds] = time.split(':');
+        return new Date(`${year}-${month}-${day}T${hours}:${minutes}:${seconds}`);
+        
     };
 
     const calcularProgresso = (quantidadeMinima, vendidos) => {
@@ -72,7 +88,7 @@ const Oferta = (props) => {
                                     <p><strong>Data de início da oferta:</strong> {formatarData(oferta.dataInicio)}</p>
                                 </div>
                             ))}
-                            <Chat fornecedorId={produto.fornecedorId} />
+                            
                         </Card.Body>
                     </Card>
                 </Col>
@@ -84,7 +100,7 @@ const Oferta = (props) => {
                                     <div key={index} className="mt-3">
                                         <div className="mt-3" style={{ fontSize: "20px" }}>
                                             <strong>Tempo restante: </strong>
-                                            <Countdown date={new Date(oferta.dataTermino)} />
+                                            <Countdown date={formatarDataCountdown(oferta.dataTermino)} />
                                         </div>
                                         <p>Oferta termina em: {formatarData(oferta.dataTermino)}</p>
 

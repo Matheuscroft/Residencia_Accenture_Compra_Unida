@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Container, Row, Col, Card, Button, ButtonGroup } from 'react-bootstrap';
-import { getPedidos, editarPedido, editarOferta } from '../auth/firebaseService';
+import { getPedidos, editarPedido, editarOferta, getTodosPedidos } from '../auth/firebaseService';
 import { ordenarPorDataString } from './Utils'
 
 const GerenciarPedidos = (props) => {
@@ -8,7 +8,7 @@ const GerenciarPedidos = (props) => {
 
     useEffect(() => {
         const fetchPedidos = async () => {
-            const pedidos = await getPedidos();
+            const pedidos = await getTodosPedidos();
             const userId = props.userId;
 
             console.log("to no fetch do ger pedidos")
@@ -63,7 +63,7 @@ const GerenciarPedidos = (props) => {
         await editarOferta(ofertaId, { status: novoStatus });
     
         // Buscar os pedidos originais do Firebase
-        const pedidosOriginais = await getPedidos();
+        const pedidosOriginais = await getTodosPedidos();
     
         // Filtrar pedidos que contêm a oferta atualizada
         const pedidosParaAtualizar = pedidosOriginais.filter(pedido =>

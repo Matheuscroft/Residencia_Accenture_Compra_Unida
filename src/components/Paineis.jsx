@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Container, Row, Col, Card, Button, ButtonGroup } from 'react-bootstrap';
-import { getPedidos, getProdutos, getOfertas } from '../auth/firebaseService';
+import { getTodosPedidos, getProdutos, getOfertas } from '../auth/firebaseService';
 import { format } from 'date-fns';
 import { BarChart, Bar, LineChart, Line, PieChart, Pie, AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import { ordenarPropriedadesObjeto, ordenarArrayPropriedadesObjeto, ordenarPorDataString } from './Utils'
@@ -39,7 +39,7 @@ const Paineis = (props) => {
         fetchProdutos();
         fetchOfertas();
         const fetchPedidos = async () => {
-            const pedidos = await getPedidos(userId);
+            const pedidos = await getTodosPedidos(userId);
         
             
             const pedidosFiltrados = pedidos.map(pedido => {
@@ -60,8 +60,10 @@ const Paineis = (props) => {
                     valorPedido: valorPedido
                 };
             }).filter(pedido => pedido !== null);
+
+            const pedidosOrdenados = ordenarPorDataString(pedidosFiltrados, 'dataDePedido');
         
-            const pedidosComPropsOrdenadas = ordenarArrayPropriedadesObjeto(pedidosFiltrados);
+            const pedidosComPropsOrdenadas = ordenarArrayPropriedadesObjeto(pedidosOrdenados);
             setListaPedidos(pedidosComPropsOrdenadas);
         };
         
