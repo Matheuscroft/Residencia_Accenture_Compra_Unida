@@ -11,10 +11,10 @@ const Oferta = (props) => {
     const [ofertas, setOfertas] = useState([]);
     const userId = props.userId
     console.log("oferta userId")
-        console.log(userId)
+    console.log(userId)
 
     useEffect(() => {
-        
+
         const fetchOfertas = async () => {
             const todasOfertas = await getOfertas();
             const ofertasProduto = todasOfertas.filter(oferta => oferta.produtoRelacionado.id === produto.id).map(oferta => ({
@@ -44,7 +44,7 @@ const Oferta = (props) => {
         const [day, month, year] = date.split('/');
         const [hours, minutes, seconds] = time.split(':');
         return new Date(`${year}-${month}-${day}T${hours}:${minutes}:${seconds}`);
-        
+
     };
 
     const calcularProgresso = (quantidadeMinima, vendidos) => {
@@ -88,7 +88,7 @@ const Oferta = (props) => {
                                     <p><strong>Data de início da oferta:</strong> {formatarData(oferta.dataInicio)}</p>
                                 </div>
                             ))}
-                            
+
                         </Card.Body>
                     </Card>
                 </Col>
@@ -98,6 +98,13 @@ const Oferta = (props) => {
                             <Card.Body>
                                 {ofertas.map((oferta, index) => (
                                     <div key={index} className="mt-3">
+                                        {oferta.status === 'Concluído' && (
+                                            <Card className="text-center mb-3" style={{ borderColor: 'green', borderRadius: '15px' }}>
+                                                <Card.Body>
+                                                    <p style={{ color: 'green', fontWeight: 'bold' }}>Oferta atingida</p>
+                                                </Card.Body>
+                                            </Card>
+                                        )}
                                         <div className="mt-3" style={{ fontSize: "20px" }}>
                                             <strong>Tempo restante: </strong>
                                             <Countdown date={formatarDataCountdown(oferta.dataTermino)} />
@@ -130,7 +137,7 @@ const Oferta = (props) => {
                                         </div>
                                         <Button
                                             variant="warning"
-                                            onClick={() => props.handlePage("carrinho", { userId: userId, oferta: ofertas})}
+                                            onClick={() => props.handlePage("carrinho", { userId: userId, oferta: ofertas })}
                                             style={{ marginTop: '20px', width: '100%' }}
                                             disabled={oferta.produtoRelacionado.quantidadeEstoque === 0}
                                         >

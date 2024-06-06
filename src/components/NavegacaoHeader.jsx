@@ -7,7 +7,7 @@ const NavegacaoHeader = ({ handlePage, paginaAtual, userId, oferta }) => {
 
 
     const renderContent = () => {
-        if ((paginaAtual === 'home-cliente' && userId) || paginaAtual === 'meus-pedidos' || paginaAtual === 'gerenciar-pedidos' || paginaAtual === 'carrinho' || (paginaAtual === 'contato' && userId)) {
+        if ((paginaAtual === 'home-cliente' && userId) || paginaAtual === 'meus-pedidos' || paginaAtual === 'oferta' || paginaAtual === 'gerenciar-pedidos' || paginaAtual === 'carrinho' || (paginaAtual === 'contato' && userId)) {
             return (
                 <>
                     <Button variant="link" onClick={() => handlePage('carrinho', { userId: userId, oferta: oferta })}>
