@@ -193,7 +193,7 @@ const Carrinho = (props) => {
             total += valorOferta;
         });
 
-        return total.toFixed(2);
+        return total.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
     };
 
     return (
