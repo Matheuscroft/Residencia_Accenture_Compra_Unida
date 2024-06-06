@@ -17,7 +17,7 @@ const Cadastro = (props) => {
                         <Card className="mb-4" style={{ backgroundColor: '#1c3bc5', borderRadius: '15px', borderColor: '#d4edda' }}>
                             <Card.Img variant="top" src={ClienteImg} />
                             <Card.Body className="d-flex flex-column align-items-center">
-                                <Button className='botao-cadastrar mb-3 align-self-center' style={{ backgroundColor: '#FFCD46', borderColor: '#FFCD46', color: 'black' }} onClick={() => props.handlePage("cadastro-cliente")}>Eu Sou Cliente</Button>
+                                <Button className='botao-cadastrar mb-3 align-self-center' style={{ backgroundColor: '#FFCD46', borderColor: '#FFCD46', color: 'black' }} onClick={() => props.handlePage("cadastro-cliente")}>Eu Sou Empreendedor</Button>
                             </Card.Body>
                         </Card>
                     </Col>

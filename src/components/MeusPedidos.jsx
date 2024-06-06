@@ -26,7 +26,7 @@ const MeusPedidos = (props) => {
     }, []);
 
     const handleProdutoClick = (produto) => {
-        props.handlePage("produto", produto);
+        props.handlePage("oferta", produto);
     };
 
     const definirCorSituacao = (status) => {

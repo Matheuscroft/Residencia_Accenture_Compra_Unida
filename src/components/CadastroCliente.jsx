@@ -59,7 +59,7 @@ const CadastroCliente = (props) => {
                 <Col xs={12} md={6}>
                     <Card className="text-light" style={{ backgroundColor: '#1c3bc5', borderRadius: '15px', borderColor: '#d4edda' }}>
                         <Card.Body>
-                            <h1 className="text-center text-light">Cadastro - Cliente</h1>
+                            <h1 className="text-center text-light">Cadastro - Empreendedor</h1>
                             <Form onSubmit={handleSubmit}>
                                 <Form.Group controlId="nome" className="mb-3">
                                     <Form.Label className="text-light">Nome Completo/Nome Fantasia</Form.Label>

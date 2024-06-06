@@ -80,7 +80,11 @@ const HomeCliente = (props) => {
         console.log(props.userId)
 
         //props.handlePage("carrinho", [ofertaComQntCarrinho], props.userId);
-        props.handlePage("carrinho", { userId: userId, oferta: [ofertaComQntCarrinho]});
+        if (userId !== undefined) {
+            props.handlePage("carrinho", { userId: userId, oferta: [ofertaComQntCarrinho]});
+        } else {
+            props.handlePage("login");
+        }
         
     };
 
@@ -95,6 +99,15 @@ const HomeCliente = (props) => {
         const minimo = oferta.quantidadeMinima;
         return vendidos >= minimo ? 'Desconto concedido!' : '';
     };
+
+    const handleOferta = (oferta) => {
+
+        if (userId !== undefined) {
+            props.handlePage("oferta", { userId: userId, oferta: oferta});
+        } else {
+            props.handlePage("login");
+        }
+    }
 
     const getMaxHeight = (categoria) => {
         return '400px';
@@ -144,7 +157,7 @@ const HomeCliente = (props) => {
                                                 cardRefs.current['melhoresOfertas'][index] = el;
                                             }}
                                             className="offer-card"
-                                            onClick={() => props.handlePage("produto", { userId: userId, oferta: oferta.produtoRelacionado})}
+                                            onClick={() => handleOferta(oferta.produtoRelacionado)}
                                             style={{ backgroundColor: getCardStyle(oferta), borderColor: getCardStyle(oferta) }}
                                         >
                                             <div style={{ backgroundColor: 'white' }}>
@@ -256,7 +269,7 @@ const HomeCliente = (props) => {
                                                         cardRefs.current[categoria][index] = el;
                                                     }}
                                                     className="offer-card"
-                                                    onClick={() => props.handlePage("produto", { userId: userId, oferta: oferta.produtoRelacionado})}
+                                                    onClick={() => props.handlePage("oferta", { userId: userId, oferta: oferta.produtoRelacionado})}
                                                     style={{ backgroundColor: getCardStyle(oferta), borderColor: getCardStyle(oferta) }}
                                                 >
                                                     <div style={{ backgroundColor: 'white' }}>

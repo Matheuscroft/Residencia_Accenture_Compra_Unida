@@ -20,7 +20,7 @@ import Contato from './components/Contato';
 
 const App = () => {
     const [carrinho, setCarrinho] = useState([]);
-    const [paginaAtual, setPaginaAtual] = useState({ page: "landing", data: null });
+    const [paginaAtual, setPaginaAtual] = useState({ page: "landing-page", data: null });
 
     const addToCart = (produto) => {
         setCarrinho([...carrinho, produto]);
@@ -95,7 +95,7 @@ const App = () => {
                     <HomeCliente addToCart={addToCart} handlePage={handlePage} userId={paginaAtual.data.userId} />
                 </div>
             );
-        case "produto":
+        case "oferta":
             return (
                 <div>
                     <NavegacaoHeader handlePage={handlePage} paginaAtual={paginaAtual.page} userId={paginaAtual.data.userId}/>
@@ -133,7 +133,7 @@ const App = () => {
         case "landing-page":
             return (
                 <div>
-                    <NavegacaoHeader handlePage={handlePage} paginaAtual={paginaAtual.page} userId={paginaAtual.data.userId} />
+                    <NavegacaoHeader handlePage={handlePage} paginaAtual={paginaAtual.page} />
                     <LandingPage handlePage={handlePage} />
                 </div>
             );
