@@ -3,13 +3,12 @@ import { Card, Container, Row, Col, ListGroup } from 'react-bootstrap';
 
 const Contato = () => {
     const membros = [
-        "Membro 1",
-        "Membro 2",
-        "Membro 3",
-        "Membro 4",
-        "Membro 5",
-        "Membro 6",
-        "Membro 7"
+        "Liliana Barbosa Alencar",
+        "Mateus Pereira de Lima",
+        "Matheus de Oliveira Santos",
+        "Matheus Marques da Silva",
+        "Renan Argôlo Carvalho Miranda",
+        "Renan Lima da Silva Oliveira"
     ];
 
     return (
