@@ -8,8 +8,8 @@ const EditarProdutoModal = ({ entidade, show, onHide, onSave }) => {
     const [arquivosSelecionados, setArquivosSelecionados] = useState([]);
     const [produtos, setProdutos] = useState([]);
     const [quantidadeEstoqueProdutoRelacionado, setQuantidadeEstoqueProdutoRelacionado] = useState(0);
-    const [dataInicio, setDataInicio] = useState(() => formataDataStringParaDataInput(entidade.dataInicio));
-    const [dataTermino, setDataTermino] = useState(() => formataDataStringParaDataInput(entidade.dataTermino));
+    const [dataInicio, setDataInicio] = useState();
+    const [dataTermino, setDataTermino] = useState();
 
 
     useEffect(() => {
@@ -25,6 +25,19 @@ const EditarProdutoModal = ({ entidade, show, onHide, onSave }) => {
 
         console.log("Entidade a editar. Tipo: " + entidade.tipo)
         console.log(entidade)
+
+        if (entidade.tipo === 'oferta') {
+            setDataInicio(formataDataStringParaDataInput(entidade.dataInicio))
+            setDataTermino(formataDataStringParaDataInput(entidade.dataTermino))
+        }
+
+        console.log("comecou dataInicio")
+        console.log(dataInicio)
+        console.log("comecou dataTermino")
+        console.log(dataTermino)
+
+
+
 
         const fetchProdutos = async () => {
             const produtos = await getProdutos();
@@ -52,24 +65,18 @@ const EditarProdutoModal = ({ entidade, show, onHide, onSave }) => {
 
     const handleDataInicioChange = (e) => {
         setDataInicio(e.target.value);
-        console.log("dataInicio do handle data Inicio change")
-        console.log(dataInicio)
+
     };
 
     const handleDataTerminoChange = (e) => {
         setDataTermino(e.target.value);
-        console.log("dataTermino do handle data termino change")
-        console.log(dataTermino)
+
     };
 
     const handleChange = (event) => {
 
         let { name, value } = event.target;
 
-        console.log("name")
-        console.log(name)
-        console.log("value")
-        console.log(value)
 
         if (name === "quantidadeEstoque") {
             value = parseInt(value, 10);
@@ -92,7 +99,7 @@ const EditarProdutoModal = ({ entidade, show, onHide, onSave }) => {
 
         } else if (name === "quantidadeMinima") {
 
-            const newValue = value < 0 ? 0 : value; // Garante que o valor mínimo não seja negativo
+            const newValue = value < 0 ? 0 : value;
             setEntidadeEditada({ ...entidadeEditada, [name]: newValue });
 
         } else {
@@ -131,9 +138,6 @@ const EditarProdutoModal = ({ entidade, show, onHide, onSave }) => {
 
             const dataInicioFuso = parseStringOrDate(dataInicio, 'America/Sao_Paulo', 'inicio');
             const dataTerminoFuso = parseStringOrDate(dataTermino, 'America/Sao_Paulo', 'termino');
-
-
-
 
             entidadeAtualizada = {
                 ...entidadeAtualizada,

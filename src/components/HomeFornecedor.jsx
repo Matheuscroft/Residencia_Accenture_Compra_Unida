@@ -88,7 +88,7 @@ const HomeFornecedor = (props) => {
 
                 setListaOfertas(novaListaOfertas);
             }
-            setAlertMessage('Produto cadastrado com sucesso!');
+            setAlertMessage('Produto editado com sucesso!');
 
         } else if (entidadeEditada.tipo === "oferta") {
 
@@ -103,7 +103,7 @@ const HomeFornecedor = (props) => {
 
             setListaOfertas(novaListaOfertas)
             
-            setAlertMessage('Oferta cadastrada com sucesso!');
+            setAlertMessage('Oferta editada com sucesso!');
         }
 
         
