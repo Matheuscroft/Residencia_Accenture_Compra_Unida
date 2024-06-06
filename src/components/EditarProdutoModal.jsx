@@ -13,10 +13,7 @@ const EditarProdutoModal = ({ entidade, show, onHide, onSave }) => {
 
 
     useEffect(() => {
-        console.log("formato:")
-        console.log(formataDataStringParaDataInput(entidadeEditada.dataInicio))
-        console.log("dataTEermino:")
-        console.log(dataTermino)
+
         if (entidade) {
             setEntidadeEditada({ ...entidade });
             setArquivosSelecionados([]);
@@ -109,17 +106,6 @@ const EditarProdutoModal = ({ entidade, show, onHide, onSave }) => {
 
         let entidadeAtualizada = { ...entidadeEditada };
 
-        console.log("entidadeAtualizada.dataInicio")
-        console.log(entidadeAtualizada.dataInicio)
-        console.log("entidadeAtualizada.dataTermino")
-        console.log(entidadeAtualizada.dataTermino)
-
-        console.log("dataTermino")
-        console.log(dataTermino)
-
-        console.log("dataInicio")
-        console.log(dataInicio)
-
         if (entidade.tipo === "produto") {
 
             if (arquivosSelecionados && arquivosSelecionados.length > 0) {
@@ -142,21 +128,18 @@ const EditarProdutoModal = ({ entidade, show, onHide, onSave }) => {
             }
         } else {
 
-            
+
             const dataInicioFuso = parseStringOrDate(dataInicio, 'America/Sao_Paulo', 'inicio');
             const dataTerminoFuso = parseStringOrDate(dataTermino, 'America/Sao_Paulo', 'termino');
 
-            
-            console.log("dataInicioFuso")
-            console.log(dataInicioFuso)
-            console.log("dataTerminoFuso")
-            console.log(dataTerminoFuso)
+
+
 
             entidadeAtualizada = {
                 ...entidadeAtualizada,
                 dataInicio: entidade.dataInicio ? dataInicioFuso : null,
                 dataTermino: entidade.dataTermino ? dataTerminoFuso : null
-                
+
             };
 
         }

@@ -18,13 +18,13 @@ const GerenciarPedidos = (props) => {
 
             const pedidosFiltrados = pedidos.filter(pedido => {
 
-                // Verifica se alguma oferta dentro de ofertasRelacionadas tem o userId correspondente
+                
                 const ofertasFiltradas = pedido.ofertasRelacionadas.filter(oferta => oferta.userId === userId);
 
-                // Se nenhuma oferta dentro de ofertasRelacionadas tem o userId correspondente, retorna false
+               
                 if (ofertasFiltradas.length === 0) return false;
 
-                // Atualiza ofertasRelacionadas com as ofertas filtradas
+               
                 pedido.ofertasRelacionadas = ofertasFiltradas;
                 return true;
             });
@@ -59,18 +59,18 @@ const GerenciarPedidos = (props) => {
 
 
     const atualizarStatusOferta = async (ofertaId, novoStatus) => {
-        // Atualizar o status da oferta no Firebase
+       
         await editarOferta(ofertaId, { status: novoStatus });
     
-        // Buscar os pedidos originais do Firebase
+       
         const pedidosOriginais = await getTodosPedidos();
     
-        // Filtrar pedidos que contêm a oferta atualizada
+      
         const pedidosParaAtualizar = pedidosOriginais.filter(pedido =>
             pedido.ofertasRelacionadas.some(oferta => oferta.id === ofertaId)
         );
     
-        // Atualizar esses pedidos no Firebase
+        
         const atualizarPedidosPromises = pedidosParaAtualizar.map(async (pedido) => {
             const ofertasAtualizadas = pedido.ofertasRelacionadas.map(oferta => {
                 if (oferta.id === ofertaId) {
@@ -84,7 +84,7 @@ const GerenciarPedidos = (props) => {
     
         await Promise.all(atualizarPedidosPromises);
     
-        // Atualizar o estado local
+       
         const novaListaPedidos = listaPedidos.map(pedido => {
             if (pedido.ofertasRelacionadas.some(oferta => oferta.id === ofertaId)) {
                 const ofertasRelacionadasAtualizadas = pedido.ofertasRelacionadas.map(oferta => {
@@ -186,7 +186,13 @@ const GerenciarPedidos = (props) => {
 
             <Row>
                 <Col xs={12} md={12}>
-                    {listaPedidosLI}
+                {listaPedidos.length > 0 ? listaPedidosLI : (
+                    <Card className="mb-4">
+                        <Card.Body>
+                            <h4 className="text-center">Não há pedidos</h4>
+                        </Card.Body>
+                    </Card>
+                )}
                 </Col>
             </Row>
         </Container>

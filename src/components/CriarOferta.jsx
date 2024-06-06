@@ -106,7 +106,8 @@ const CriarOferta = (props) => {
             dataTermino: oferta.dataTermino ? formatarDataStringHoras(dataTerminoFuso, "23", "59", "59") : null,
             dataInicio: oferta.dataInicio ? formatarDataStringHoras(dataInicioFuso, "00", "00", "00") : null,
             dataCriacao: formatarDataString(new Date()),
-            userId: props.userId
+            userId: props.userId,
+            status: "Pendente"
         };
 
 
