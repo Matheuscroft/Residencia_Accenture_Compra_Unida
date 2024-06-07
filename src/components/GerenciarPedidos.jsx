@@ -1,20 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { Container, Row, Col, Card, Button, ButtonGroup } from 'react-bootstrap';
-import { getPedidos, editarPedido, editarOferta, getTodosPedidos } from '../auth/firebaseService';
+import { editarPedido, editarOferta, getTodosPedidos } from '../auth/firebaseService';
 import { ordenarPorDataString } from './Utils'
 
 const GerenciarPedidos = (props) => {
     const [listaPedidos, setListaPedidos] = useState([]);
+    const userId = props.userId;
 
     useEffect(() => {
         const fetchPedidos = async () => {
             const pedidos = await getTodosPedidos();
-            const userId = props.userId;
-
-            console.log("to no fetch do ger pedidos")
-
-            console.log("pedidos")
-            console.log(pedidos)
 
             const pedidosFiltrados = pedidos.filter(pedido => {
 
@@ -29,9 +24,6 @@ const GerenciarPedidos = (props) => {
                 return true;
             });
 
-            console.log("pedidosFiltrados")
-            console.log(pedidosFiltrados)
-
             const pedidosOrdenados = ordenarPorDataString(pedidosFiltrados, 'dataDePedido');
             setListaPedidos(pedidosOrdenados);
         };
@@ -41,7 +33,7 @@ const GerenciarPedidos = (props) => {
 
 
     const handleProdutoClick = (produto) => {
-        props.handlePage("produto", produto);
+        props.handlePage("oferta", { userId: null, oferta: produto});
     };
 
     const definirCorSituacao = (status) => {
@@ -102,10 +94,6 @@ const GerenciarPedidos = (props) => {
     };
     
     
-    
-
-
-
 
 
 

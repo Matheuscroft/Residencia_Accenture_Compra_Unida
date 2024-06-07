@@ -1,17 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { Container, Row, Col, Card, Carousel, Button, ProgressBar, Form } from 'react-bootstrap';
 import { getOfertas } from '../auth/firebaseService';
-import { format } from 'date-fns';
 import Countdown from 'react-countdown';
-import Chat from './Chat';
 import '../App.css';
 
 const Oferta = (props) => {
     const produto = props.produto;
     const [ofertas, setOfertas] = useState([]);
     const userId = props.userId
-    console.log("oferta userId")
-    console.log(userId)
 
     useEffect(() => {
 
@@ -25,11 +21,6 @@ const Oferta = (props) => {
         };
         fetchOfertas();
     }, [produto.id]);
-
-    /*const formatarData = (dataString) => {
-        const data = new Date(dataString);
-        return format(data, 'dd/MM/yyyy');
-    };*/
 
     const formatarData = (dataString) => {
         const [date, time] = dataString.split(' ');
@@ -139,7 +130,7 @@ const Oferta = (props) => {
                                             variant="warning"
                                             onClick={() => props.handlePage("carrinho", { userId: userId, oferta: ofertas })}
                                             style={{ marginTop: '20px', width: '100%' }}
-                                            disabled={oferta.produtoRelacionado.quantidadeEstoque === 0}
+                                            disabled={oferta.produtoRelacionado.quantidadeEstoque === 0 || userId === null}
                                         >
                                             Adicionar ao Carrinho
                                         </Button>
